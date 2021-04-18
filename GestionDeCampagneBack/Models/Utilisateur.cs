@@ -20,7 +20,9 @@ namespace GestionDeCampagneBack.Models
         public string MotDePasse { get; set; }
         public bool? Etat { get; set; }
         public bool? Statut { get; set; }
+        public int? IdRole { get; set; }
 
+        public virtual Role IdRoleNavigation { get; set; }
         public virtual ICollection<Campagne> Campagnes { get; set; }
     }
 }

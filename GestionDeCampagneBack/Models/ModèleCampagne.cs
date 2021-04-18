@@ -7,6 +7,7 @@ namespace GestionDeCampagneBack.Models
 {
     public partial class ModèleCampagne
     {
+        public int Id { get; set; }
         public int? IdCampagne { get; set; }
         public int? IdModèle { get; set; }
 

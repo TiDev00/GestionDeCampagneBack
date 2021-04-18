@@ -10,15 +10,15 @@ namespace GestionDeCampagneBack.Models
         public NiveauDeVisibilite()
         {
             Campagnes = new HashSet<Campagne>();
+            ContactListeDiffusions = new HashSet<ContactListeDiffusion>();
+            Contacts = new HashSet<Contact>();
         }
 
         public int Id { get; set; }
         public string Libellé { get; set; }
-        public int? IdConatct { get; set; }
-        public int? IdContactListeDiffusion { get; set; }
 
-        public virtual Contact IdConatctNavigation { get; set; }
-        public virtual ContactListeDiffusion IdContactListeDiffusionNavigation { get; set; }
         public virtual ICollection<Campagne> Campagnes { get; set; }
+        public virtual ICollection<ContactListeDiffusion> ContactListeDiffusions { get; set; }
+        public virtual ICollection<Contact> Contacts { get; set; }
     }
 }

@@ -10,7 +10,6 @@ namespace GestionDeCampagneBack.Models
         public ContactListeDiffusion()
         {
             ListeDeDiffusions = new HashSet<ListeDeDiffusion>();
-            NiveauDeVisibilites = new HashSet<NiveauDeVisibilite>();
         }
 
         public int Id { get; set; }
@@ -19,9 +18,10 @@ namespace GestionDeCampagneBack.Models
         public DateTime? DateDesa { get; set; }
         public string Raison { get; set; }
         public int? IdContact { get; set; }
+        public int? IdNiveauVisib { get; set; }
 
         public virtual Contact IdContactNavigation { get; set; }
+        public virtual NiveauDeVisibilite IdNiveauVisibNavigation { get; set; }
         public virtual ICollection<ListeDeDiffusion> ListeDeDiffusions { get; set; }
-        public virtual ICollection<NiveauDeVisibilite> NiveauDeVisibilites { get; set; }
     }
 }

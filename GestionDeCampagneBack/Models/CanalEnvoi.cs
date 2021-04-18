@@ -10,15 +10,15 @@ namespace GestionDeCampagneBack.Models
         public CanalEnvoi()
         {
             Campagnes = new HashSet<Campagne>();
+            ContactCanals = new HashSet<ContactCanal>();
         }
 
         public int Id { get; set; }
         public string Titre { get; set; }
         public string Code { get; set; }
         public bool? Etat { get; set; }
-        public int? IdConatctCanal { get; set; }
 
-        public virtual ContactCanal IdConatctCanalNavigation { get; set; }
         public virtual ICollection<Campagne> Campagnes { get; set; }
+        public virtual ICollection<ContactCanal> ContactCanals { get; set; }
     }
 }

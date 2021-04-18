@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace GestionDeCampagneBack.Models
 {
-    public partial class Categorie
+    public partial class Catégorie
     {
-        public Categorie()
+        public Catégorie()
         {
             Campagnes = new HashSet<Campagne>();
         }

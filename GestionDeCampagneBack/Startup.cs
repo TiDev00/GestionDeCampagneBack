@@ -1,4 +1,4 @@
-using GestionDeCampagneBack.Models;
+//using GestionDeCampagneBack.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,8 +28,8 @@ namespace GestionDeCampagneBack
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContextPool<Gestion_de_campagneDBContext>(options => options.UseSqlServer(
-                    Configuration.GetConnectionString("CampagneConnection")));
+            //services.AddDbContextPool<Gestion_de_campagneDBContext>(options => options.UseSqlServer(
+               //     Configuration.GetConnectionString("CampagneConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

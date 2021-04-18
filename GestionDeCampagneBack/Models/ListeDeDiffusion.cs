@@ -7,6 +7,11 @@ namespace GestionDeCampagneBack.Models
 {
     public partial class ListeDeDiffusion
     {
+        public ListeDeDiffusion()
+        {
+            ListeDffCampagnes = new HashSet<ListeDffCampagne>();
+        }
+
         public int Id { get; set; }
         public string Titre { get; set; }
         public string Reference { get; set; }
@@ -15,5 +20,6 @@ namespace GestionDeCampagneBack.Models
         public int? IdContactListeDiffusion { get; set; }
 
         public virtual ContactListeDiffusion IdContactListeDiffusionNavigation { get; set; }
+        public virtual ICollection<ListeDffCampagne> ListeDffCampagnes { get; set; }
     }
 }
