@@ -7,21 +7,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestionDeCampagneBack.Models
 {
-    public partial class ListeDffCampagne
+    public partial class ModeleCampagne
     {
         [Key]
         public int Id { get; set; }
-
         [Required(ErrorMessage = "La campagne est obligatoire")]
         public int IdCampagne { get; set; }
 
         [ForeignKey("IdCampagne")]
         public virtual Campagne IdCampagneNavigation { get; set; }
 
-        [Required(ErrorMessage = "La liste de diffusion est obligatoire")]
-        public int IdListe { get; set; }
+        [Required(ErrorMessage = "Le modèle est obligatoire")]
+        public int IdModele { get; set; }
 
-        [ForeignKey("IdListe")]
-        public virtual ListeDeDiffusion IdListeNavigation { get; set; }
+        [ForeignKey("IdModele")]
+        public virtual Modele IdModeleNavigation { get; set; }
     }
 }

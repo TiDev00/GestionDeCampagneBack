@@ -1,4 +1,6 @@
 using GestionDeCampagneBack.Models;
+using GestionDeCampagneBack.Repository;
+using GestionDeCampagneBack.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,8 +29,14 @@ namespace GestionDeCampagneBack
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
             services.AddControllers();
-            services.AddDbContextPool<Gestion_de_campagneDBContext>(options => options.UseSqlServer(
+            services.AddScoped<IRole, RoleService>();
+            services.AddScoped<IUtilisateur, UtilisateurService>();
+            services.AddDbContextPool<DbcontextGC>(options => options.UseSqlServer(
                     Configuration.GetConnectionString("CampagneConnection")));
         }
 

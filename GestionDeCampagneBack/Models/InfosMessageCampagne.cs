@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-#nullable disable
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack.Models
 {
-    public partial class ListeDffCampagne
+    public class InfosMessageCampagne
     {
         [Key]
         public int Id { get; set; }
@@ -15,13 +15,11 @@ namespace GestionDeCampagneBack.Models
         [Required(ErrorMessage = "La campagne est obligatoire")]
         public int IdCampagne { get; set; }
 
-        [ForeignKey("IdCampagne")]
         public virtual Campagne IdCampagneNavigation { get; set; }
 
-        [Required(ErrorMessage = "La liste de diffusion est obligatoire")]
-        public int IdListe { get; set; }
+        [Required(ErrorMessage = "L'Infos Message est obligatoire")]
+        public int IdInfosMessage { get; set; }
 
-        [ForeignKey("IdListe")]
-        public virtual ListeDeDiffusion IdListeNavigation { get; set; }
+        public virtual InfosMessage IdInfosMessageNavigation { get; set; }
     }
 }
