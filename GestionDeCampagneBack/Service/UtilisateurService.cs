@@ -22,7 +22,7 @@ namespace GestionDeCampagneBack.Service
                 throw new ArgumentNullException(nameof(Utilisateur));
 
             }
-    
+
             _dbcontextGC.Utilisateurs.Add(Utilisateur);
         }
 
@@ -76,5 +76,5 @@ namespace GestionDeCampagneBack.Service
             return (_dbcontextGC.SaveChanges() >= 0);
         }
     }
-    
+
 }
