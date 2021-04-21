@@ -54,22 +54,23 @@ namespace GestionDeCampagneBack.Controllers
         public ActionResult<Role> AddRole(Role role)
         {
             var verifiLibelle = _roleData.GetRoleByLibelle(role.Libelle);
-         
-             if (verifiLibelle == null)
-             {
+
+            if (verifiLibelle == null)
+            {
                 _roleData.AddRole(role);
                 _roleData.SaveChanges();
 
                 return CreatedAtRoute(nameof(GetRoleById), new { Id = role.Id }, role);
-             }
-             else { 
+            }
+            else
+            {
                 return NotFound($"Un role avec le libelle : {role.Libelle} existe déjà");
 
             }
         }
 
         [HttpPut("put/{id}")]
-        public ActionResult<Role> PutRole(Role rol,int id)
+        public ActionResult<Role> PutRole(Role rol, int id)
         {
             var role = _roleData.GetRoleById(id);
             if (role != null)
@@ -81,7 +82,7 @@ namespace GestionDeCampagneBack.Controllers
                     _roleData.SaveChanges();
                     return CreatedAtRoute(nameof(GetRoleById), new { Id = role.Id }, role);
                 }
-                else 
+                else
                 if (verifiLibelle.Id == role.Id)
                 {
                     _roleData.EditRole(rol, id);
@@ -93,12 +94,12 @@ namespace GestionDeCampagneBack.Controllers
                     return NotFound($"Un role avec le libelle : {rol.Libelle} existe déjà");
 
                 }
-               
+
             }
             return NotFound($"Un role avec l'id : {id} n'existe pas");
-        
 
-         
+
+
             // return Ok(categorireadDto);
         }
 
@@ -113,7 +114,7 @@ namespace GestionDeCampagneBack.Controllers
             {
                 _roleData.DeleteRole(role);
                 _roleData.SaveChanges();
-                return Accepted(); 
+                return Accepted();
 
             }
             return NotFound($"Un role avec l'id : {id} n'existe pas");

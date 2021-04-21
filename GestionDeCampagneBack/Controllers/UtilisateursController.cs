@@ -67,7 +67,7 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<Utilisateur> AddUtilisateur(Utilisateur Utilisateur)
         {
- 
+
             var role = _roleData.GetRoleById(Utilisateur.IdRole);
             if (role != null)
             {
@@ -76,7 +76,7 @@ namespace GestionDeCampagneBack.Controllers
 
                 if (verifiLogin == null)
                 {
-                    if(verifiEmail == null)
+                    if (verifiEmail == null)
                     {
                         string passwordHash = BCrypt.Net.BCrypt.HashPassword(Utilisateur.Password);
                         Utilisateur.Password = passwordHash;
@@ -98,7 +98,7 @@ namespace GestionDeCampagneBack.Controllers
 
             }
             else
-            return NotFound($"Un role avec l'id : {Utilisateur.IdRole} n'existe pas");
+                return NotFound($"Un role avec l'id : {Utilisateur.IdRole} n'existe pas");
 
 
             // return Ok(categorireadDto);
