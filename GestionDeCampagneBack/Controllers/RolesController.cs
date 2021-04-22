@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GestionDeCampagneBack.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
