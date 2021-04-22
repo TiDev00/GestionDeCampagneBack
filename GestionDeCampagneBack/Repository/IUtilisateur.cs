@@ -15,6 +15,8 @@ namespace GestionDeCampagneBack.Repository
 
         Utilisateur GetUtilisateurByLogin(string login);
 
+        Utilisateur Authentification(string login, string password);
+
         Utilisateur GetUtilisateurByEmail(string email);
 
         void AddUtilisateur(Utilisateur Utilisateur);

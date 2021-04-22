@@ -2,9 +2,13 @@
 using GestionDeCampagneBack.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack.Controllers
@@ -50,6 +54,33 @@ namespace GestionDeCampagneBack.Controllers
 
             }
             return NotFound($"Un utilisateur avec le login : {login} n'existe pas");
+        }
+
+        [HttpPost("auth", Name = "GetUtilisateurByloginAndPassword")]
+        public IActionResult GetUtilisateurByloginAndPassword(Authentification aut)
+        {
+            //string passwordHash = BCrypt.Net.BCrypt.HashPassword(aut.Password);
+            var user = _utilisateurData.Authentification(aut.Login, aut.Password);
+            if (user == null)
+                return BadRequest("Login ou mot de passe invalide");
+            if (user != null)
+            {
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superGCSecretKey@11"));
+                var signingCredential = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                var tokenOptions = new JwtSecurityToken(
+                    issuer: "https://localhost:44332",
+                    audience: "https://localhost:44332",
+                    claims: new List<Claim>(),
+                    expires: DateTime.Now.AddMinutes(30),
+                    signingCredentials: signingCredential
+                    );
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+                return Ok(new { Token = tokenString });
+            }
+            return Unauthorized();
+
+
         }
 
         [HttpGet("email/{email}", Name = "GetUtilisateurByEmail")]
