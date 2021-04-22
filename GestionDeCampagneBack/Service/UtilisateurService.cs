@@ -75,6 +75,14 @@ namespace GestionDeCampagneBack.Service
         {
             return (_dbcontextGC.SaveChanges() >= 0);
         }
+
+        public Utilisateur Authentification(string login, string password)
+        {
+            var user = _dbcontextGC.Utilisateurs.FirstOrDefault(u => u.Login == login && u.Password == password);
+            if (user != null)
+                return user;
+            else return null;
+        }
     }
 
 }
