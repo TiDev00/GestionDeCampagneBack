@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionDeCampagneBack.Migrations
 {
     [DbContext(typeof(DbcontextGC))]
-    [Migration("20210420135516_firstmigration")]
-    partial class firstmigration
+    [Migration("20210423031916_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

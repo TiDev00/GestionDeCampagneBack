@@ -10,7 +10,7 @@ namespace GestionDeCampagneBack.Models
     [Index(nameof(Libelle), IsUnique = true)]
     public partial class Categorie
     {
-        public Catégorie()
+        public Categorie()
         {
             Campagnes = new HashSet<Campagne>();
         }
