@@ -1,24 +1,28 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace GestionDeCampagneBack.Models
 {
+    [Index(nameof(Libelle), IsUnique = true)]
     public partial class NiveauDeVisibilite
     {
-        public NiveauDeVisibilite()
-        {
-            Campagnes = new HashSet<Campagne>();
-            ContactListeDiffusions = new HashSet<ContactListeDiffusion>();
-            Contacts = new HashSet<Contact>();
-        }
+     
 
+        [Key]
         public int Id { get; set; }
-        public string Libellé { get; set; }
 
-        public virtual ICollection<Campagne> Campagnes { get; set; }
-        public virtual ICollection<ContactListeDiffusion> ContactListeDiffusions { get; set; }
-        public virtual ICollection<Contact> Contacts { get; set; }
+        [Required(ErrorMessage = "Le libellé est obligatoire")]
+        [StringLength(100, MinimumLength = 2,
+        ErrorMessage = "Le libellé doit comporter au minimum 2 caractères et au maximum 100 caractères")]
+        [DataType(DataType.Text)]
+        public string Libelle { get; set; }
+      
+     
+
     }
 }
