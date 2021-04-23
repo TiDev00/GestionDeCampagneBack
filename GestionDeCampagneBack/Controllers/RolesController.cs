@@ -1,12 +1,11 @@
 ﻿using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Repository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestionDeCampagneBack.Controllers
 {
-   // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
