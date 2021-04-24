@@ -46,7 +46,7 @@ namespace GestionDeCampagneBack.Service
         }
 
 
-        public Contact GetContactByAdresse(string Adresse)
+        /*public Contact GetContactByAdresse(string Adresse)
         {
             var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.Adresse == Adresse);
             if (Contact != null)
@@ -60,7 +60,7 @@ namespace GestionDeCampagneBack.Service
             if (Contact != null)
                 return Contact;
             else return null;
-        }
+        }*/
 
         public Contact GetContactById(int id)
         {
@@ -68,7 +68,15 @@ namespace GestionDeCampagneBack.Service
             return Contact;
         }
 
-        public Contact GetContactByNom(string Nom)
+        public Contact GetContactByMatricul(string Matricule)
+        {
+            var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.Matricule == Matricule);
+            if (Contact != null)
+                return Contact;
+            else return null;
+        }
+
+        /*public Contact GetContactByNom(string Nom)
         {
             var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.NomComplet == Nom);
             if (Contact != null)
@@ -114,7 +122,7 @@ namespace GestionDeCampagneBack.Service
             if (Contact != null)
                 return Contact;
             else return null;
-        }
+        }*/
 
         public List<Contact> GetContacts()
         {

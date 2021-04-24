@@ -6,21 +6,22 @@ using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack.Repository
 {
-    interface IContact
+    public interface IContact
     {
         bool SaveChanges();
         List<Contact> GetContacts();
 
         Contact GetContactById(int Id);
 
-        Contact GetContactByNom(string Nom);
+        /*Contact GetContactByNom(string Nom);
         Contact GetContactByAdresse(string Adresse);
         Contact GetContactByPays(string Pays);
         Contact GetContactByRegion(string Region);
         Contact GetContactByDateDeNaissance(DateTime DateNaissance);
         Contact GetContactBySexe(bool Sexe);
         Contact GetContactBySituation(bool Situation);
-        Contact GetContactByProfession(string Profession);
+        Contact GetContactByProfession(string Profession);*/
+        Contact GetContactByMatricul(string Matricule);
 
         void AddContact(Contact Contact);
 

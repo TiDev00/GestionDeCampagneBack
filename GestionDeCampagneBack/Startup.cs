@@ -65,6 +65,7 @@ namespace GestionDeCampagneBack
             services.AddScoped<IModele, ModeleService>();
             services.AddScoped<ICanalEnvoi, CanalEnvoiService>();
             services.AddScoped<IContact, ContactService>();
+            services.AddScoped<INiveauDeVisibilite, NiveauDeVisibiliteService>();
             services.AddDbContextPool<DbcontextGC>(options => options.UseSqlServer(
                     Configuration.GetConnectionString("CampagneConnection"))); 
         }
