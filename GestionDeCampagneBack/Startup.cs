@@ -1,3 +1,4 @@
+//using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Repository;
 using GestionDeCampagneBack.Service;
@@ -56,8 +57,10 @@ namespace GestionDeCampagneBack
             services.AddScoped<IUtilisateur, UtilisateurService>();
             services.AddScoped<IModele, ModeleService>();
             services.AddScoped<ICanalEnvoi, CanalEnvoiService>();
+            services.AddScoped<IContact, ContactService>();
+            services.AddScoped<INiveauDeVisibilite, NiveauDeVisibiliteService>();
             services.AddDbContextPool<DbcontextGC>(options => options.UseSqlServer(
-                    Configuration.GetConnectionString("CampagneConnection")));
+                    Configuration.GetConnectionString("CampagneConnection"))); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
