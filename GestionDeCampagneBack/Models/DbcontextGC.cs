@@ -12,6 +12,7 @@ namespace GestionDeCampagneBack.Models
         public DbcontextGC(DbContextOptions<DbcontextGC> options)
            : base(options)
         {
+           
         }
 
 

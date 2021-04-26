@@ -17,6 +17,7 @@ namespace GestionDeCampagneBack.Models
             Campagnes = new HashSet<Campagne>();
         }
 
+        [Key]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Le nom est obligatoire")]
@@ -56,8 +57,8 @@ namespace GestionDeCampagneBack.Models
         public bool Statut { get; set; }
 
         [Required(ErrorMessage = "Le role est obligatoire")]
-
         public int IdRole { get; set; }
+
         [ForeignKey("IdRole")]
         public virtual Role IdRoleNavigation { get; set; }
         public virtual ICollection<Campagne> Campagnes { get; set; }
