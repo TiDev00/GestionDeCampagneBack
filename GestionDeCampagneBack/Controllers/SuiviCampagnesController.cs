@@ -14,12 +14,12 @@ namespace GestionDeCampagneBack.Controllers
     public class SuiviCampagnesController : ControllerBase
     {
         private ISuiviCampagne _SuiviCampagneData;
-        private IContact _ContactData;
+    
 
         public SuiviCampagnesController(ISuiviCampagne SuiviCampagneData, IContact ContactData)
         {
             _SuiviCampagneData = SuiviCampagneData;
-            _ContactData = ContactData;
+          
         }
         // GET: api/<ValuesController>
         [HttpGet]
