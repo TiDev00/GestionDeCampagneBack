@@ -44,6 +44,12 @@ namespace GestionDeCampagneBack.Service
             return _categorie;
         }
 
+        public Categorie GetCategorieById(int id)
+        {
+            var categorie = _dbcontextGC.Categories.Find(id);
+            return categorie;
+        }
+        
         public Categorie GetCategorieByLibelle(string libelle)
         {
             var _categorie = _dbcontextGC.Categories.FirstOrDefault(c => c.Libelle == libelle);

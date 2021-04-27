@@ -16,7 +16,7 @@ namespace GestionDeCampagneBack.Service
         {
             _dbcontextGC = dbcontextGC;
         }
-
+        
         public void AddRegleDEnvoi(RegleDEnvoi regleDEnvoi)
         {
             if (regleDEnvoi == null)

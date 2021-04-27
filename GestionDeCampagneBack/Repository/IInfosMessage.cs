@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace GestionDeCampagneBack.Repository
 {
-    interface IInfosMessage 
+    public interface IInfosMessage 
     {
         //Methode pour sauvegarder les changements dans le context de la bdd
         bool SaveChanges();

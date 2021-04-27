@@ -44,6 +44,12 @@ namespace GestionDeCampagneBack.Service
             return _typeDeCampagne;
         }
 
+        public TypeDeCampagne GetTypeDeCampagneById(int id)
+        {
+            var _typeDeCampagne = _dbcontextGC.TypeDeCampagnes.Find(id);
+            return _typeDeCampagne;
+        }
+        
         public TypeDeCampagne GetTypeDeCampagneByLibelle(string libelle)
         {
             var _typeDeCampagne = _dbcontextGC.TypeDeCampagnes.FirstOrDefault(t => t.Libelle == libelle);

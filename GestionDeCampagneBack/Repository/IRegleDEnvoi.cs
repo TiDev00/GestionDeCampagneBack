@@ -7,7 +7,7 @@ using System.Collections.Generic;
  */
 namespace GestionDeCampagneBack.Repository
 {
-    interface IRegleDEnvoi
+    public interface IRegleDEnvoi
     {
        //Methode pour sauvegarder les changements dans le context de la bdd
         bool SaveChanges();

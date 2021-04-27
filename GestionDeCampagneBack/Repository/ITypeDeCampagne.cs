@@ -7,13 +7,16 @@ using System.Collections.Generic;
  */
 namespace GestionDeCampagneBack.Repository
 {
-    interface ITypeDeCampagne
+    public interface ITypeDeCampagne
     {
         //Methode pour sauvegarder les changements dans le context de la bdd
         bool SaveChanges();
 
         //Methode pour récupérer tous les TypeDeCampagne
         List<TypeDeCampagne> GetTypeDeCampagnes();
+        
+        //Methode pour recuperer un TypeDeCampagne par id
+        TypeDeCampagne GetTypeDeCampagneById(int id);
 
         //Methode pour recuperer un TypeDeCampagne par son nom
         TypeDeCampagne GetTypeDeCampagneByLibelle(string libelle);

@@ -7,13 +7,16 @@ using System.Collections.Generic;
  */
 namespace GestionDeCampagneBack.Repository
 {
-    interface ICategorie
+    public interface ICategorie
     {
         //Methode pour sauvegarder les changements dans le context de la bdd
         bool SaveChanges();
 
         //Methode pour récupérer toutes les Categories
         List<Categorie> GetCategories();
+        
+        //Methode pour recuperer une Categorie a partir de son id
+        Categorie GetCategorieById(int id);
 
         //Methode pour récuperer une Categorie a partir de son libelle
         Categorie GetCategorieByLibelle(string libelle);
