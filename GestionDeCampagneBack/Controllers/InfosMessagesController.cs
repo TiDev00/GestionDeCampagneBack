@@ -6,11 +6,11 @@ namespace GestionDeCampagneBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InfosMessageController : ControllerBase
+    public class InfosMessagesController : ControllerBase
     {
         private IInfosMessage _infosMessageData;
 
-        public InfosMessageController(IInfosMessage infosMessageData)
+        public InfosMessagesController(IInfosMessage infosMessageData)
         {
             _infosMessageData = infosMessageData;
         }

@@ -6,15 +6,15 @@ namespace GestionDeCampagneBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategorieController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private ICategorie _categorieData;
 
-        public CategorieController(ICategorie categorieData)
+        public CategoriesController(ICategorie categorieData)
         {
             _categorieData = categorieData;
         }
-        // GET: api/<ValuesController>
+      
         [HttpGet]
         public IActionResult GetAllCategories()
         {

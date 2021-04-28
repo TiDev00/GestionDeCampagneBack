@@ -7,11 +7,11 @@ namespace GestionDeCampagneBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TypeDeCampagneController : ControllerBase
+    public class TypeDeCampagnesController : ControllerBase
     {
         private ITypeDeCampagne _typeDeCampagneData;
 
-        public TypeDeCampagneController(ITypeDeCampagne typeDeCampagneData)
+        public TypeDeCampagnesController(ITypeDeCampagne typeDeCampagneData)
         {
             _typeDeCampagneData = typeDeCampagneData;
         }

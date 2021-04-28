@@ -6,11 +6,11 @@ namespace GestionDeCampagneBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegleDEnvoiController : ControllerBase
+    public class RegleDEnvoisController : ControllerBase
     {
         private IRegleDEnvoi _regleDEnvoiData;
 
-        public RegleDEnvoiController(IRegleDEnvoi regleDEnvoiData)
+        public RegleDEnvoisController(IRegleDEnvoi regleDEnvoiData)
         {
             _regleDEnvoiData = regleDEnvoiData;
         }
