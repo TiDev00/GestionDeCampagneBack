@@ -71,6 +71,7 @@ namespace GestionDeCampagneBack.Controllers
 
             if (verifiLibelle == null)
             {
+
                 _modelData.AddModele(Modele);
                 _modelData.SaveChanges();
 
@@ -84,28 +85,28 @@ namespace GestionDeCampagneBack.Controllers
         }
 
         [HttpPut("put/{id}")]
-        public ActionResult<Modele> PutModele(Modele rol, int id)
+        public ActionResult<Modele> PutModele(Modele mod, int id)
         {
             var Modele = _modelData.GetModeleById(id);
             if (Modele != null)
             {
-                var verifiLibelle = _modelData.GetModeleByLibelle(rol.Libelle);
+                var verifiLibelle = _modelData.GetModeleByLibelle(mod.Libelle);
                 if (verifiLibelle == null)
                 {
-                    _modelData.EditModele(rol, id);
+                    _modelData.EditModele(mod, id);
                     _modelData.SaveChanges();
                     return CreatedAtRoute(nameof(GetModeleById), new { Id = Modele.Id }, Modele);
                 }
                 else
                 if (verifiLibelle.Id == Modele.Id)
                 {
-                    _modelData.EditModele(rol, id);
+                    _modelData.EditModele(mod, id);
                     _modelData.SaveChanges();
                     return CreatedAtRoute(nameof(GetModeleById), new { Id = Modele.Id }, Modele);
                 }
                 else
                 {
-                    return NotFound($"Un Modele avec le libelle : {rol.Libelle} existe déjà");
+                    return NotFound($"Un Modele avec le libelle : {mod.Libelle} existe déjà");
 
                 }
 

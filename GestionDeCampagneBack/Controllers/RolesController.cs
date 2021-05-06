@@ -17,7 +17,7 @@ namespace GestionDeCampagneBack.Controllers
             _roleData = roleData;
         }
         // GET: api/<ValuesController>
-        [Authorize]
+       // [Authorize]
         [HttpGet]
         public IActionResult GetAllRoles()
         {

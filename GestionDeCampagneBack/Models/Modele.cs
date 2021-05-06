@@ -27,11 +27,6 @@ namespace GestionDeCampagneBack.Models
         ErrorMessage = "Le libellé doit comporter au minimum 2 caractères et au maximum 100 caractères")]
         [DataType(DataType.Text)]
         public string Libelle { get; set; }
-
-        [Required(ErrorMessage = "Le code est obligatoire")]
-        [StringLength(100, MinimumLength = 2,
-        ErrorMessage = "Le code doit comporter au minimum 2 caractères et au maximum 100 caractères")]
-        [DataType(DataType.Text)]
         public string Code { get; set; }
 
         [DataType(DataType.MultilineText)]

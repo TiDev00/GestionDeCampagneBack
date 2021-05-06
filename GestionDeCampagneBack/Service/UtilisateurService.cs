@@ -39,9 +39,19 @@ namespace GestionDeCampagneBack.Service
 
         public Utilisateur EditUtilisateur(Utilisateur Utilisateur, int id)
         {
-            var utilisateur = _dbcontextGC.Utilisateurs.Find(id);
-            Utilisateur.Statut = true;
-            return Utilisateur;
+            var user = _dbcontextGC.Utilisateurs.Find(id);
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(Utilisateur.Password);
+            user.Statut = Utilisateur.Statut;
+            user.Password = passwordHash;
+            user.ConfirmPassword = passwordHash;
+            user.Etat = Utilisateur.Etat;
+            user.Statut = Utilisateur.Statut;
+            user.NomComplet = Utilisateur.NomComplet;
+            user.IdRole = Utilisateur.IdRole;
+            user.Login = Utilisateur.Login;
+            user.Email = Utilisateur.Email;
+            user.Telephone = Utilisateur.Telephone;
+            return user;
         }
 
         public Utilisateur GetUtilisateurById(int id)
