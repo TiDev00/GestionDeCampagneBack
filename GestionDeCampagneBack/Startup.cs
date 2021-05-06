@@ -1,22 +1,16 @@
+//using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Repository;
 using GestionDeCampagneBack.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack
 {
@@ -63,9 +57,15 @@ namespace GestionDeCampagneBack
             services.AddScoped<IUtilisateur, UtilisateurService>();
             services.AddScoped<IModele, ModeleService>();
             services.AddScoped<ICanalEnvoi, CanalEnvoiService>();
+<<<<<<< HEAD
             services.AddScoped<IListeDeDiffusion, ListeDeDiffusionService>();
+=======
+            services.AddScoped<IContact, ContactService>();
+            services.AddScoped<INiveauDeVisibilite, NiveauDeVisibiliteService>();
+            services.AddScoped<ISuiviCampagne, SuiviCampagneService>();
+>>>>>>> ee4b9f5954b00ca52a39192b95e14fd020e10f06
             services.AddDbContextPool<DbcontextGC>(options => options.UseSqlServer(
-                    Configuration.GetConnectionString("CampagneConnection")));
+                    Configuration.GetConnectionString("CampagneConnection"))); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

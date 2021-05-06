@@ -1,12 +1,11 @@
 ﻿using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Repository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestionDeCampagneBack.Controllers
 {
-   // [Authorize]
+  
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
@@ -18,6 +17,7 @@ namespace GestionDeCampagneBack.Controllers
             _roleData = roleData;
         }
         // GET: api/<ValuesController>
+       // [Authorize]
         [HttpGet]
         public IActionResult GetAllRoles()
         {

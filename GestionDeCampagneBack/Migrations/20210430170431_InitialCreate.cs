@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GestionDeCampagneBack.Migrations
 {
-    public partial class firstmigration : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -58,7 +58,7 @@ namespace GestionDeCampagneBack.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Libelle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Contenu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Statut = table.Column<bool>(type: "bit", nullable: false)
@@ -164,10 +164,12 @@ namespace GestionDeCampagneBack.Migrations
                     NomComplet = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Login = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Etat = table.Column<bool>(type: "bit", nullable: false),
                     Statut = table.Column<bool>(type: "bit", nullable: false),
-                    IdRole = table.Column<int>(type: "int", nullable: false)
+                    Ischange = table.Column<bool>(type: "bit", nullable: false),
+                    IdRole = table.Column<int>(type: "int", nullable: false),
+                    Telephone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -634,7 +636,8 @@ namespace GestionDeCampagneBack.Migrations
                 name: "IX_Modeles_Code",
                 table: "Modeles",
                 column: "Code",
-                unique: true);
+                unique: true,
+                filter: "[Code] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Modeles_Libelle",

@@ -37,13 +37,12 @@ namespace GestionDeCampagneBack.Models
         [DataType(DataType.Text)]
         public string Login { get; set; }
 
-        [Required(ErrorMessage = "Le mot de passe est obligatoire")]
-        [StringLength(100, ErrorMessage = "Le mot de passe doit comporter au minimum 5 caractères et au maximum 100 caractères", MinimumLength = 5)]
+      
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
 
-        [Required(ErrorMessage = "La confirmation de mot de passe est obligatoire")]
+       
         [DataType(DataType.Password)]
         [Compare("Password")]
         [NotMapped]
@@ -55,11 +54,19 @@ namespace GestionDeCampagneBack.Models
       
         public bool Statut { get; set; }
 
+        public bool Ischange { get; set; }
+
         [Required(ErrorMessage = "Le role est obligatoire")]
 
         public int IdRole { get; set; }
         [ForeignKey("IdRole")]
         public virtual Role IdRoleNavigation { get; set; }
+
+        [Required(ErrorMessage = "Le numéro de téléphone est obligatoire")]
+        [StringLength(100, MinimumLength = 7,
+         ErrorMessage = "Le numéro de téléphone doit comporter au minimum 7 caractères et au maximum 100 caractères")]
+        [DataType(DataType.Text)]
+        public string Telephone { get; set; }
         public virtual ICollection<Campagne> Campagnes { get; set; }
     }
 }
