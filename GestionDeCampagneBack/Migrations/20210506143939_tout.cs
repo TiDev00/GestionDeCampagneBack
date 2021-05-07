@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GestionDeCampagneBack.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class tout : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
