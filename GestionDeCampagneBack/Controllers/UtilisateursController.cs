@@ -43,6 +43,30 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Un Utilisateur avec l'id : {id} n'existe pas");
         }
 
+        [HttpGet("changestatut/{id}")]
+        public IActionResult ChangeStatutUser(int id)
+        {
+            var Utilisateur = _utilisateurData.GetUtilisateurById(id);
+            if (Utilisateur != null)
+            {
+                if (Utilisateur.Statut == true)
+                {
+                    Utilisateur.Statut = false;
+                    _utilisateurData.SaveChanges();
+                    return Ok(Utilisateur);
+                } 
+                else
+                {
+                    Utilisateur.Statut = true;
+                    _utilisateurData.SaveChanges();
+                    return Ok(Utilisateur);
+                }
+               
+
+            }
+            return NotFound($"Un Utilisateur avec l'id : {id} n'existe pas");
+        }
+
         [HttpGet("login/{login}", Name = "GetUtilisateurByLogin")]
         public IActionResult GetUtilisateurByLogin(string login)
         {
