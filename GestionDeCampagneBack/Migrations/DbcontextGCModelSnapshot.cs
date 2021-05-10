@@ -97,9 +97,12 @@ namespace GestionDeCampagneBack.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
@@ -110,9 +113,6 @@ namespace GestionDeCampagneBack.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
 
                     b.HasIndex("Titre")
                         .IsUnique();
@@ -160,12 +160,18 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("IdNiveauVisibilite")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdUtilisateur")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdUtilisateurNavigationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Matricule")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("NomComplet")
+                    b.Property<string>("Nom")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -173,17 +179,19 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<string>("Pays")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Profession")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Prenom")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Region")
+                    b.Property<string>("Profession")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Sexe")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Situation")
-                        .HasColumnType("bit");
+                    b.Property<string>("Situation")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Statut")
                         .HasMaxLength(20)
@@ -191,7 +199,9 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdNiveauVisibilite");
+                    b.HasIndex("IdUtilisateur");
+
+                    b.HasIndex("IdUtilisateurNavigationId");
 
                     b.HasIndex("Matricule")
                         .IsUnique();
@@ -626,13 +636,18 @@ namespace GestionDeCampagneBack.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("NomComplet")
+                    b.Property<string>("Nom")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Prenom")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("Statut")
                         .HasColumnType("bit");
@@ -746,11 +761,17 @@ namespace GestionDeCampagneBack.Migrations
                 {
                     b.HasOne("GestionDeCampagneBack.Models.NiveauDeVisibilite", "IdNiveauVisibiliteNavigation")
                         .WithMany()
-                        .HasForeignKey("IdNiveauVisibilite")
+                        .HasForeignKey("IdUtilisateur")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GestionDeCampagneBack.Models.Utilisateur", "IdUtilisateurNavigation")
+                        .WithMany("Contacts")
+                        .HasForeignKey("IdUtilisateurNavigationId");
+
                     b.Navigation("IdNiveauVisibiliteNavigation");
+
+                    b.Navigation("IdUtilisateurNavigation");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.ContactCanal", b =>
@@ -983,6 +1004,8 @@ namespace GestionDeCampagneBack.Migrations
             modelBuilder.Entity("GestionDeCampagneBack.Models.Utilisateur", b =>
                 {
                     b.Navigation("Campagnes");
+
+                    b.Navigation("Contacts");
                 });
 #pragma warning restore 612, 618
         }

@@ -84,7 +84,7 @@ namespace GestionDeCampagneBack.Controllers
         {
             //string passwordHash = BCrypt.Net.BCrypt.HashPassword(aut.Password);
             var user = _utilisateurData.GetUtilisateurByLogin(aut.Login);
-            if (user == null)
+            if (user == null || user.Etat==false)
                 
                 return BadRequest(new { message = "Login ou mot de passe invalide" });
             else
