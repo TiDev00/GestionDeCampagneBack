@@ -46,7 +46,8 @@ namespace GestionDeCampagneBack.Service
             user.ConfirmPassword = passwordHash;
             user.Etat = Utilisateur.Etat;
             user.Statut = Utilisateur.Statut;
-            user.NomComplet = Utilisateur.NomComplet;
+            user.Nom = Utilisateur.Nom;
+            user.Prenom = Utilisateur.Password;
             user.IdRole = Utilisateur.IdRole;
             user.Login = Utilisateur.Login;
             user.Email = Utilisateur.Email;
@@ -78,20 +79,14 @@ namespace GestionDeCampagneBack.Service
 
         public List<Utilisateur> GetUtilisateurs()
         {
-            return _dbcontextGC.Utilisateurs.ToList();
+            return _dbcontextGC.Utilisateurs.Where(r=> r.Etat ==true).ToList();
         }
         public bool SaveChanges()
         {
             return (_dbcontextGC.SaveChanges() >= 0);
         }
 
-        public Utilisateur Authentification(string login, string password)
-        {
-            var user = _dbcontextGC.Utilisateurs.FirstOrDefault(u => u.Login == login && u.Password == password);
-            if (user != null)
-                return user;
-            else return null;
-        }
+
     }
 
 }

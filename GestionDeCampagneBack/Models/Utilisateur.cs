@@ -15,6 +15,7 @@ namespace GestionDeCampagneBack.Models
         public Utilisateur()
         {
             Campagnes = new HashSet<Campagne>();
+            Contacts = new HashSet<Contact>();
         }
 
         public int Id { get; set; }
@@ -23,7 +24,13 @@ namespace GestionDeCampagneBack.Models
         [StringLength(100, MinimumLength = 2,
         ErrorMessage = "Le nom doit comporter au minimum 2 caractères et au maximum 100 caractères")]
         [DataType(DataType.Text)]
-        public string NomComplet { get; set; }
+        public string Nom { get; set; }
+
+        [Required(ErrorMessage = "Le prenom est obligatoire")]
+        [StringLength(100, MinimumLength = 2,
+         ErrorMessage = "Le prenom doit comporter au minimum 2 caractères et au maximum 100 caractères")]
+        [DataType(DataType.Text)]
+        public string Prenom { get; set; }
 
         [Required(ErrorMessage = "l'email est obligatoire")]
         [StringLength(50, ErrorMessage = "L'email doit comporter au minimum 5 caractères et au maximum 50 caractères", MinimumLength = 5)]
@@ -68,5 +75,7 @@ namespace GestionDeCampagneBack.Models
         [DataType(DataType.Text)]
         public string Telephone { get; set; }
         public virtual ICollection<Campagne> Campagnes { get; set; }
+
+        public virtual ICollection<Contact> Contacts { get; set; }
     }
 }

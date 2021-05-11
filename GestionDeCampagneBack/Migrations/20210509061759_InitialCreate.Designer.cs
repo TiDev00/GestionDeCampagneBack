@@ -4,14 +4,21 @@ using GestionDeCampagneBack.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestionDeCampagneBack.Migrations
 {
     [DbContext(typeof(DbcontextGC))]
-    partial class DbcontextGCModelSnapshot : ModelSnapshot
+<<<<<<< HEAD:GestionDeCampagneBack/Migrations/20210506143939_tout.Designer.cs
+    [Migration("20210506143939_tout")]
+    partial class tout
+=======
+    [Migration("20210509061759_InitialCreate")]
+    partial class InitialCreate
+>>>>>>> be069cca87e28b243c3484a3f3b5f199f98480e0:GestionDeCampagneBack/Migrations/20210509061759_InitialCreate.Designer.cs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
