@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionDeCampagneBack.Migrations
 {
     [DbContext(typeof(DbcontextGC))]
-    [Migration("20210509061759_InitialCreate")]
+    [Migration("20210517174625_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,10 +162,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("IdNiveauVisibilite")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdUtilisateur")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdUtilisateurNavigationId")
+                    b.Property<int>("IdUser")
                         .HasColumnType("int");
 
                     b.Property<string>("Matricule")
@@ -189,8 +186,9 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<string>("Profession")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("Sexe")
-                        .HasColumnType("bit");
+                    b.Property<string>("Sexe")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Situation")
                         .HasColumnType("nvarchar(max)");
@@ -201,9 +199,9 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdUtilisateur");
+                    b.HasIndex("IdNiveauVisibilite");
 
-                    b.HasIndex("IdUtilisateurNavigationId");
+                    b.HasIndex("IdUser");
 
                     b.HasIndex("Matricule")
                         .IsUnique();
@@ -763,17 +761,19 @@ namespace GestionDeCampagneBack.Migrations
                 {
                     b.HasOne("GestionDeCampagneBack.Models.NiveauDeVisibilite", "IdNiveauVisibiliteNavigation")
                         .WithMany()
-                        .HasForeignKey("IdUtilisateur")
+                        .HasForeignKey("IdNiveauVisibilite")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestionDeCampagneBack.Models.Utilisateur", "IdUtilisateurNavigation")
+                    b.HasOne("GestionDeCampagneBack.Models.Utilisateur", "IdUserNavigation")
                         .WithMany("Contacts")
-                        .HasForeignKey("IdUtilisateurNavigationId");
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("IdNiveauVisibiliteNavigation");
 
-                    b.Navigation("IdUtilisateurNavigation");
+                    b.Navigation("IdUserNavigation");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.ContactCanal", b =>

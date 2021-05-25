@@ -46,20 +46,13 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<Contact> AddContact(Contact Contact)
         {
-            var verifiMatricul = _ContactData.GetContactByMatricul(Contact.Matricule);
-
-            if (verifiMatricul == null)
-            {
+           
                 _ContactData.AddContact(Contact);
                 _ContactData.SaveChanges();
 
                 return CreatedAtRoute(nameof(GetContactById), new { Id = Contact.Id }, Contact);
-            }
-            else
-            {
-                return NotFound($"Un Contact avec le Matricule : {Contact.Matricule} existe déjà");
-
-            }
+            
+           
         }
 
 
