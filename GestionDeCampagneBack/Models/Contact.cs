@@ -26,12 +26,14 @@ namespace GestionDeCampagneBack.Models
         [StringLength(100, MinimumLength = 2,
         ErrorMessage = "Le nom doit comporter au minimum 2 caractères et au maximum 100 caractères")]
         [DataType(DataType.Text)]
-        public string NomComplet { get; set; }
+        public string Nom { get; set; }
 
-        [Required(ErrorMessage = "Le nom est obligatoire")]
+        [Required(ErrorMessage = "Le prenom est obligatoire")]
         [StringLength(100, MinimumLength = 2,
-        ErrorMessage = "Le matricule doit comporter au minimum 2 caractères et au maximum 100 caractères")]
+        ErrorMessage = "Le prenom doit comporter au minimum 2 caractères et au maximum 100 caractères")]
         [DataType(DataType.Text)]
+        public string Prenom { get; set; }
+
         public string Matricule { get; set; }
 
         [StringLength(20, MinimumLength = 0)]
@@ -39,24 +41,28 @@ namespace GestionDeCampagneBack.Models
 
         public bool Etat { get; set; }
 
-        [Required(ErrorMessage = "Le statut est obligatoire")]
-        [StringLength(20, MinimumLength = 2)]
+
         public bool Statut { get; set; }
         public string Pays { get; set; }
-        public string Region { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? DateDeNaissance { get; set; }
 
-        public bool? Sexe { get; set; }
-        public bool? Situation { get; set; }
+        [Required(ErrorMessage = "Le sexe est obligatoire")]
+        public string Sexe { get; set; }
+        public string Situation { get; set; }
         public string Profession { get; set; }
+
         [Required(ErrorMessage = "Le niveau de visibilité est obligatoire")]
         public int IdNiveauVisibilite { get; set; }
 
         [ForeignKey("IdNiveauVisibilite")]
         public virtual NiveauDeVisibilite IdNiveauVisibiliteNavigation { get; set; }
+
+        public int IdUser { get; set; }
+        [ForeignKey("IdUser")]
+        public virtual Utilisateur IdUserNavigation { get; set; }
         public virtual ICollection<ContactCanal> ContactCanals { get; set; }
         public virtual ICollection<ContactListeDiffusion> ContactListeDiffusions { get; set; }
         public virtual ICollection<SuiviCampagne> SuiviCampagnes { get; set; }

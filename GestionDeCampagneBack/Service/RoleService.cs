@@ -3,7 +3,6 @@ using GestionDeCampagneBack.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack.Service
 {
@@ -33,11 +32,11 @@ namespace GestionDeCampagneBack.Service
 
             }
             _dbcontextGC.Roles.Remove(role);
-           // _dbcontextGC.Roles.Remove(Role);
-              
+            // _dbcontextGC.Roles.Remove(Role);
+
         }
 
-        public Role EditRole(Role Role,int id)
+        public Role EditRole(Role Role, int id)
         {
             var role = _dbcontextGC.Roles.Find(id);
             role.Libelle = Role.Libelle;
@@ -52,7 +51,7 @@ namespace GestionDeCampagneBack.Service
 
         public Role GetRoleByLibelle(string libelle)
         {
- 
+
             var role = _dbcontextGC.Roles.FirstOrDefault(r => r.Libelle == libelle);
             if (role != null)
                 return role;
@@ -66,8 +65,8 @@ namespace GestionDeCampagneBack.Service
         public bool SaveChanges()
         {
 
-                return (_dbcontextGC.SaveChanges() >= 0);
-           
+            return (_dbcontextGC.SaveChanges() >= 0);
+
         }
     }
 }

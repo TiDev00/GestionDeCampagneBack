@@ -3,7 +3,6 @@ using GestionDeCampagneBack.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack.Service
 {
@@ -22,7 +21,7 @@ namespace GestionDeCampagneBack.Service
                 throw new ArgumentNullException(nameof(Utilisateur));
 
             }
-    
+
             _dbcontextGC.Utilisateurs.Add(Utilisateur);
         }
 
@@ -40,9 +39,20 @@ namespace GestionDeCampagneBack.Service
 
         public Utilisateur EditUtilisateur(Utilisateur Utilisateur, int id)
         {
-            var utilisateur = _dbcontextGC.Utilisateurs.Find(id);
-            Utilisateur.Statut = true;
-            return Utilisateur;
+            var user = _dbcontextGC.Utilisateurs.Find(id);
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(Utilisateur.Password);
+            user.Statut = Utilisateur.Statut;
+            user.Password = passwordHash;
+            user.ConfirmPassword = passwordHash;
+            user.Etat = Utilisateur.Etat;
+            user.Statut = Utilisateur.Statut;
+            user.Nom = Utilisateur.Nom;
+            user.Prenom = Utilisateur.Password;
+            user.IdRole = Utilisateur.IdRole;
+            user.Login = Utilisateur.Login;
+            user.Email = Utilisateur.Email;
+            user.Telephone = Utilisateur.Telephone;
+            return user;
         }
 
         public Utilisateur GetUtilisateurById(int id)
@@ -69,12 +79,14 @@ namespace GestionDeCampagneBack.Service
 
         public List<Utilisateur> GetUtilisateurs()
         {
-            return _dbcontextGC.Utilisateurs.ToList();
+            return _dbcontextGC.Utilisateurs.Where(r=> r.Etat ==true).ToList();
         }
         public bool SaveChanges()
         {
             return (_dbcontextGC.SaveChanges() >= 0);
         }
+
+
     }
-    
+
 }

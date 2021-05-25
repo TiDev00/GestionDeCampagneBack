@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 namespace GestionDeCampagneBack.Models
 {
     [Index(nameof(Reference), IsUnique = true)]
+    [Index(nameof(Reference), IsUnique = true)]
     public partial class ListeDeDiffusion
     {
 

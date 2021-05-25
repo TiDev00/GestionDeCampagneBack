@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GestionDeCampagneBack.Migrations
 {
-    public partial class firstmigration : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,8 @@ namespace GestionDeCampagneBack.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Titre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Etat = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -58,7 +59,7 @@ namespace GestionDeCampagneBack.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Libelle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Contenu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Statut = table.Column<bool>(type: "bit", nullable: false)
@@ -126,23 +127,113 @@ namespace GestionDeCampagneBack.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Utilisateurs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nom = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Prenom = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Login = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Etat = table.Column<bool>(type: "bit", nullable: false),
+                    Statut = table.Column<bool>(type: "bit", nullable: false),
+                    Ischange = table.Column<bool>(type: "bit", nullable: false),
+                    IdRole = table.Column<int>(type: "int", nullable: false),
+                    Telephone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Utilisateurs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Utilisateurs_Roles_IdRole",
+                        column: x => x.IdRole,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Campagnes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Titre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateDeDebut = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateDeFin = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Etat = table.Column<bool>(type: "bit", nullable: false),
+                    Statut = table.Column<bool>(type: "bit", nullable: false),
+                    IdUtilisateur = table.Column<int>(type: "int", nullable: false),
+                    IdRegleEnvoi = table.Column<int>(type: "int", nullable: false),
+                    IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false),
+                    IdTypeCampagne = table.Column<int>(type: "int", nullable: false),
+                    IdCategorie = table.Column<int>(type: "int", nullable: false),
+                    IdCanalEnvoi = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Campagnes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Campagnes_CanalEnvois_IdCanalEnvoi",
+                        column: x => x.IdCanalEnvoi,
+                        principalTable: "CanalEnvois",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Campagnes_Categories_IdCategorie",
+                        column: x => x.IdCategorie,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Campagnes_NiveauDeVisibilites_IdNiveauVisibilite",
+                        column: x => x.IdNiveauVisibilite,
+                        principalTable: "NiveauDeVisibilites",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Campagnes_RegleDEnvois_IdRegleEnvoi",
+                        column: x => x.IdRegleEnvoi,
+                        principalTable: "RegleDEnvois",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Campagnes_TypeDeCampagnes_IdTypeCampagne",
+                        column: x => x.IdTypeCampagne,
+                        principalTable: "TypeDeCampagnes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Campagnes_Utilisateurs_IdUtilisateur",
+                        column: x => x.IdUtilisateur,
+                        principalTable: "Utilisateurs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Contacts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NomComplet = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Nom = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Prenom = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Matricule = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Adresse = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Etat = table.Column<bool>(type: "bit", nullable: false),
                     Statut = table.Column<bool>(type: "bit", maxLength: 20, nullable: false),
                     Pays = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Region = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateDeNaissance = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Sexe = table.Column<bool>(type: "bit", nullable: true),
-                    Situation = table.Column<bool>(type: "bit", nullable: true),
+                    Sexe = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Situation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Profession = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false)
+                    IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false),
+                    IdUser = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -153,29 +244,85 @@ namespace GestionDeCampagneBack.Migrations
                         principalTable: "NiveauDeVisibilites",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Contacts_Utilisateurs_IdUser",
+                        column: x => x.IdUser,
+                        principalTable: "Utilisateurs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Utilisateurs",
+                name: "InfosMessages",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NomComplet = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Login = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Etat = table.Column<bool>(type: "bit", nullable: false),
-                    Statut = table.Column<bool>(type: "bit", nullable: false),
-                    IdRole = table.Column<int>(type: "int", nullable: false)
+                    MessagePrevu = table.Column<int>(type: "int", nullable: false),
+                    MessageAchemines = table.Column<int>(type: "int", nullable: true),
+                    MessageEnCours = table.Column<int>(type: "int", nullable: true),
+                    MessageErreur = table.Column<int>(type: "int", nullable: true),
+                    IdCampagne = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Utilisateurs", x => x.Id);
+                    table.PrimaryKey("PK_InfosMessages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Utilisateurs_Roles_IdRole",
-                        column: x => x.IdRole,
-                        principalTable: "Roles",
+                        name: "FK_InfosMessages_Campagnes_IdCampagne",
+                        column: x => x.IdCampagne,
+                        principalTable: "Campagnes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ListeDffCampagnes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdCampagne = table.Column<int>(type: "int", nullable: false),
+                    IdListe = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ListeDffCampagnes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ListeDffCampagnes_Campagnes_IdCampagne",
+                        column: x => x.IdCampagne,
+                        principalTable: "Campagnes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ListeDffCampagnes_ListeDeDiffusions_IdListe",
+                        column: x => x.IdListe,
+                        principalTable: "ListeDeDiffusions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ModeleCampagnes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdCampagne = table.Column<int>(type: "int", nullable: false),
+                    IdModele = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ModeleCampagnes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ModeleCampagnes_Campagnes_IdCampagne",
+                        column: x => x.IdCampagne,
+                        principalTable: "Campagnes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ModeleCampagnes_Modeles_IdModele",
+                        column: x => x.IdModele,
+                        principalTable: "Modeles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -296,139 +443,31 @@ namespace GestionDeCampagneBack.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Campagnes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Titre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateDeDebut = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateDeFin = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Etat = table.Column<bool>(type: "bit", nullable: false),
-                    Statut = table.Column<bool>(type: "bit", nullable: false),
-                    IdUtilisateur = table.Column<int>(type: "int", nullable: false),
-                    IdRegleEnvoi = table.Column<int>(type: "int", nullable: false),
-                    IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false),
-                    IdTypeCampagne = table.Column<int>(type: "int", nullable: false),
-                    IdCategorie = table.Column<int>(type: "int", nullable: false),
-                    IdCanalEnvoi = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Campagnes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Campagnes_CanalEnvois_IdCanalEnvoi",
-                        column: x => x.IdCanalEnvoi,
-                        principalTable: "CanalEnvois",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Campagnes_Categories_IdCategorie",
-                        column: x => x.IdCategorie,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Campagnes_NiveauDeVisibilites_IdNiveauVisibilite",
-                        column: x => x.IdNiveauVisibilite,
-                        principalTable: "NiveauDeVisibilites",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Campagnes_RegleDEnvois_IdRegleEnvoi",
-                        column: x => x.IdRegleEnvoi,
-                        principalTable: "RegleDEnvois",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Campagnes_TypeDeCampagnes_IdTypeCampagne",
-                        column: x => x.IdTypeCampagne,
-                        principalTable: "TypeDeCampagnes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Campagnes_Utilisateurs_IdUtilisateur",
-                        column: x => x.IdUtilisateur,
-                        principalTable: "Utilisateurs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InfosMessages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MessagePrevu = table.Column<int>(type: "int", nullable: false),
-                    MessageAchemines = table.Column<int>(type: "int", nullable: true),
-                    MessageEnCours = table.Column<int>(type: "int", nullable: true),
-                    MessageErreur = table.Column<int>(type: "int", nullable: true),
-                    IdCampagne = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InfosMessages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_InfosMessages_Campagnes_IdCampagne",
-                        column: x => x.IdCampagne,
-                        principalTable: "Campagnes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ListeDffCampagnes",
+                name: "InfosMessageCampagne",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdCampagne = table.Column<int>(type: "int", nullable: false),
-                    IdListe = table.Column<int>(type: "int", nullable: false)
+                    IdCampagneNavigationId = table.Column<int>(type: "int", nullable: true),
+                    IdInfosMessage = table.Column<int>(type: "int", nullable: false),
+                    IdInfosMessageNavigationId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ListeDffCampagnes", x => x.Id);
+                    table.PrimaryKey("PK_InfosMessageCampagne", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ListeDffCampagnes_Campagnes_IdCampagne",
-                        column: x => x.IdCampagne,
+                        name: "FK_InfosMessageCampagne_Campagnes_IdCampagneNavigationId",
+                        column: x => x.IdCampagneNavigationId,
                         principalTable: "Campagnes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ListeDffCampagnes_ListeDeDiffusions_IdListe",
-                        column: x => x.IdListe,
-                        principalTable: "ListeDeDiffusions",
+                        name: "FK_InfosMessageCampagne_InfosMessages_IdInfosMessageNavigationId",
+                        column: x => x.IdInfosMessageNavigationId,
+                        principalTable: "InfosMessages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ModeleCampagnes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IdCampagne = table.Column<int>(type: "int", nullable: false),
-                    IdModele = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ModeleCampagnes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ModeleCampagnes_Campagnes_IdCampagne",
-                        column: x => x.IdCampagne,
-                        principalTable: "Campagnes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ModeleCampagnes_Modeles_IdModele",
-                        column: x => x.IdModele,
-                        principalTable: "Modeles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -455,34 +494,6 @@ namespace GestionDeCampagneBack.Migrations
                         name: "FK_SuiviCampagneCampagnes_SuiviCampagnes_IdSuiviNavigationId",
                         column: x => x.IdSuiviNavigationId,
                         principalTable: "SuiviCampagnes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InfosMessageCampagne",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IdCampagne = table.Column<int>(type: "int", nullable: false),
-                    IdCampagneNavigationId = table.Column<int>(type: "int", nullable: true),
-                    IdInfosMessage = table.Column<int>(type: "int", nullable: false),
-                    IdInfosMessageNavigationId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InfosMessageCampagne", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_InfosMessageCampagne_Campagnes_IdCampagneNavigationId",
-                        column: x => x.IdCampagneNavigationId,
-                        principalTable: "Campagnes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_InfosMessageCampagne_InfosMessages_IdInfosMessageNavigationId",
-                        column: x => x.IdInfosMessageNavigationId,
-                        principalTable: "InfosMessages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -522,12 +533,6 @@ namespace GestionDeCampagneBack.Migrations
                 name: "IX_Campagnes_IdUtilisateur",
                 table: "Campagnes",
                 column: "IdUtilisateur");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CanalEnvois_Code",
-                table: "CanalEnvois",
-                column: "Code",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CanalEnvois_Titre",
@@ -584,6 +589,11 @@ namespace GestionDeCampagneBack.Migrations
                 column: "IdNiveauVisibilite");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Contacts_IdUser",
+                table: "Contacts",
+                column: "IdUser");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Contacts_Matricule",
                 table: "Contacts",
                 column: "Matricule",
@@ -634,7 +644,8 @@ namespace GestionDeCampagneBack.Migrations
                 name: "IX_Modeles_Code",
                 table: "Modeles",
                 column: "Code",
-                unique: true);
+                unique: true,
+                filter: "[Code] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Modeles_Libelle",
@@ -752,10 +763,10 @@ namespace GestionDeCampagneBack.Migrations
                 name: "TypeDeCampagnes");
 
             migrationBuilder.DropTable(
-                name: "Utilisateurs");
+                name: "NiveauDeVisibilites");
 
             migrationBuilder.DropTable(
-                name: "NiveauDeVisibilites");
+                name: "Utilisateurs");
 
             migrationBuilder.DropTable(
                 name: "Roles");
