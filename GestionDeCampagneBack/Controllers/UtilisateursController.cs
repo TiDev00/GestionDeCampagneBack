@@ -112,6 +112,33 @@ namespace GestionDeCampagneBack.Controllers
             }
         }
 
+        [HttpPut("changepassword/{id}")]
+        public IActionResult GetUserByIdForChangePassword(int id, Changerpassword chm)
+        {
+            var user = _utilisateurData.GetUtilisateurById(id);
+            if (user != null)
+            {
+                bool verified = BCrypt.Net.BCrypt.Verify(chm.Amp, user.Password);
+                if (verified==true)
+                {
+                    string passwordHash = BCrypt.Net.BCrypt.HashPassword(chm.Nmp);
+                    user.Password = passwordHash;
+                    user.Ischange = true;
+                    _utilisateurData.SaveChanges();
+                    return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = user.Id }, user);
+                }
+                else
+                {
+                    return NotFound($"Le mot de passe est incorrecte");
+
+                }
+
+
+
+            }
+            return NotFound($"Un utilisateur avec l'email : {id} n'existe pas");
+        }
+
         [HttpGet("email/{email}", Name = "GetUtilisateurByEmail")]
         public IActionResult GetUtilisateurByEmail(string email)
         {
@@ -182,7 +209,6 @@ namespace GestionDeCampagneBack.Controllers
 
                     if (verifiLogin == null && verifiEmail == null)
                     {
-
                         _utilisateurData.EditUtilisateur(user, id);
                         _utilisateurData.SaveChanges();
                         return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = utilisateur.Id }, utilisateur);

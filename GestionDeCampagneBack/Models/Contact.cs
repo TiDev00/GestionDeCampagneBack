@@ -34,10 +34,6 @@ namespace GestionDeCampagneBack.Models
         [DataType(DataType.Text)]
         public string Prenom { get; set; }
 
-        [Required(ErrorMessage = "Le nom est obligatoire")]
-        [StringLength(100, MinimumLength = 2,
-        ErrorMessage = "Le matricule doit comporter au minimum 2 caractères et au maximum 100 caractères")]
-        [DataType(DataType.Text)]
         public string Matricule { get; set; }
 
         [StringLength(20, MinimumLength = 0)]
@@ -45,8 +41,7 @@ namespace GestionDeCampagneBack.Models
 
         public bool Etat { get; set; }
 
-        [Required(ErrorMessage = "Le statut est obligatoire")]
-        [StringLength(20, MinimumLength = 2)]
+
         public bool Statut { get; set; }
         public string Pays { get; set; }
 
@@ -54,20 +49,20 @@ namespace GestionDeCampagneBack.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? DateDeNaissance { get; set; }
 
-        public bool? Sexe { get; set; }
+        [Required(ErrorMessage = "Le sexe est obligatoire")]
+        public string Sexe { get; set; }
         public string Situation { get; set; }
         public string Profession { get; set; }
+
         [Required(ErrorMessage = "Le niveau de visibilité est obligatoire")]
         public int IdNiveauVisibilite { get; set; }
 
         [ForeignKey("IdNiveauVisibilite")]
-
-        [Required(ErrorMessage = "L'utilisateur est obligatoire")]
-        public int IdUtilisateur { get; set; }
-
-        [ForeignKey("IdUtilisateur")]
         public virtual NiveauDeVisibilite IdNiveauVisibiliteNavigation { get; set; }
-        public virtual Utilisateur IdUtilisateurNavigation { get; set; }
+
+        public int IdUser { get; set; }
+        [ForeignKey("IdUser")]
+        public virtual Utilisateur IdUserNavigation { get; set; }
         public virtual ICollection<ContactCanal> ContactCanals { get; set; }
         public virtual ICollection<ContactListeDiffusion> ContactListeDiffusions { get; set; }
         public virtual ICollection<SuiviCampagne> SuiviCampagnes { get; set; }

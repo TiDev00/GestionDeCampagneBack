@@ -29,6 +29,12 @@ namespace GestionDeCampagneBack.Controllers
             return Ok(_ContactData.GetContacts());
         }
 
+
+       /* public IActionResult GetDonnee()
+        {
+            return Ok(_ContactData.GetAllLienByIdContact(1));
+        }
+       */
         [HttpGet("{id}", Name = "GetContactById")]
         public IActionResult GetContactById(int id)
         {
@@ -46,20 +52,13 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<Contact> AddContact(Contact Contact)
         {
-            var verifiMatricul = _ContactData.GetContactByMatricul(Contact.Matricule);
-
-            if (verifiMatricul == null)
-            {
+           
                 _ContactData.AddContact(Contact);
                 _ContactData.SaveChanges();
 
                 return CreatedAtRoute(nameof(GetContactById), new { Id = Contact.Id }, Contact);
-            }
-            else
-            {
-                return NotFound($"Un Contact avec le Matricule : {Contact.Matricule} existe déjà");
-
-            }
+            
+           
         }
 
 

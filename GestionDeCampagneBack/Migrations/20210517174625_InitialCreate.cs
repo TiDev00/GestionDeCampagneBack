@@ -229,28 +229,27 @@ namespace GestionDeCampagneBack.Migrations
                     Statut = table.Column<bool>(type: "bit", maxLength: 20, nullable: false),
                     Pays = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateDeNaissance = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Sexe = table.Column<bool>(type: "bit", nullable: true),
+                    Sexe = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Situation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Profession = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false),
-                    IdUtilisateur = table.Column<int>(type: "int", nullable: false),
-                    IdUtilisateurNavigationId = table.Column<int>(type: "int", nullable: true)
+                    IdUser = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Contacts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Contacts_NiveauDeVisibilites_IdUtilisateur",
-                        column: x => x.IdUtilisateur,
+                        name: "FK_Contacts_NiveauDeVisibilites_IdNiveauVisibilite",
+                        column: x => x.IdNiveauVisibilite,
                         principalTable: "NiveauDeVisibilites",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Contacts_Utilisateurs_IdUtilisateurNavigationId",
-                        column: x => x.IdUtilisateurNavigationId,
+                        name: "FK_Contacts_Utilisateurs_IdUser",
+                        column: x => x.IdUser,
                         principalTable: "Utilisateurs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -585,14 +584,14 @@ namespace GestionDeCampagneBack.Migrations
                 column: "IdNiveauVisibiliteNavigationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contacts_IdUtilisateur",
+                name: "IX_Contacts_IdNiveauVisibilite",
                 table: "Contacts",
-                column: "IdUtilisateur");
+                column: "IdNiveauVisibilite");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contacts_IdUtilisateurNavigationId",
+                name: "IX_Contacts_IdUser",
                 table: "Contacts",
-                column: "IdUtilisateurNavigationId");
+                column: "IdUser");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contacts_Matricule",

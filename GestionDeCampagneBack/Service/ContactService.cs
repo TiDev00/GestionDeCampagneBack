@@ -15,6 +15,9 @@ namespace GestionDeCampagneBack.Service
         {
             _dbcontextGC = dbcontextGC;
         }
+   
+
+
         public void AddContact(Contact Contact)
         {
             if (Contact == null)
@@ -22,7 +25,32 @@ namespace GestionDeCampagneBack.Service
                 throw new ArgumentNullException(nameof(Contact));
 
             }
-            _dbcontextGC.Contacts.Add(Contact);
+            else
+            {
+                var countval = _dbcontextGC.Contacts.Count();
+                if (countval >= 1)
+                {
+                    var maxId = _dbcontextGC.Contacts.Max(p => p.Id);
+
+                    Contact.Matricule = "CT0000" + (maxId + 1).ToString();
+                    Contact.Etat = true;
+                    Contact.Statut = true;
+
+                    _dbcontextGC.Contacts.Add(Contact);
+                }
+                else
+                {
+
+
+                    Contact.Matricule = "CT00001";
+                    Contact.Etat = true;
+                    Contact.Statut = true;
+                    _dbcontextGC.Contacts.Add(Contact);
+                }
+
+
+            }
+
         }
 
 
@@ -46,22 +74,6 @@ namespace GestionDeCampagneBack.Service
         }
 
 
-        /*public Contact GetContactByAdresse(string Adresse)
-        {
-            var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.Adresse == Adresse);
-            if (Contact != null)
-                return Contact;
-            else return null;
-        }
-
-        public Contact GetContactByDateDeNaissance(DateTime DateNaissance)
-        {
-            var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.DateDeNaissance == DateNaissance);
-            if (Contact != null)
-                return Contact;
-            else return null;
-        }*/
-
         public Contact GetContactById(int id)
         {
             var Contact = _dbcontextGC.Contacts.Find(id);
@@ -76,54 +88,6 @@ namespace GestionDeCampagneBack.Service
             else return null;
         }
 
-        /*public Contact GetContactByNom(string Nom)
-        {
-            var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.NomComplet == Nom);
-            if (Contact != null)
-                return Contact;
-            else return null;
-        }
-
-        public Contact GetContactByPays(string Pays)
-        {
-            var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.Pays == Pays);
-            if (Contact != null)
-                return Contact;
-            else return null;
-        }
-
-        public Contact GetContactByProfession(string Profession)
-        {
-            var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.Profession == Profession);
-            if (Contact != null)
-                return Contact;
-            else return null;
-        }
-
-        public Contact GetContactByRegion(string Region)
-        {
-            var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.Region == Region);
-            if (Contact != null)
-                return Contact;
-            else return null;
-        }
-
-        public Contact GetContactBySexe(bool Sexe)
-        {
-            var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.Sexe == Sexe);
-            if (Contact != null)
-                return Contact;
-            else return null;
-        }
-
-        public Contact GetContactBySituation(bool Situation)
-        {
-            var Contact = _dbcontextGC.Contacts.FirstOrDefault(r => r.Situation == Situation);
-            if (Contact != null)
-                return Contact;
-            else return null;
-        }*/
-
         public List<Contact> GetContacts()
         {
             return _dbcontextGC.Contacts.ToList();
@@ -132,6 +96,12 @@ namespace GestionDeCampagneBack.Service
         public bool SaveChanges()
         {
             return (_dbcontextGC.SaveChanges() >= 0);
+        }
+
+        public void GetAllLienByIdContact(int id)
+        {
+            var Contact = _dbcontextGC.Contacts.Where(r => r.Id == id && r.Id == _dbcontextGC.Contacts.First(r => r.Id == id).Id);
+           
         }
     }
 }
