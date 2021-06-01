@@ -164,9 +164,7 @@ namespace GestionDeCampagneBack.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Matricule")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Nom")
                         .IsRequired()
@@ -192,7 +190,6 @@ namespace GestionDeCampagneBack.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Statut")
-                        .HasMaxLength(20)
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -202,7 +199,8 @@ namespace GestionDeCampagneBack.Migrations
                     b.HasIndex("IdUser");
 
                     b.HasIndex("Matricule")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Matricule] IS NOT NULL");
 
                     b.ToTable("Contacts");
                 });
@@ -235,9 +233,6 @@ namespace GestionDeCampagneBack.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CanalDuContatct")
-                        .IsUnique();
 
                     b.HasIndex("IdCanalEnvoi");
 

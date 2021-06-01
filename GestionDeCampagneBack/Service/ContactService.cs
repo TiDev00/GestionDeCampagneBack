@@ -98,10 +98,7 @@ namespace GestionDeCampagneBack.Service
             return (_dbcontextGC.SaveChanges() >= 0);
         }
 
-        public void GetAllLienByIdContact(int id)
-        {
-            var Contact = _dbcontextGC.Contacts.Where(r => r.Id == id && r.Id == _dbcontextGC.Contacts.First(r => r.Id == id).Id);
-           
-        }
+
+       
     }
 }

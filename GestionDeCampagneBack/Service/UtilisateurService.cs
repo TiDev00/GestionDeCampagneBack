@@ -47,7 +47,7 @@ namespace GestionDeCampagneBack.Service
             user.Etat = Utilisateur.Etat;
             user.Statut = Utilisateur.Statut;
             user.Nom = Utilisateur.Nom;
-            user.Prenom = Utilisateur.Password;
+            user.Prenom = Utilisateur.Prenom;
             user.IdRole = Utilisateur.IdRole;
             user.Login = Utilisateur.Login;
             user.Email = Utilisateur.Email;

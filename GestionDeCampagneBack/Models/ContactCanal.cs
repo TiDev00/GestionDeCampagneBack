@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestionDeCampagneBack.Models
 {
-    [Index(nameof(CanalDuContatct), IsUnique = true)]
+
     public partial class ContactCanal
     {
   

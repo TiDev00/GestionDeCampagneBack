@@ -223,10 +223,10 @@ namespace GestionDeCampagneBack.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nom = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Prenom = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Matricule = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Matricule = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Adresse = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Etat = table.Column<bool>(type: "bit", nullable: false),
-                    Statut = table.Column<bool>(type: "bit", maxLength: 20, nullable: false),
+                    Statut = table.Column<bool>(type: "bit", nullable: false),
                     Pays = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateDeNaissance = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Sexe = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -547,12 +547,6 @@ namespace GestionDeCampagneBack.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContactCanals_CanalDuContatct",
-                table: "ContactCanals",
-                column: "CanalDuContatct",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ContactCanals_IdCanalEnvoi",
                 table: "ContactCanals",
                 column: "IdCanalEnvoi");
@@ -597,7 +591,8 @@ namespace GestionDeCampagneBack.Migrations
                 name: "IX_Contacts_Matricule",
                 table: "Contacts",
                 column: "Matricule",
-                unique: true);
+                unique: true,
+                filter: "[Matricule] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InfosMessageCampagne_IdCampagneNavigationId",

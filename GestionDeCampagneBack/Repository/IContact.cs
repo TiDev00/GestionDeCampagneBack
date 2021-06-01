@@ -21,6 +21,6 @@ namespace GestionDeCampagneBack.Repository
 
         Contact EditContact(Contact Contact, int Id);
 
-        void  GetAllLienByIdContact(int id);
+
     }
 }
