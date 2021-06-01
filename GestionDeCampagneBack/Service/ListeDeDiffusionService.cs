@@ -22,7 +22,25 @@ namespace GestionDeCampagneBack.Service
                 throw new ArgumentNullException(nameof(ListeDeDiffusion));
 
             }
-            _dbcontextGC.ListeDeDiffusions.Add(ListeDeDiffusion);
+            else
+            {
+                var countval = _dbcontextGC.ListeDeDiffusions.Count();
+                if(countval >= 1)
+                {
+                    var maxId = _dbcontextGC.ListeDeDiffusions.Max(p => p.Id);
+
+                    ListeDeDiffusion.Reference = "RE0000" + (maxId + 1).ToString();
+                    ListeDeDiffusion.Etat = true;
+
+                    _dbcontextGC.ListeDeDiffusions.Add(ListeDeDiffusion);
+                }
+                else
+                {
+                    ListeDeDiffusion.Reference = "RE00001";
+                    ListeDeDiffusion.Etat = true;
+                    _dbcontextGC.ListeDeDiffusions.Add(ListeDeDiffusion);
+                }
+            }
         }
 
         public void DeleteListeDiffusion(ListeDeDiffusion ListeDeDiffusion)

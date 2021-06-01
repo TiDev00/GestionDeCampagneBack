@@ -38,7 +38,32 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Une Liste de Diffusion avec l'id : {id} n'existe pas");
         }
 
-    [HttpGet("titre/{titre}", Name = "GetListeDiffusionByTitre")]
+
+        [HttpGet("changeEtat/{id}")]
+        public IActionResult ChangeetatCanalEnvoiById(int id)
+        {
+            var ListeDiff = _listeListeData.GetListeDiffusionById(id);
+            if (ListeDiff != null)
+            {
+                if (ListeDiff.Etat == true)
+                {
+                    ListeDiff.Etat = false;
+                    _listeListeData.SaveChanges();
+                    return Ok(ListeDiff);
+                }
+                else
+                {
+                    ListeDiff.Etat = true;
+                    _listeListeData.SaveChanges();
+                    return Ok(ListeDiff);
+                }
+
+
+            }
+            return NotFound($"Une Liste de Diffusion avec l'id : {id} n'existe pas");
+        }
+
+        [HttpGet("titre/{titre}", Name = "GetListeDiffusionByTitre")]
         public IActionResult GetListeDiffusionByTitre(string titre)
         {
             var ListeDiffusion = _listeListeData.GetListeDiffusionByTitre(titre);
@@ -70,7 +95,7 @@ namespace GestionDeCampagneBack.Controllers
             var verifiTitre = _listeListeData.GetListeDiffusionByTitre(ListeDiff.Titre);
             var verify = _listeListeData.GetListeDiffusionByReference(ListeDiff.Reference);
 
-            if (verifiTitre == null && verify == null)
+            if (verifiTitre == null)
             {
                 _listeListeData.AddListeDiffusion(ListeDiff);
                 _listeListeData.SaveChanges();
