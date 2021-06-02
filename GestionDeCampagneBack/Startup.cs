@@ -54,6 +54,10 @@ namespace GestionDeCampagneBack
 
             }));
             services.AddScoped<IRole, RoleService>();
+            services.AddScoped<ICategorie, CategorieService>();
+            services.AddScoped<ITypeDeCampagne, TypeDeCampagneService>();
+            services.AddScoped<IInfosMessage, InfosMessageService>();
+            services.AddScoped<IRegleDEnvoi, RegleDEnvoiService>();
             services.AddScoped<IUtilisateur, UtilisateurService>();
             services.AddScoped<IModele, ModeleService>();
             services.AddScoped<ICanalEnvoi, CanalEnvoiService>();
