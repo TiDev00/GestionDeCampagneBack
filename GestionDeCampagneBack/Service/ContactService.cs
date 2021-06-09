@@ -69,6 +69,19 @@ namespace GestionDeCampagneBack.Service
         {
             var contact = _dbcontextGC.Contacts.Find(id);
             contact.Matricule = Contact.Matricule;
+            contact.Prenom = Contact.Prenom;
+            contact.Nom = Contact.Nom;
+            contact.Pays = Contact.Pays;
+            contact.Sexe = Contact.Sexe;
+            contact.Profession = Contact.Profession;
+            contact.Situation = Contact.Situation;
+            contact.DateDeNaissance = Contact.DateDeNaissance;
+            contact.Adresse = Contact.Adresse;
+            contact.Etat = Contact.Etat;
+            contact.Statut = Contact.Statut;
+            contact.IdNiveauVisibilite = Contact.IdNiveauVisibilite;
+            contact.IdUser = Contact.IdUser;
+   
             return Contact;
 
         }

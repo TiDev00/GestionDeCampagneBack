@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionDeCampagneBack.Migrations
 {
     [DbContext(typeof(DbcontextGC))]
-    [Migration("20210511002449_InitialCreate")]
+    [Migration("20210607121847_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,16 +162,11 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("IdNiveauVisibilite")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdUtilisateur")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdUtilisateurNavigationId")
+                    b.Property<int>("IdUser")
                         .HasColumnType("int");
 
                     b.Property<string>("Matricule")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Nom")
                         .IsRequired()
@@ -189,24 +184,25 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<string>("Profession")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("Sexe")
-                        .HasColumnType("bit");
+                    b.Property<string>("Sexe")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Situation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Statut")
-                        .HasMaxLength(20)
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdUtilisateur");
+                    b.HasIndex("IdNiveauVisibilite");
 
-                    b.HasIndex("IdUtilisateurNavigationId");
+                    b.HasIndex("IdUser");
 
                     b.HasIndex("Matricule")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Matricule] IS NOT NULL");
 
                     b.ToTable("Contacts");
                 });
@@ -239,9 +235,6 @@ namespace GestionDeCampagneBack.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CanalDuContatct")
-                        .IsUnique();
 
                     b.HasIndex("IdCanalEnvoi");
 
@@ -763,17 +756,19 @@ namespace GestionDeCampagneBack.Migrations
                 {
                     b.HasOne("GestionDeCampagneBack.Models.NiveauDeVisibilite", "IdNiveauVisibiliteNavigation")
                         .WithMany()
-                        .HasForeignKey("IdUtilisateur")
+                        .HasForeignKey("IdNiveauVisibilite")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestionDeCampagneBack.Models.Utilisateur", "IdUtilisateurNavigation")
+                    b.HasOne("GestionDeCampagneBack.Models.Utilisateur", "IdUserNavigation")
                         .WithMany("Contacts")
-                        .HasForeignKey("IdUtilisateurNavigationId");
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("IdNiveauVisibiliteNavigation");
 
-                    b.Navigation("IdUtilisateurNavigation");
+                    b.Navigation("IdUserNavigation");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.ContactCanal", b =>
