@@ -22,8 +22,25 @@ namespace GestionDeCampagneBack.Service
                 throw new ArgumentNullException(nameof(ContactListeDiffusion));
 
             }
+            else
+            {
+                var countval = _dbcontextGC.ContactListeDiffusions.Count();
+                if (countval >= 1)
+                {
+                    var maxId = _dbcontextGC.ContactListeDiffusions.Max(p => p.Id);
 
-            _dbcontextGC.ContactListeDiffusions.Add(ContactListeDiffusion);
+                    ContactListeDiffusion.Code = "C0000" + (maxId + 1).ToString();
+                    ContactListeDiffusion.Etat = true;
+
+                    _dbcontextGC.ContactListeDiffusions.Add(ContactListeDiffusion);
+                }
+                else
+                {
+                    ContactListeDiffusion.Code = "C00001";
+                    ContactListeDiffusion.Etat = true;
+                    _dbcontextGC.ContactListeDiffusions.Add(ContactListeDiffusion);
+                }
+            }
         }
 
         public void DeleteContactListeDiffusion(ContactListeDiffusion ContactListeDiffusion)
