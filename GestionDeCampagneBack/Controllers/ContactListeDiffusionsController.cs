@@ -1,6 +1,6 @@
-﻿using GestionDeCampagneBack.ModeleRequete;
-using GestionDeCampagneBack.Models;
+﻿using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,89 +9,120 @@ using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class ContactListeDiffusionsController : ControllerBase
     {
-        private IListeDiffussion _ListeDiffusionData;
-        private IContact _ContactData;
         private IContactListeDiffusion _ContactListeDiffusionData;
-        private DbcontextGC _dbcontextGC;
+        private IContact _ContactData;
+        private INiveauDeVisibilite _NiveauVisibiliteData;
 
-        public ContactListeDiffusionsController(IListeDiffussion ListeDiffusionData, IContact ContactData,
-            IContactListeDiffusion ContactListeDiffusionData, DbcontextGC _dbcontextGC
-           )
+        public ContactListeDiffusionsController(IContactListeDiffusion ContactListeDiffusionData, IContact ContactData, INiveauDeVisibilite NiveauVisibiliteData)
         {
-            _ListeDiffusionData = ListeDiffusionData;
-            _ContactData = ContactData;
             _ContactListeDiffusionData = ContactListeDiffusionData;
-
+            _ContactData = ContactData;
+            _NiveauVisibiliteData = NiveauVisibiliteData;
         }
+        // GET: api/<ValuesController>
         [HttpGet]
-        public IActionResult GetContactListeDeDiffusions()
+        public IActionResult GetAllContactListeDiffusions()
         {
-            return Ok(_ContactListeDiffusionData.GetContactListeDeDiffusions());
+            return Ok(_ContactListeDiffusionData.GetContactListeDiffusions());
         }
 
-        [HttpGet("{id}", Name = "GetContactListeDiffusionByID")]
-        public IActionResult GetContactListeDiffusionByID(int id)
+        [HttpGet("{id}", Name = "GetContactListeDiffusionById")]
+        public IActionResult GetContactListeDiffusionById(int id)
         {
-            var ContactListeDiffusion = _ContactListeDiffusionData.GetContactListeDiffusionByID(id);
+            var ContactListeDiffusion = _ContactListeDiffusionData.GetContactListeDiffusionById(id);
             if (ContactListeDiffusion != null)
             {
                 return Ok(ContactListeDiffusion);
 
             }
-            return NotFound($"Une Liste de diffusion avec l'id : {id} n'existe pas");
+            return NotFound($"Un ContactListeDiffusion avec l'id : {id} n'existe pas");
         }
 
-        [HttpGet("ListeContacts")]
-        public IActionResult GetAllContacts()
+
+        [HttpGet("code/{code}", Name = "GetContactListeDiffusionByCode")]
+        public IActionResult GetContactListeDiffusionByEmail(string Code)
         {
-            return Ok(_ContactData.GetContacts());
-        }
+            var code = _ContactListeDiffusionData.GetContactListeDiffusionByCode(Code);
+            if (code != null)
+            {
+                return Ok(code);
 
+            }
+            return NotFound($"Un ContactListeDiffusion avec l'email : {code} n'existe pas");
+        }
 
         [HttpPost("add")]
-        public ActionResult<ContactListeDiffusion> AddContactListeDeDiffusion(ContactListeDiffusion ContactListeDiffusion)
+        public ActionResult<ContactListeDiffusion> AddContactListeDiffusion(ContactListeDiffusion ContactListeDiffusion)
         {
 
-            _ContactListeDiffusionData.AddContactListeDeDiffusion(ContactListeDiffusion);
-            _ContactListeDiffusionData.SaveChanges();
+            var contact = _ContactData.GetContactById(ContactListeDiffusion.IdContact);
+            if (contact != null)
+            {
+                var verifiId = _ContactListeDiffusionData.GetContactListeDiffusionById(ContactListeDiffusion.Id);
+                var verifiCode = _ContactListeDiffusionData.GetContactListeDiffusionByCode(ContactListeDiffusion.Code);
 
-            return CreatedAtRoute(nameof(GetContactListeDiffusionByID), new { Id = ContactListeDiffusion.Id }, ContactListeDiffusion);
+                if (verifiId == null)
+                {
+                    if (verifiCode == null)
+                    {
+                        _ContactListeDiffusionData.AddContactListeDiffusion(ContactListeDiffusion);
+                        _ContactListeDiffusionData.SaveChanges();
+                        return CreatedAtRoute(nameof(GetContactListeDiffusionById), new { Id = ContactListeDiffusion.Id }, ContactListeDiffusion);
+                    }
+                    else return NotFound($"Un ContactListeDiffusion avec l'email : {ContactListeDiffusion.Code} existe déjà");
+
+                }
+                else
+                {
+                    return NotFound($"Un ContactListeDiffusion avec le login : {ContactListeDiffusion.Id} existe déjà");
+
+                }
+
+            }
+            else
+                return NotFound($"Un contact avec l'id : {ContactListeDiffusion.IdContact} n'existe pas");
+
+
+            // return Ok(categorireadDto);
         }
 
         [HttpPut("put/{id}")]
-        public ActionResult<ContactListeDiffusion> EditContactListeDeDiffusion(ContactListeDiffusion ContactListeDiffusion, int Id) { 
-
-            var ContactListeDeDiffusion = _ContactListeDiffusionData.GetContactListeDiffusionByID(Id);
-            if (ContactListeDeDiffusion != null)
+        public ActionResult<ContactListeDiffusion> PutContactListeDiffusion(ContactListeDiffusion contact, int id)
+        {
+            var ContactListeDiffusion = _ContactListeDiffusionData.GetContactListeDiffusionById(id);
+            if (ContactListeDiffusion != null)
             {
-                _ContactListeDiffusionData.EditContactListeDeDiffusion(ContactListeDiffusion, Id);
+                _ContactListeDiffusionData.EditContactListeDiffusion(contact, id);
                 _ContactListeDiffusionData.SaveChanges();
-
-                return CreatedAtRoute(nameof(GetContactListeDiffusionByID), new { Id = ContactListeDiffusion.Id }, ContactListeDiffusion);
+                return CreatedAtRoute(nameof(GetContactListeDiffusionById), new { Id = ContactListeDiffusion.Id }, ContactListeDiffusion);
             }
-            return NotFound($"Une Liste de diffusion avec l'id : {Id} n'existe pas");
+            return NotFound($"Un ContactListeDiffusion avec l'id : {id} n'existe pas");
 
+
+
+            // return Ok(categorireadDto);
         }
 
+
+
         [HttpDelete("delete/{id}")]
-        public ActionResult<ContactListeDiffusion> DeleteContactListeDeDiffusion(int Id)
+        public ActionResult<ContactListeDiffusion> DeleteContactListeDiffusion(int id)
         {
 
-            var ContactListeDeDiffusion = _ContactListeDiffusionData.GetContactListeDiffusionByID(Id);
-            if (ContactListeDeDiffusion != null)
+            var ContactListeDiffusion = _ContactListeDiffusionData.GetContactListeDiffusionById(id);
+            if (ContactListeDiffusion != null)
             {
-                _ContactListeDiffusionData.DeleteContactListeDeDiffusion(ContactListeDeDiffusion);
+                _ContactListeDiffusionData.DeleteContactListeDiffusion(ContactListeDiffusion);
                 _ContactListeDiffusionData.SaveChanges();
                 return Accepted();
 
             }
-            return NotFound($"Une Liste de diffusion avec l'id : {Id} n'existe pas");
+            return NotFound($"Un ContactListeDiffusion avec l'id : {id} n'existe pas");
+            // return Ok(categorireadDto);
         }
-
     }
 }

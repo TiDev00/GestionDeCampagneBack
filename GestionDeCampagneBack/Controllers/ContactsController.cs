@@ -14,16 +14,16 @@ namespace GestionDeCampagneBack.Controllers
     [ApiController]
     public class ContactsController : ControllerBase
     {
+        private DbcontextGC _dbcontextGC;
+
         private IContact _ContactData;
         private INiveauDeVisibilite _NiveauDeVisibiliteData;
-        private IContactCanalEnvoi _contactCanalEnvoiData;
 
-        public ContactsController(IContact ContactData, INiveauDeVisibilite NiveauDeVisibiliteData , IContactCanalEnvoi contactCanalEnvoi)
+        public ContactsController(DbcontextGC dbcontextGC,IContact ContactData, INiveauDeVisibilite NiveauDeVisibiliteData)
         {
             _ContactData = ContactData;
             _NiveauDeVisibiliteData = NiveauDeVisibiliteData;
-            _contactCanalEnvoiData = contactCanalEnvoi;
-
+            _dbcontextGC = dbcontextGC;
         }
         // GET: api/<ValuesController>
         [HttpGet]
@@ -32,6 +32,46 @@ namespace GestionDeCampagneBack.Controllers
             return Ok(_ContactData.GetContacts());
         }
 
+
+        [HttpGet("donneescontact/{id}")]
+        public IActionResult GetDonnee(int id)
+        {
+            var data = _dbcontextGC.Contacts
+       .Join(
+           _dbcontextGC.ContactCanals,
+           contact => contact.Id,
+           contactcanal => contactcanal.IdContactNavigation.Id,
+           (contact, contactcanal) => new
+           {
+               nomCanal = contactcanal.CanalDuContatct,
+               contactName = contact.Nom,
+               contactPrenom = contact.Prenom,
+               contactId = contact.Id
+           }
+       ).ToList().Where(c => c.contactId == id);
+
+            List <object> nnn = new List<object>();
+
+
+            //Dictionary <List<string> myDic = new Dictionary<List<string>();
+             //int i=0;
+            foreach (var detail in data)
+            {
+                var contactObjet = new Dictionary<string, object>();
+
+                contactObjet.Add("idContact", detail.contactId);
+                contactObjet.Add("nomContact", detail.contactName);
+                contactObjet.Add("prenomContact", detail.contactPrenom);
+                contactObjet.Add("nomCanal", detail.nomCanal);
+
+                nnn.Add(contactObjet);
+            }
+
+         
+           
+            return Ok(nnn);
+        }
+       
         [HttpGet("{id}", Name = "GetContactById")]
         public IActionResult GetContactById(int id)
         {
@@ -44,40 +84,14 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Un Contact avec l'id : {id} n'existe pas");
         }
 
-        [HttpGet("CanalEnvoi")]
-        public IActionResult GetAllContactCanalEnvoi()
-        {
-            return Ok(_contactCanalEnvoiData.GetContactCanalCanals());
-        }
 
-        [HttpGet("changes/{id}")]
-        public IActionResult ChangeStatutContact(int id)
-        {
-            var Contact = _ContactData.GetContactById(id);
-            if (Contact != null)
-            {
-                if (Contact.Statut == true)
-                {
-                    Contact.Statut = false;
-                    _ContactData.SaveChanges();
-                    return Ok(Contact);
-                }
-                else
-                {
-                    Contact.Statut = true;
-                    _ContactData.SaveChanges();
-                    return Ok(Contact);
-                }
-
-
-            }
-            return NotFound($"Un Contact avec l'id : {id} n'existe pas");
-        }
+  
         [HttpPost("add")]
         public ActionResult<Contact> AddContact(Contact Contact)
         {
            
                 _ContactData.AddContact(Contact);
+                
                 _ContactData.SaveChanges();
 
                 return CreatedAtRoute(nameof(GetContactById), new { Id = Contact.Id }, Contact);

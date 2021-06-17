@@ -9,17 +9,16 @@ namespace GestionDeCampagneBack.Repository
     public interface IContactListeDiffusion
     {
         bool SaveChanges();
-        List<ContactListeDiffusion> GetContactListeDeDiffusions();
+        List<ContactListeDiffusion> GetContactListeDiffusions();
 
-        ContactListeDiffusion GetContactListeDiffusionByID(int id);
+        ContactListeDiffusion GetContactListeDiffusionById(int id);
 
+        ContactListeDiffusion GetContactListeDiffusionByCode(string Code);
 
-        List<Contact> GetContacts();
+        void AddContactListeDiffusion(ContactListeDiffusion ContactListeDiffusion);
 
-        void AddContactListeDeDiffusion(ContactListeDiffusion ContactListeDiffusion);
+        void DeleteContactListeDiffusion(ContactListeDiffusion ContactListeDiffusion);
 
-        void DeleteContactListeDeDiffusion(ContactListeDiffusion ContactListeDiffusion);
-
-        ContactListeDiffusion EditContactListeDeDiffusion(ContactListeDiffusion ContactListeDiffusion, int Id);
+        ContactListeDiffusion EditContactListeDiffusion(ContactListeDiffusion ContactListeDiffusion, int id);
     }
 }

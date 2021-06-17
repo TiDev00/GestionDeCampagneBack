@@ -209,7 +209,6 @@ namespace GestionDeCampagneBack.Controllers
 
                     if (verifiLogin == null && verifiEmail == null)
                     {
-
                         _utilisateurData.EditUtilisateur(user, id);
                         _utilisateurData.SaveChanges();
                         return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = utilisateur.Id }, utilisateur);

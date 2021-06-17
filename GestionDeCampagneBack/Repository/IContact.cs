@@ -22,5 +22,7 @@ namespace GestionDeCampagneBack.Repository
         void DeleteContact(Contact Contact);
 
         Contact EditContact(Contact Contact, int Id);
+
+
     }
 }

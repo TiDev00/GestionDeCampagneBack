@@ -234,9 +234,6 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CanalDuContatct")
-                        .IsUnique();
-
                     b.HasIndex("IdCanalEnvoi");
 
                     b.HasIndex("IdContact");

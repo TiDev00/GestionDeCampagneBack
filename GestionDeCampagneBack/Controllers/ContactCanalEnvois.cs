@@ -14,10 +14,12 @@ namespace GestionDeCampagneBack.Controllers
     public class ContactCanalEnvois : ControllerBase
     {
         private IContactCanalEnvoi _contactCanalEnvoiData;
+        private IContact _contactData;
 
-        public ContactCanalEnvois(IContactCanalEnvoi ContactCanalEnvoiData)
+        public ContactCanalEnvois(IContactCanalEnvoi ContactCanalEnvoiData, IContact ContactData)
         {
             _contactCanalEnvoiData = ContactCanalEnvoiData;
+            _contactData = ContactData;
         }
 
         [HttpGet ]
@@ -41,12 +43,12 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")] 
         public ActionResult<ContactCanal> AddContactCanal(ContactCanal ContactCanal)
         {
-
-          
-
+            var contact = _contactData.GetContactById(ContactCanal.IdContact);
                 _contactCanalEnvoiData.AddContactCanal(ContactCanal);
                 _contactCanalEnvoiData.SaveChanges();
-
+            contact.ContactCanals.Add(ContactCanal);
+            _contactData.EditContact(contact,contact.Id);
+            _contactData.SaveChanges();
                 return CreatedAtRoute(nameof(GetContactCanalEnvoiById), new { Id = ContactCanal.Id }, ContactCanal);
             }
 

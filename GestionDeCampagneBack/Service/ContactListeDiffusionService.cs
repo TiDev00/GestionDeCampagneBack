@@ -15,7 +15,7 @@ namespace GestionDeCampagneBack.Service
         {
             _dbcontextGC = dbcontextGC;
         }
-        public void AddContactListeDeDiffusion(ContactListeDiffusion ContactListeDiffusion)
+        public void AddContactListeDiffusion(ContactListeDiffusion ContactListeDiffusion)
         {
             if (ContactListeDiffusion == null)
             {
@@ -24,36 +24,26 @@ namespace GestionDeCampagneBack.Service
             }
             else
             {
-
                 var countval = _dbcontextGC.ContactListeDiffusions.Count();
                 if (countval >= 1)
                 {
                     var maxId = _dbcontextGC.ContactListeDiffusions.Max(p => p.Id);
 
-                    ContactListeDiffusion.Code = "Cd0000" + (maxId + 1).ToString();
+                    ContactListeDiffusion.Code = "C0000" + (maxId + 1).ToString();
                     ContactListeDiffusion.Etat = true;
-                    ContactListeDiffusion.DateDesa = null;
-                    ContactListeDiffusion.Raison = " ";
 
                     _dbcontextGC.ContactListeDiffusions.Add(ContactListeDiffusion);
                 }
                 else
                 {
-
-                    ContactListeDiffusion.Code = "Cd0001";
+                    ContactListeDiffusion.Code = "C00001";
                     ContactListeDiffusion.Etat = true;
-                    ContactListeDiffusion.DateDesa = null;
-                    ContactListeDiffusion.Raison = " ";
-
                     _dbcontextGC.ContactListeDiffusions.Add(ContactListeDiffusion);
                 }
-
-
             }
+        }
 
-    }
-
-    public void DeleteContactListeDeDiffusion(ContactListeDiffusion ContactListeDiffusion)
+        public void DeleteContactListeDiffusion(ContactListeDiffusion ContactListeDiffusion)
         {
             if (ContactListeDiffusion == null)
             {
@@ -61,39 +51,39 @@ namespace GestionDeCampagneBack.Service
 
             }
             _dbcontextGC.ContactListeDiffusions.Remove(ContactListeDiffusion);
+            // _dbcontextGC.ContactListeDiffusions.Remove(ContactListeDiffusion);
+
         }
 
-        public ContactListeDiffusion EditContactListeDeDiffusion(ContactListeDiffusion ContactListeDiffusion, int Id)
+        public ContactListeDiffusion EditContactListeDiffusion(ContactListeDiffusion ContactListeDiffusion, int id)
         {
-
-            var contactListeDiffusion = _dbcontextGC.ContactListeDiffusions.Find(Id);
-            contactListeDiffusion.Code = ContactListeDiffusion.Code;
-            contactListeDiffusion.Raison = ContactListeDiffusion.Raison;
-            contactListeDiffusion.DateDesa = ContactListeDiffusion.DateDesa;
-
+            var contactListeDiffusion = _dbcontextGC.ContactListeDiffusions.Find(id);
+            ContactListeDiffusion.Etat = true;
             return ContactListeDiffusion;
-
         }
 
-        public List<ContactListeDiffusion> GetContactListeDeDiffusions()
+        public ContactListeDiffusion GetContactListeDiffusionById(int id)
+        {
+            var value = _dbcontextGC.ContactListeDiffusions.Find(id);
+            return value;
+        }
+
+        public ContactListeDiffusion GetContactListeDiffusionByCode(string Code)
+        {
+            var user = _dbcontextGC.ContactListeDiffusions.FirstOrDefault(r => r.Code == Code);
+            if (user != null)
+                return user;
+            else return null;
+        }
+
+        public List<ContactListeDiffusion> GetContactListeDiffusions()
         {
             return _dbcontextGC.ContactListeDiffusions.ToList();
         }
-
-        public ContactListeDiffusion GetContactListeDiffusionByID(int id)
-        {
-            var ContactListeDiffusion = _dbcontextGC.ContactListeDiffusions.Find(id);
-            return ContactListeDiffusion;
-        }
-
-        public List<Contact> GetContacts()
-        {
-            return _dbcontextGC.Contacts.ToList();
-        }
-
         public bool SaveChanges()
         {
             return (_dbcontextGC.SaveChanges() >= 0);
         }
+
     }
 }
