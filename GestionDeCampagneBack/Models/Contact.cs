@@ -43,11 +43,12 @@ namespace GestionDeCampagneBack.Models
 
 
         public bool Statut { get; set; }
+
         public string Pays { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime? DateDeNaissance { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "dd-MM-yyyy")]
+        public DateTime? DateDeNaissance  { get; set; }
 
         [Required(ErrorMessage = "Le sexe est obligatoire")]
         public string Sexe { get; set; }

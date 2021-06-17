@@ -15,6 +15,8 @@ namespace GestionDeCampagneBack.Repository
 
         Contact GetContactByMatricul(string Matricule);
 
+        List<ContactCanal> GetContactCanalCanals();
+
         void AddContact(Contact Contact);
 
         void DeleteContact(Contact Contact);

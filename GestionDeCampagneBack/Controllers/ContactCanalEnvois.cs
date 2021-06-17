@@ -20,7 +20,7 @@ namespace GestionDeCampagneBack.Controllers
             _contactCanalEnvoiData = ContactCanalEnvoiData;
         }
 
-        [HttpGet]
+        [HttpGet ]
         public IActionResult GetAllContactCanalEnvoi()
         {
             return Ok(_contactCanalEnvoiData.GetContactCanalCanals());
@@ -38,7 +38,7 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Un contact canal avec l'id : {id} n'existe pas");
         }
 
-        [HttpPost("add")]
+        [HttpPost("add")] 
         public ActionResult<ContactCanal> AddContactCanal(ContactCanal ContactCanal)
         {
 

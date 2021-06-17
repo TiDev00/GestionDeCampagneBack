@@ -69,6 +69,17 @@ namespace GestionDeCampagneBack.Service
         {
             var contact = _dbcontextGC.Contacts.Find(id);
             contact.Matricule = Contact.Matricule;
+            contact.Statut = Contact.Statut;
+            contact.Etat = Contact.Etat;
+            contact.Adresse = Contact.Adresse;
+            contact.Sexe = Contact.Sexe;
+            contact.Nom = Contact.Nom;
+            contact.Prenom = Contact.Prenom;
+            contact.Profession = Contact.Profession;
+            contact.ContactCanals = Contact.ContactCanals;
+            contact.Pays = Contact.Pays;
+            contact.Situation = Contact.Situation;
+            contact.DateDeNaissance = Contact.DateDeNaissance;
             return Contact;
 
         }
@@ -88,10 +99,17 @@ namespace GestionDeCampagneBack.Service
                 return Contact;
             else return null;
         }
+        public List<ContactCanal> GetContactCanalCanals()
+        {
+            return _dbcontextGC.ContactCanals.ToList();
+        }
+
 
         public List<Contact> GetContacts()
         {
             return _dbcontextGC.Contacts.ToList();
+           
+
         }
 
         public bool SaveChanges()
