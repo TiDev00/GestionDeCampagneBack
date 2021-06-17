@@ -1,4 +1,5 @@
 ﻿using GestionDeCampagneBack.Models;
+using GestionDeCampagneBack.ModelsRequets;
 using GestionDeCampagneBack.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,19 +15,20 @@ namespace GestionDeCampagneBack.Controllers
     public class ListeDeDiffusionController : ControllerBase
     {
         private IListeDeDiffusion _listeListeData;
-
-        public ListeDeDiffusionController(IListeDeDiffusion ListeDeDiffusionData)
+        private DbcontextGC _dbcontextGC;
+        public ListeDeDiffusionController(IListeDeDiffusion ListeDeDiffusionData, DbcontextGC dbcontextGC)
         {
             _listeListeData = ListeDeDiffusionData;
+            _dbcontextGC = dbcontextGC;
         }
-    // GET: api/<ValuesController>
-    [HttpGet]
+        // GET: api/<ValuesController>
+        [HttpGet]
         public IActionResult GetAllListeDeDiffusions()
         {
             return Ok(_listeListeData.GetListeDiffusion());
         }
 
-    [HttpGet("{id}", Name = "GetListeDiffusionById")]
+        [HttpGet("{id}", Name = "GetListeDiffusionById")]
         public IActionResult GetListeDiffusionById(int id)
         {
             var ListeDiffusion = _listeListeData.GetListeDiffusionById(id);
@@ -107,8 +109,8 @@ namespace GestionDeCampagneBack.Controllers
                 return NotFound($"Une Liste de Diffusion avec le titre : {ListeDiff.Titre} existe déjà");
 
             }
-            
- 
+
+
         }
 
         [HttpPut("put/{id}")]
@@ -144,7 +146,7 @@ namespace GestionDeCampagneBack.Controllers
         }
 
 
-    [HttpDelete("delete/{id}")]
+        [HttpDelete("delete/{id}")]
         public ActionResult<ListeDeDiffusion> DeleteListeDiffusion(int id)
         {
 
@@ -159,5 +161,27 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Une Liste de diffusion avec l'id : {id} n'existe pas");
             // return Ok(categorireadDto);
         }
+
+
+        [HttpGet("donneescontact/{id}")]
+        public IQueryable<ContactListDeDiffusion> GetDonneesContactByListeDiffusion(int id)
+        {
+            var query = (from x in _dbcontextGC.ContactListeDiffusions
+                         join y in _dbcontextGC.Contacts on x.IdContact equals y.Id
+                         join z in _dbcontextGC.ListeDeDiffusions on x.IdListeDiffusion equals z.Id
+                         where z.Id == id
+                         select new ContactListDeDiffusion()
+                         {
+                             Nom = y.Nom,
+                             Prenom = y.Prenom,
+                             Sexe = y.Sexe 
+                         }
+                             ).AsQueryable();
+
+            return query;
+
+        }
+
+  
     }
 }
