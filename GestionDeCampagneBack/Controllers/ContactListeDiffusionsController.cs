@@ -69,6 +69,8 @@ namespace GestionDeCampagneBack.Controllers
                 {
                     if (verifiCode == null)
                     {
+                        _ContactListeDiffusionData.AddContactListeDiffusion(ContactListeDiffusion);
+                        _ContactListeDiffusionData.SaveChanges();
                         return CreatedAtRoute(nameof(GetContactListeDiffusionById), new { Id = ContactListeDiffusion.Id }, ContactListeDiffusion);
                     }
                     else return NotFound($"Un ContactListeDiffusion avec l'email : {ContactListeDiffusion.Code} existe déjà");

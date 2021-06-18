@@ -3,7 +3,6 @@ using GestionDeCampagneBack.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack.Service
 {
@@ -22,7 +21,29 @@ namespace GestionDeCampagneBack.Service
                 throw new ArgumentNullException(nameof(Modele));
 
             }
-            _dbcontextGC.Modeles.Add(Modele);
+            else
+            {
+                var countval = _dbcontextGC.Modeles.Count();
+                if (countval>=1)
+                {
+                    var maxId = _dbcontextGC.Modeles.Max(p => p.Id);
+
+                    Modele.Code = "MD0000" + (maxId+1).ToString();
+
+                    _dbcontextGC.Modeles.Add(Modele);
+                }
+                else
+                {
+                
+
+                    Modele.Code = "MD00001";
+
+                    _dbcontextGC.Modeles.Add(Modele);
+                }
+
+             
+            }
+          
         }
 
   
@@ -39,9 +60,14 @@ namespace GestionDeCampagneBack.Service
 
         public Modele EditModele(Modele Modele, int id)
         {
-            var modele = _dbcontextGC.Modeles.Find(id);
-            modele.Code = Modele.Code;
-            return Modele;
+            var mod = _dbcontextGC.Modeles.Find(id);
+  
+            mod.Statut = Modele.Statut;
+            mod.Libelle = Modele.Libelle;
+            mod.Code = Modele.Code;
+            mod.Contenu = Modele.Contenu;
+            mod.Description = Modele.Description;
+            return mod;
 
         }
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -35,6 +34,7 @@ namespace GestionDeCampagneBack.Models
 
         [Required(ErrorMessage = "Le niveau de visibilité est obligatoire")]
         public int IdNiveauVisibilite { get; set; }
+        [ForeignKey("IdNiveauVisibilite")]
         public virtual NiveauDeVisibilite IdNiveauVisibiliteNavigation { get; set; }
 
         [Required(ErrorMessage = "La liste de diffusion est obligatoire")]

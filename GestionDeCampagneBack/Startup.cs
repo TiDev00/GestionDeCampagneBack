@@ -5,19 +5,12 @@ using GestionDeCampagneBack.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack
 {
@@ -61,15 +54,19 @@ namespace GestionDeCampagneBack
 
             }));
             services.AddScoped<IRole, RoleService>();
+            services.AddScoped<ICategorie, CategorieService>();
+            services.AddScoped<ITypeDeCampagne, TypeDeCampagneService>();
+            services.AddScoped<IInfosMessage, InfosMessageService>();
+            services.AddScoped<IRegleDEnvoi, RegleDEnvoiService>();
             services.AddScoped<IUtilisateur, UtilisateurService>();
             services.AddScoped<IModele, ModeleService>();
             services.AddScoped<ICanalEnvoi, CanalEnvoiService>();
             services.AddScoped<IContact, ContactService>();
             services.AddScoped<INiveauDeVisibilite, NiveauDeVisibiliteService>();
             services.AddScoped<ISuiviCampagne, SuiviCampagneService>();
-            services.AddScoped<IVariable, VariableService>();
+            services.AddScoped<IContactCanalEnvoi, ContactCanalEnvoiService>();
+            services.AddScoped<IListeDeDiffusion, ListeDeDiffusionService>();
             services.AddScoped<IContactListeDiffusion, ContactListeDiffusionService>();
-            services.AddScoped<IContactCanal, ContactCanalService>();
             services.AddDbContextPool<DbcontextGC>(options => options.UseSqlServer(
                     Configuration.GetConnectionString("CampagneConnection"))); 
         }

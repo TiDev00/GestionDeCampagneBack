@@ -1,8 +1,6 @@
 ﻿using GestionDeCampagneBack.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace GestionDeCampagneBack.Repository
 {
@@ -14,8 +12,6 @@ namespace GestionDeCampagneBack.Repository
         Utilisateur GetUtilisateurById(int id);
 
         Utilisateur GetUtilisateurByLogin(string login);
-
-        Utilisateur Authentification(string login, string password);
 
         Utilisateur GetUtilisateurByEmail(string email);
 

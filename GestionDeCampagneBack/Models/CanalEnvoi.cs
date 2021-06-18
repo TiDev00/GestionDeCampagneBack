@@ -2,14 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace GestionDeCampagneBack.Models
 {
     [Index(nameof(Titre), IsUnique = true)]
-    [Index(nameof(Code), IsUnique = true)]
     public partial class CanalEnvoi
     {
         public CanalEnvoi()
@@ -27,10 +25,13 @@ namespace GestionDeCampagneBack.Models
         [DataType(DataType.Text)]
         public string Titre { get; set; }
 
-        [Required(ErrorMessage = "Le code est obligatoire")]
-        [StringLength(50, MinimumLength = 2,
-        ErrorMessage = "Le code doit comporter au minimum 2 caractères et au maximum 100 caractères")]
-        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "La description est obligatoire")]
+        [StringLength(500, MinimumLength = 2,
+        ErrorMessage = "La description doit comporter au minimum 2 caractères et au maximum 500 caractères")]
+        [DataType(DataType.MultilineText)]
+
+        public string Description { get; set; }
+
         public string Code { get; set; }
 
  

@@ -3,7 +3,6 @@ using GestionDeCampagneBack.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack.Service
 {
@@ -15,14 +14,37 @@ namespace GestionDeCampagneBack.Service
         {
             _dbcontextGC = dbcontextGC;
         }
-        public void AddCanalEnvoi(CanalEnvoi CanalEnvoi)
+     public void AddCanalEnvoi(CanalEnvoi CanalEnvoi)
         {
             if (CanalEnvoi == null)
             {
                 throw new ArgumentNullException(nameof(CanalEnvoi));
 
             }
-            _dbcontextGC.CanalEnvois.Add(CanalEnvoi);
+            else
+            {
+                var countval = _dbcontextGC.CanalEnvois.Count();
+                if (countval>=1)
+                {
+                    var maxId = _dbcontextGC.CanalEnvois.Max(p => p.Id);
+
+                    CanalEnvoi.Code = "CE0000" + (maxId+1).ToString();
+                    CanalEnvoi.Etat = true;
+
+                    _dbcontextGC.CanalEnvois.Add(CanalEnvoi);
+                }
+                else
+                {
+                
+
+                    CanalEnvoi.Code = "CE00001";
+                    CanalEnvoi.Etat = true;
+                    _dbcontextGC.CanalEnvois.Add(CanalEnvoi);
+                }
+
+             
+            }
+          
         }
 
         public void DeleteCanalEnvoi(CanalEnvoi CanalEnvoi)
@@ -38,7 +60,7 @@ namespace GestionDeCampagneBack.Service
         public CanalEnvoi EditCanalEnvoi(CanalEnvoi CanalEnvoi, int id)
         {
             var canalEnvoi = _dbcontextGC.CanalEnvois.Find(id);
-            canalEnvoi.Code = CanalEnvoi.Code;
+          
             return canalEnvoi;
 
         }

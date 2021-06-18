@@ -33,6 +33,30 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Un CanalEnvoi avec l'id : {id} n'existe pas");
         }
 
+        [HttpGet("changeEtat/{id}")]
+        public IActionResult ChangeetatCanalEnvoiById(int id)
+        {
+            var CanalEnvoi = _canalEnvoiData.GetCanalEnvoiById(id);
+            if (CanalEnvoi != null)
+            {
+                if (CanalEnvoi.Etat == true)
+                {
+                    CanalEnvoi.Etat = false;
+                    _canalEnvoiData.SaveChanges();
+                    return Ok(CanalEnvoi);
+                }
+                else
+                {
+                    CanalEnvoi.Etat = true;
+                    _canalEnvoiData.SaveChanges();
+                    return Ok(CanalEnvoi);
+                }
+
+
+            }
+            return NotFound($"Un CanalEnvoi avec l'id : {id} n'existe pas");
+        }
+
         [HttpGet("titre/{titre}", Name = "GetCanalEnvoiByTitre")]
         public IActionResult GetCanalEnvoiByLibelle(string titre)
         {
