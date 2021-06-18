@@ -86,7 +86,7 @@ namespace GestionDeCampagneBack
 
             app.UseRouting();
 
-            app.UseCors("CampagneConnection");
+            app.UseCors("GestionCampagnePolicy");
 
             app.UseAuthorization();
 
