@@ -9,7 +9,7 @@ namespace GestionDeCampagneBack.Repository
     public interface IContactListeDiffusion
     {
         bool SaveChanges();
-        List<ContactListeDiffusion> GetContactListeDiffusions();
+        List<ContactListeDiffusion> GetContactListeDiffusions(int id);
 
         ContactListeDiffusion GetContactListeDiffusionById(int id);
 

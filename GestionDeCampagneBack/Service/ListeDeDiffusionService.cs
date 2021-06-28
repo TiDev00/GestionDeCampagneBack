@@ -25,12 +25,13 @@ namespace GestionDeCampagneBack.Service
             else
             {
                 var countval = _dbcontextGC.ListeDeDiffusions.Count();
-                if(countval >= 1)
+                if (countval >= 1)
                 {
                     var maxId = _dbcontextGC.ListeDeDiffusions.Max(p => p.Id);
 
                     ListeDeDiffusion.Reference = "RE0000" + (maxId + 1).ToString();
                     ListeDeDiffusion.Etat = true;
+                    ListeDeDiffusion.Statut = true;
 
                     _dbcontextGC.ListeDeDiffusions.Add(ListeDeDiffusion);
                 }
@@ -38,6 +39,7 @@ namespace GestionDeCampagneBack.Service
                 {
                     ListeDeDiffusion.Reference = "RE00001";
                     ListeDeDiffusion.Etat = true;
+                    ListeDeDiffusion.Statut = true;
                     _dbcontextGC.ListeDeDiffusions.Add(ListeDeDiffusion);
                 }
             }
@@ -45,7 +47,7 @@ namespace GestionDeCampagneBack.Service
 
         public void DeleteListeDiffusion(ListeDeDiffusion ListeDeDiffusion)
         {
-            if(ListeDeDiffusion == null)
+            if (ListeDeDiffusion == null)
             {
                 throw new ArgumentNullException(nameof(ListeDeDiffusion));
             }
@@ -56,13 +58,18 @@ namespace GestionDeCampagneBack.Service
         {
             var listeDiffusion = _dbcontextGC.ListeDeDiffusions.Find(id);
             listeDiffusion.Titre = ListeDeDiffusion.Titre;
+            listeDiffusion.Etat = ListeDeDiffusion.Etat;
+            listeDiffusion.IdEntite = ListeDeDiffusion.IdEntite;
+            listeDiffusion.Reference = ListeDeDiffusion.Reference;
+            listeDiffusion.Statut = ListeDeDiffusion.Statut;
+            listeDiffusion.IdNiveauVisibilite = ListeDeDiffusion.IdNiveauVisibilite;
             return listeDiffusion;
-            
+
         }
 
-        public List<ListeDeDiffusion> GetListeDiffusion()
+        public List<ListeDeDiffusion> GetListeDiffusion(int id)
         {
-            return _dbcontextGC.ListeDeDiffusions.ToList();
+            return _dbcontextGC.ListeDeDiffusions.Where(r => r.Etat == true && r.IdEntite == id).ToList();
         }
 
         public ListeDeDiffusion GetListeDiffusionById(int id)

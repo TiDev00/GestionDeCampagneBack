@@ -20,5 +20,7 @@ namespace GestionDeCampagneBack.Models
 
         [ForeignKey("IdModele")]
         public virtual Modele IdModeleNavigation { get; set; }
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
     }
 }

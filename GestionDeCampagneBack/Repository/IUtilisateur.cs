@@ -7,13 +7,11 @@ namespace GestionDeCampagneBack.Repository
    public interface IUtilisateur
     {
         bool SaveChanges();
-        List<Utilisateur> GetUtilisateurs();
+        List<Utilisateur> GetUtilisateurs(int id);
 
         Utilisateur GetUtilisateurById(int id);
 
         Utilisateur GetUtilisateurByLogin(string login);
-
-        Utilisateur GetUtilisateurByEmail(string email);
 
         void AddUtilisateur(Utilisateur Utilisateur);
 

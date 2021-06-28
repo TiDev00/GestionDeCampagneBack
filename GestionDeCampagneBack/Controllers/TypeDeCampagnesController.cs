@@ -15,11 +15,11 @@ namespace GestionDeCampagneBack.Controllers
         {
             _typeDeCampagneData = typeDeCampagneData;
         }
-       
-        [HttpGet]
-        public IActionResult GetAllTypeDeCampagnes()
+
+        [HttpGet("all/{id}")]
+        public IActionResult GetAllTypeDeCampagnes(int id)
         {
-            return Ok(_typeDeCampagneData.GetTypeDeCampagnes());
+            return Ok(_typeDeCampagneData.GetTypeDeCampagnes(id));
         }
 
         [HttpGet("{id}", Name = "GetTypeDeCampagneById")]
@@ -31,67 +31,38 @@ namespace GestionDeCampagneBack.Controllers
                 return Ok(typeDeCampagne);
 
             }
-            return NotFound($"Un typeDeCampagne avec l'id : {id} n'existe pas");
+            return NotFound($"Un type de campagne avec l'id : {id} n'existe pas");
         }
 
-        [HttpGet("libelle/{libelle}", Name = "GetTypeDeCampagneByLibelle")]
-        public IActionResult GetTypeDeCampagneByLibelle(string libelle)
-        {
-            var typeDeCampagne = _typeDeCampagneData.GetTypeDeCampagneByLibelle(libelle);
-            if (typeDeCampagne != null)
-            {
-                return Ok(typeDeCampagne);
 
-            }
-            return NotFound($"Un typeDeCampagne avec le libelle : {libelle} n'existe pas");
-        }
 
         [HttpPost("add")]
         public ActionResult<TypeDeCampagne> AddTypeDeCampagne(TypeDeCampagne typeDeCampagne)
         {
-            var verifiLibelle = _typeDeCampagneData.GetTypeDeCampagneByLibelle(typeDeCampagne.Libelle);
-         
-             if (verifiLibelle == null)
-             {
-                _typeDeCampagneData.AddTypeDeCampagne(typeDeCampagne);
-                _typeDeCampagneData.SaveChanges();
 
-                return CreatedAtRoute(nameof(GetTypeDeCampagneById), new { Id = typeDeCampagne.Id }, typeDeCampagne);
-             }
-             else { 
-                return NotFound($"Un typeDeCampagne avec le libelle : {typeDeCampagne.Libelle} existe déjà");
+            _typeDeCampagneData.AddTypeDeCampagne(typeDeCampagne);
+            _typeDeCampagneData.SaveChanges();
 
-            }
+            return CreatedAtRoute(nameof(GetTypeDeCampagneById), new { Id = typeDeCampagne.Id }, typeDeCampagne);
+
+
+
         }
 
         [HttpPut("put/{id}")]
-        public ActionResult<TypeDeCampagne> PutTypeDeCampagne(TypeDeCampagne tdc,int id)
+        public ActionResult<TypeDeCampagne> PutTypeDeCampagne(TypeDeCampagne tdc, int id)
         {
             var typeDeCampagne = _typeDeCampagneData.GetTypeDeCampagneById(id);
             if (typeDeCampagne != null)
             {
-                var verifiLibelle = _typeDeCampagneData.GetTypeDeCampagneByLibelle(tdc.Libelle);
-                if (verifiLibelle == null)
-                {
-                    _typeDeCampagneData.EditTypeDeCampagne(tdc, id);
-                    _typeDeCampagneData.SaveChanges();
-                    return CreatedAtRoute(nameof(GetTypeDeCampagneById), new { Id = typeDeCampagne.Id }, typeDeCampagne);
-                }
-                else 
-                if (verifiLibelle.Id == typeDeCampagne.Id)
-                {
-                    _typeDeCampagneData.EditTypeDeCampagne(tdc, id);
-                    _typeDeCampagneData.SaveChanges();
-                    return CreatedAtRoute(nameof(GetTypeDeCampagneById), new { Id = typeDeCampagne.Id }, typeDeCampagne);
-                }
-                else
-                {
-                    return NotFound($"Un typeDeCampagne avec le libelle : {tdc.Libelle} existe déjà");
 
-                }
-               
+                _typeDeCampagneData.EditTypeDeCampagne(tdc, id);
+                _typeDeCampagneData.SaveChanges();
+                return CreatedAtRoute(nameof(GetTypeDeCampagneById), new { Id = typeDeCampagne.Id }, typeDeCampagne);
+
             }
-            return NotFound($"Un typeDeCampagne avec l'id : {id} n'existe pas");
+            else
+                return NotFound($"Un type de campagne avec l'id : {id} n'existe pas");
         }
 
         [HttpDelete("delete/{id}")]
@@ -103,7 +74,7 @@ namespace GestionDeCampagneBack.Controllers
             {
                 _typeDeCampagneData.DeleteTypeDeCampagne(typeDeCampagne);
                 _typeDeCampagneData.SaveChanges();
-                return Accepted(); 
+                return Accepted();
 
             }
             return NotFound($"Un typeDeCampagne avec l'id : {id} n'existe pas");

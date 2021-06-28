@@ -9,7 +9,7 @@ namespace GestionDeCampagneBack.Repository
     public interface IContactCanal
     {
         bool SaveChanges();
-        List<ContactCanal> GetContactCanals();
+        List<ContactCanal> GetContactCanals(int id);
 
         ContactCanal GetContactCanalById(int id);
 

@@ -34,6 +34,9 @@ namespace GestionDeCampagneBack.Models
 
         public virtual ICollection<SuiviCampagneCampagne> SuiviCampagneCampagnes { get; set; }
 
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
+
 
     }
 }

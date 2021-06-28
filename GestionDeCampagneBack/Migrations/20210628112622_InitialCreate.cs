@@ -16,7 +16,8 @@ namespace GestionDeCampagneBack.Migrations
                     Titre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Etat = table.Column<bool>(type: "bit", nullable: false)
+                    Etat = table.Column<bool>(type: "bit", nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -24,16 +25,17 @@ namespace GestionDeCampagneBack.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "Entites",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Libelle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Libelle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Activite = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Entites", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,28 +47,13 @@ namespace GestionDeCampagneBack.Migrations
                     Titre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Reference = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Etat = table.Column<bool>(type: "bit", nullable: false),
-                    Statut = table.Column<bool>(type: "bit", nullable: false)
+                    Statut = table.Column<bool>(type: "bit", nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false),
+                    IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ListeDeDiffusions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Modeles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Libelle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Contenu = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Statut = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Modeles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,7 +80,8 @@ namespace GestionDeCampagneBack.Migrations
                     DateExecution = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Expediteur = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Recepteur = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FuseauHoraire = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    FuseauHoraire = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,11 +107,37 @@ namespace GestionDeCampagneBack.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Libelle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Libelle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TypeDeCampagnes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Modeles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Libelle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Contenu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Statut = table.Column<bool>(type: "bit", nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false),
+                    IdCanalEnvoi = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Modeles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Modeles_CanalEnvois_IdCanalEnvoi",
+                        column: x => x.IdCanalEnvoi,
+                        principalTable: "CanalEnvois",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -141,11 +155,18 @@ namespace GestionDeCampagneBack.Migrations
                     Statut = table.Column<bool>(type: "bit", nullable: false),
                     Ischange = table.Column<bool>(type: "bit", nullable: false),
                     IdRole = table.Column<int>(type: "int", nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false),
                     Telephone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Utilisateurs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Utilisateurs_Entites_IdEntite",
+                        column: x => x.IdEntite,
+                        principalTable: "Entites",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Utilisateurs_Roles_IdRole",
                         column: x => x.IdRole,
@@ -171,24 +192,11 @@ namespace GestionDeCampagneBack.Migrations
                     IdRegleEnvoi = table.Column<int>(type: "int", nullable: false),
                     IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false),
                     IdTypeCampagne = table.Column<int>(type: "int", nullable: false),
-                    IdCategorie = table.Column<int>(type: "int", nullable: false),
-                    IdCanalEnvoi = table.Column<int>(type: "int", nullable: false)
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Campagnes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Campagnes_CanalEnvois_IdCanalEnvoi",
-                        column: x => x.IdCanalEnvoi,
-                        principalTable: "CanalEnvois",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Campagnes_Categories_IdCategorie",
-                        column: x => x.IdCategorie,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Campagnes_NiveauDeVisibilites_IdNiveauVisibilite",
                         column: x => x.IdNiveauVisibilite,
@@ -282,7 +290,8 @@ namespace GestionDeCampagneBack.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdCampagne = table.Column<int>(type: "int", nullable: false),
-                    IdListe = table.Column<int>(type: "int", nullable: false)
+                    IdListe = table.Column<int>(type: "int", nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -308,7 +317,8 @@ namespace GestionDeCampagneBack.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdCampagne = table.Column<int>(type: "int", nullable: false),
-                    IdModele = table.Column<int>(type: "int", nullable: false)
+                    IdModele = table.Column<int>(type: "int", nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -338,7 +348,8 @@ namespace GestionDeCampagneBack.Migrations
                     DateDesabonnement = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Raison = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdContact = table.Column<int>(type: "int", nullable: false),
-                    IdCanalEnvoi = table.Column<int>(type: "int", nullable: false)
+                    IdCanalEnvoi = table.Column<int>(type: "int", nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -368,9 +379,8 @@ namespace GestionDeCampagneBack.Migrations
                     DateDesa = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Raison = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdContact = table.Column<int>(type: "int", nullable: false),
-                    IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false),
-                    IdNiveauVisibiliteNavigationId = table.Column<int>(type: "int", nullable: true),
-                    IdListeDiffusion = table.Column<int>(type: "int", nullable: false)
+                    IdListeDiffusion = table.Column<int>(type: "int", nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -387,12 +397,6 @@ namespace GestionDeCampagneBack.Migrations
                         principalTable: "ListeDeDiffusions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ContactListeDiffusions_NiveauDeVisibilites_IdNiveauVisibiliteNavigationId",
-                        column: x => x.IdNiveauVisibiliteNavigationId,
-                        principalTable: "NiveauDeVisibilites",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -405,7 +409,8 @@ namespace GestionDeCampagneBack.Migrations
                     Contenu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Statut = table.Column<bool>(type: "bit", nullable: false),
                     NombreDeTentative = table.Column<int>(type: "int", nullable: true),
-                    IdContact = table.Column<int>(type: "int", nullable: false)
+                    IdContact = table.Column<int>(type: "int", nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -479,7 +484,8 @@ namespace GestionDeCampagneBack.Migrations
                     IdCampagne = table.Column<int>(type: "int", nullable: false),
                     IdSuivi = table.Column<int>(type: "int", nullable: false),
                     IdCampagneNavigationId = table.Column<int>(type: "int", nullable: true),
-                    IdSuiviNavigationId = table.Column<int>(type: "int", nullable: true)
+                    IdSuiviNavigationId = table.Column<int>(type: "int", nullable: true),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -505,16 +511,6 @@ namespace GestionDeCampagneBack.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Campagnes_IdCanalEnvoi",
-                table: "Campagnes",
-                column: "IdCanalEnvoi");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Campagnes_IdCategorie",
-                table: "Campagnes",
-                column: "IdCategorie");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Campagnes_IdNiveauVisibilite",
                 table: "Campagnes",
                 column: "IdNiveauVisibilite");
@@ -533,18 +529,6 @@ namespace GestionDeCampagneBack.Migrations
                 name: "IX_Campagnes_IdUtilisateur",
                 table: "Campagnes",
                 column: "IdUtilisateur");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CanalEnvois_Titre",
-                table: "CanalEnvois",
-                column: "Titre",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_Libelle",
-                table: "Categories",
-                column: "Libelle",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ContactCanals_IdCanalEnvoi",
@@ -571,11 +555,6 @@ namespace GestionDeCampagneBack.Migrations
                 name: "IX_ContactListeDiffusions_IdListeDiffusion",
                 table: "ContactListeDiffusions",
                 column: "IdListeDiffusion");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ContactListeDiffusions_IdNiveauVisibiliteNavigationId",
-                table: "ContactListeDiffusions",
-                column: "IdNiveauVisibiliteNavigationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contacts_IdNiveauVisibilite",
@@ -636,17 +615,9 @@ namespace GestionDeCampagneBack.Migrations
                 column: "IdModele");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Modeles_Code",
+                name: "IX_Modeles_IdCanalEnvoi",
                 table: "Modeles",
-                column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Modeles_Libelle",
-                table: "Modeles",
-                column: "Libelle",
-                unique: true);
+                column: "IdCanalEnvoi");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NiveauDeVisibilites_Libelle",
@@ -676,16 +647,9 @@ namespace GestionDeCampagneBack.Migrations
                 column: "IdContact");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TypeDeCampagnes_Libelle",
-                table: "TypeDeCampagnes",
-                column: "Libelle",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Utilisateurs_Email",
+                name: "IX_Utilisateurs_IdEntite",
                 table: "Utilisateurs",
-                column: "Email",
-                unique: true);
+                column: "IdEntite");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Utilisateurs_IdRole",
@@ -743,13 +707,10 @@ namespace GestionDeCampagneBack.Migrations
                 name: "Campagnes");
 
             migrationBuilder.DropTable(
-                name: "Contacts");
-
-            migrationBuilder.DropTable(
                 name: "CanalEnvois");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Contacts");
 
             migrationBuilder.DropTable(
                 name: "RegleDEnvois");
@@ -762,6 +723,9 @@ namespace GestionDeCampagneBack.Migrations
 
             migrationBuilder.DropTable(
                 name: "Utilisateurs");
+
+            migrationBuilder.DropTable(
+                name: "Entites");
 
             migrationBuilder.DropTable(
                 name: "Roles");

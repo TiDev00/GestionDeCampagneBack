@@ -16,16 +16,20 @@ namespace GestionDeCampagneBack.Controllers
     {
         private IListeDeDiffusion _listeListeData;
         private DbcontextGC _dbcontextGC;
-        public ListeDeDiffusionController(IListeDeDiffusion ListeDeDiffusionData, DbcontextGC dbcontextGC)
+        private IEntite _entiteData;
+        private INiveauDeVisibilite _NiveauDeVisibiliteData;
+        public ListeDeDiffusionController(IListeDeDiffusion ListeDeDiffusionData, DbcontextGC dbcontextGC, IEntite entite, INiveauDeVisibilite niveauDeVisibilite)
         {
             _listeListeData = ListeDeDiffusionData;
             _dbcontextGC = dbcontextGC;
+            _entiteData = entite;
+            _NiveauDeVisibiliteData = niveauDeVisibilite;
         }
         // GET: api/<ValuesController>
-        [HttpGet]
-        public IActionResult GetAllListeDeDiffusions()
+        [HttpGet("all/{id}")]
+        public IActionResult GetAllListeDeDiffusions(int id)
         {
-            return Ok(_listeListeData.GetListeDiffusion());
+            return Ok(_listeListeData.GetListeDiffusion(id));
         }
 
         [HttpGet("{id}", Name = "GetListeDiffusionById")]
@@ -65,18 +69,6 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Une Liste de Diffusion avec l'id : {id} n'existe pas");
         }
 
-        [HttpGet("titre/{titre}", Name = "GetListeDiffusionByTitre")]
-        public IActionResult GetListeDiffusionByTitre(string titre)
-        {
-            var ListeDiffusion = _listeListeData.GetListeDiffusionByTitre(titre);
-            if (ListeDiffusion != null)
-            {
-                return Ok(ListeDiffusion);
-
-            }
-            return NotFound($"Une liste de Diffusion avec le titre : {titre} n'existe pas");
-        }
-
         [HttpGet("reference/{reference}", Name = "GetListeDiffusionByReference")]
         public IActionResult GetListediffusionByRef(string reference)
         {
@@ -94,54 +86,73 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<ListeDeDiffusion> AddListeDiffusion(ListeDeDiffusion ListeDiff)
         {
-            var verifiTitre = _listeListeData.GetListeDiffusionByTitre(ListeDiff.Titre);
-            var verify = _listeListeData.GetListeDiffusionByReference(ListeDiff.Reference);
-
-            if (verifiTitre == null)
+            var niveauDevisibilite = _NiveauDeVisibiliteData.GetNiveauDeVisibiliteById(ListeDiff.IdNiveauVisibilite);
+            if (niveauDevisibilite != null)
             {
-                _listeListeData.AddListeDiffusion(ListeDiff);
-                _listeListeData.SaveChanges();
+                var entite = _entiteData.GetEntiteById(ListeDiff.IdEntite);
+                if (entite != null)
+                {
+                    var verify = _listeListeData.GetListeDiffusionByReference(ListeDiff.Reference);
 
-                return CreatedAtRoute(nameof(GetListeDiffusionById), new { Id = ListeDiff.Id }, ListeDiff);
+                    if (verify == null)
+                    {
+                        _listeListeData.AddListeDiffusion(ListeDiff);
+                        _listeListeData.SaveChanges();
+
+                        return CreatedAtRoute(nameof(GetListeDiffusionById), new { Id = ListeDiff.Id }, ListeDiff);
+                    }
+                    else
+                    {
+                        return NotFound($"Une Liste de Diffusion avec le référence : {ListeDiff.Reference} existe déjà");
+
+                    }
+                }
+                else
+                    return NotFound($"Une entité avec l'id : {ListeDiff.IdEntite} n'existe pas");
             }
-            else
-            {
-                return NotFound($"Une Liste de Diffusion avec le titre : {ListeDiff.Titre} existe déjà");
-
-            }
-
-
+            else return NotFound($"Un niveau de visibilité avec l'id : {ListeDiff.IdNiveauVisibilite} n'existe pas");
         }
 
         [HttpPut("put/{id}")]
         public ActionResult<ListeDeDiffusion> PutListeDeDiffusion(ListeDeDiffusion rol, int id)
         {
-            var ListeDiffusion = _listeListeData.GetListeDiffusionById(id);
-            if (ListeDiffusion != null)
+            var niveauDevisibilite = _NiveauDeVisibiliteData.GetNiveauDeVisibiliteById(rol.IdNiveauVisibilite);
+            if (niveauDevisibilite != null)
             {
-                var verifiTitre = _listeListeData.GetListeDiffusionByTitre(rol.Titre);
-                if (verifiTitre == null)
+                var entite = _entiteData.GetEntiteById(rol.IdEntite);
+                if (entite != null)
                 {
-                    _listeListeData.EditListeDiffusion(rol, id);
-                    _listeListeData.SaveChanges();
-                    return CreatedAtRoute(nameof(GetListeDiffusionById), new { Id = ListeDiffusion.Id }, ListeDiffusion);
-                }
-                else
-                if (verifiTitre.Id == ListeDiffusion.Id)
-                {
-                    _listeListeData.EditListeDiffusion(rol, id);
-                    _listeListeData.SaveChanges();
-                    return CreatedAtRoute(nameof(GetListeDiffusionById), new { Id = ListeDiffusion.Id }, ListeDiffusion);
-                }
-                else
-                {
-                    return NotFound($"Une Liste de diffusion avec le titre : {rol.Titre} existe déjà");
+                    var ListeDiffusion = _listeListeData.GetListeDiffusionById(id);
+                    if (ListeDiffusion != null)
+                    {
+                        var verifiRef = _listeListeData.GetListeDiffusionByReference(rol.Reference);
+                        if (verifiRef == null)
+                        {
+                            _listeListeData.EditListeDiffusion(rol, id);
+                            _listeListeData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetListeDiffusionById), new { Id = ListeDiffusion.Id }, ListeDiffusion);
+                        }
+                        else
+                        if (verifiRef.Id == ListeDiffusion.Id)
+                        {
+                            _listeListeData.EditListeDiffusion(rol, id);
+                            _listeListeData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetListeDiffusionById), new { Id = ListeDiffusion.Id }, ListeDiffusion);
+                        }
+                        else
+                        {
+                            return NotFound($"Une Liste de diffusion avec la référence : {rol.Reference} existe déjà");
+
+                        }
+
+                    }
+                    return NotFound($"Une Liste de diffusion avec l'id : {id} n'existe pas");
 
                 }
-
+                else
+                    return NotFound($"Une entité avec l'id : {rol.IdEntite} n'existe pas");
             }
-            return NotFound($"Une Liste de diffusion avec l'id : {id} n'existe pas");
-
+            return NotFound($"Un niveau de visibilité avec l'id : {rol.IdEntite} n'existe pas");
             // return Ok(categorireadDto);
         }
 
@@ -174,7 +185,7 @@ namespace GestionDeCampagneBack.Controllers
                          {
                              Nom = y.Nom,
                              Prenom = y.Prenom,
-                             Sexe = y.Sexe 
+                             Sexe = y.Sexe
                          }
                              ).AsQueryable();
 
@@ -182,6 +193,6 @@ namespace GestionDeCampagneBack.Controllers
 
         }
 
-  
+
     }
 }

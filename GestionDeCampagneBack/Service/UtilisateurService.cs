@@ -21,7 +21,8 @@ namespace GestionDeCampagneBack.Service
                 throw new ArgumentNullException(nameof(Utilisateur));
 
             }
-
+            Utilisateur.Statut = true;
+            Utilisateur.Etat = true;
             _dbcontextGC.Utilisateurs.Add(Utilisateur);
         }
 
@@ -52,6 +53,7 @@ namespace GestionDeCampagneBack.Service
             user.Login = Utilisateur.Login;
             user.Email = Utilisateur.Email;
             user.Telephone = Utilisateur.Telephone;
+            user.IdEntite = Utilisateur.IdEntite;
             return user;
         }
 
@@ -69,17 +71,11 @@ namespace GestionDeCampagneBack.Service
             else return null;
         }
 
-        public Utilisateur GetUtilisateurByEmail(string email)
-        {
-            var user = _dbcontextGC.Utilisateurs.FirstOrDefault(r => r.Email == email);
-            if (user != null)
-                return user;
-            else return null;
-        }
 
-        public List<Utilisateur> GetUtilisateurs()
+
+        public List<Utilisateur> GetUtilisateurs(int id)
         {
-            return _dbcontextGC.Utilisateurs.Where(r=> r.Etat ==true).ToList();
+            return _dbcontextGC.Utilisateurs.Where(r => r.Etat == true && r.IdEntite == id).ToList();
         }
         public bool SaveChanges()
         {
