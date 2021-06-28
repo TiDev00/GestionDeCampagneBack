@@ -101,6 +101,11 @@ namespace GestionDeCampagneBack.Service
             else return null;
         }
 
+        public List<ContactCanal> GetContactCanalCanals()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Contact> GetContacts()
         {
             return _dbcontextGC.Contacts.ToList();

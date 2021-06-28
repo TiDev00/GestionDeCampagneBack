@@ -13,7 +13,7 @@ namespace GestionDeCampagneBack.Models
 
         public NiveauDeVisibilite()
         {
-            ContactListeDiffusions = new HashSet<ContactListeDiffusion>();
+          
         }
 
         [Key]
@@ -24,7 +24,8 @@ namespace GestionDeCampagneBack.Models
         ErrorMessage = "Le libellé doit comporter au minimum 2 caractères et au maximum 100 caractères")]
         [DataType(DataType.Text)]
         public string Libelle { get; set; }
-        public virtual ICollection<ContactListeDiffusion> ContactListeDiffusions { get; set; }
+        
+
 
 
     }

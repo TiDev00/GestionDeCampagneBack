@@ -369,7 +369,6 @@ namespace GestionDeCampagneBack.Migrations
                     Raison = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdContact = table.Column<int>(type: "int", nullable: false),
                     IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false),
-                    IdNiveauVisibiliteNavigationId = table.Column<int>(type: "int", nullable: true),
                     IdListeDiffusion = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -387,12 +386,6 @@ namespace GestionDeCampagneBack.Migrations
                         principalTable: "ListeDeDiffusions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ContactListeDiffusions_NiveauDeVisibilites_IdNiveauVisibiliteNavigationId",
-                        column: x => x.IdNiveauVisibiliteNavigationId,
-                        principalTable: "NiveauDeVisibilites",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -547,12 +540,6 @@ namespace GestionDeCampagneBack.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContactCanals_CanalDuContatct",
-                table: "ContactCanals",
-                column: "CanalDuContatct",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ContactCanals_IdCanalEnvoi",
                 table: "ContactCanals",
                 column: "IdCanalEnvoi");
@@ -577,11 +564,6 @@ namespace GestionDeCampagneBack.Migrations
                 name: "IX_ContactListeDiffusions_IdListeDiffusion",
                 table: "ContactListeDiffusions",
                 column: "IdListeDiffusion");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ContactListeDiffusions_IdNiveauVisibiliteNavigationId",
-                table: "ContactListeDiffusions",
-                column: "IdNiveauVisibiliteNavigationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contacts_IdNiveauVisibilite",

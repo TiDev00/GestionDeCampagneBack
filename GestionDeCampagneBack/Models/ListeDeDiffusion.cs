@@ -26,9 +26,9 @@ namespace GestionDeCampagneBack.Models
         [DataType(DataType.Text)]
         public string Titre { get; set; }
 
-        [Required(ErrorMessage = "La référence est obligatoire")]
+        /*[Required(ErrorMessage = "La référence est obligatoire")]
         [StringLength(100, MinimumLength = 2,
-        ErrorMessage = "La référence doit comporter au minimum 2 caractères et au maximum 100 caractères")]
+        ErrorMessage = "La référence doit comporter au minimum 2 caractères et au maximum 100 caractères")]*/
         [DataType(DataType.Text)]
         public string Reference { get; set; }
 

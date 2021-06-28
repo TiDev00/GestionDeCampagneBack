@@ -15,16 +15,16 @@ namespace GestionDeCampagneBack.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.5")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.Campagne", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -94,7 +94,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
@@ -125,7 +125,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Libelle")
                         .IsRequired()
@@ -145,7 +145,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Adresse")
                         .HasMaxLength(20)
@@ -210,7 +210,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("CanalDuContatct")
                         .IsRequired()
@@ -246,7 +246,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -268,9 +268,6 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("IdNiveauVisibilite")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdNiveauVisibiliteNavigationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Raison")
                         .HasColumnType("nvarchar(max)");
 
@@ -283,8 +280,6 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.HasIndex("IdListeDiffusion");
 
-                    b.HasIndex("IdNiveauVisibiliteNavigationId");
-
                     b.ToTable("ContactListeDiffusions");
                 });
 
@@ -293,7 +288,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdCampagne")
                         .HasColumnType("int");
@@ -322,7 +317,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdCampagne")
                         .HasColumnType("int");
@@ -350,7 +345,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
@@ -381,7 +376,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdCampagne")
                         .HasColumnType("int");
@@ -403,7 +398,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(450)");
@@ -439,7 +434,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdCampagne")
                         .HasColumnType("int");
@@ -461,7 +456,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Libelle")
                         .IsRequired()
@@ -481,7 +476,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<DateTime?>("DateExecution")
                         .HasColumnType("datetime2");
@@ -511,7 +506,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Libelle")
                         .IsRequired()
@@ -531,7 +526,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Contenu")
                         .HasColumnType("nvarchar(max)");
@@ -560,7 +555,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdCampagne")
                         .HasColumnType("int");
@@ -588,7 +583,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Libelle")
                         .IsRequired()
@@ -608,7 +603,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -668,7 +663,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<int>("IdContact")
                         .HasColumnType("int");
@@ -802,15 +797,9 @@ namespace GestionDeCampagneBack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestionDeCampagneBack.Models.NiveauDeVisibilite", "IdNiveauVisibiliteNavigation")
-                        .WithMany()
-                        .HasForeignKey("IdNiveauVisibiliteNavigationId");
-
                     b.Navigation("IdContactNavigation");
 
                     b.Navigation("IdIdListeDiffusionNavigation");
-
-                    b.Navigation("IdNiveauVisibiliteNavigation");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.InfosMessage", b =>

@@ -73,12 +73,12 @@ namespace GestionDeCampagneBack.Controllers
                         _ContactListeDiffusionData.SaveChanges();
                         return CreatedAtRoute(nameof(GetContactListeDiffusionById), new { Id = ContactListeDiffusion.Id }, ContactListeDiffusion);
                     }
-                    else return NotFound($"Un ContactListeDiffusion avec l'email : {ContactListeDiffusion.Code} existe déjà");
+                    else return NotFound($"Un ContactListeDiffusion avec le code  : {ContactListeDiffusion.Code} existe déjà");
 
                 }
                 else
                 {
-                    return NotFound($"Un ContactListeDiffusion avec le login : {ContactListeDiffusion.Id} existe déjà");
+                    return NotFound($"Un ContactListeDiffusion avec l' Id : {ContactListeDiffusion.Id} existe déjà");
 
                 }
 

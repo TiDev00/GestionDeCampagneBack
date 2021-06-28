@@ -41,27 +41,15 @@ namespace GestionDeCampagneBack.Controllers
         }
 
 
-        [HttpGet("changeEtat/{id}")]
-        public IActionResult ChangeetatCanalEnvoiById(int id)
+        [HttpGet("listeDiffusion/{id}")]
+        public IActionResult getListeDiffusionById(int id)
         {
             var ListeDiff = _listeListeData.GetListeDiffusionById(id);
             if (ListeDiff != null)
             {
-                if (ListeDiff.Etat == true)
-                {
-                    ListeDiff.Etat = false;
-                    _listeListeData.SaveChanges();
                     return Ok(ListeDiff);
                 }
-                else
-                {
-                    ListeDiff.Etat = true;
-                    _listeListeData.SaveChanges();
-                    return Ok(ListeDiff);
-                }
-
-
-            }
+                
             return NotFound($"Une Liste de Diffusion avec l'id : {id} n'existe pas");
         }
 
