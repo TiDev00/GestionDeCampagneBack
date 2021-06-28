@@ -13,13 +13,11 @@ namespace GestionDeCampagneBack.Repository
         bool SaveChanges();
 
         //Methode pour récupérer tous les TypeDeCampagne
-        List<TypeDeCampagne> GetTypeDeCampagnes();
+        List<TypeDeCampagne> GetTypeDeCampagnes(int id);
         
         //Methode pour recuperer un TypeDeCampagne par id
         TypeDeCampagne GetTypeDeCampagneById(int id);
 
-        //Methode pour recuperer un TypeDeCampagne par son nom
-        TypeDeCampagne GetTypeDeCampagneByLibelle(string libelle);
 
         //Methode pour ajouter un TypeDeCampagne
         void AddTypeDeCampagne(TypeDeCampagne typeDeCampagne);

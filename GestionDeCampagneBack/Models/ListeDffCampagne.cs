@@ -21,5 +21,8 @@ namespace GestionDeCampagneBack.Models
 
         [ForeignKey("IdListe")]
         public virtual ListeDeDiffusion IdListeNavigation { get; set; }
+
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
     }
 }

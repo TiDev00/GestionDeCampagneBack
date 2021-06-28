@@ -1,4 +1,3 @@
-//using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Repository;
 using GestionDeCampagneBack.Service;
@@ -54,7 +53,6 @@ namespace GestionDeCampagneBack
 
             }));
             services.AddScoped<IRole, RoleService>();
-            services.AddScoped<ICategorie, CategorieService>();
             services.AddScoped<ITypeDeCampagne, TypeDeCampagneService>();
             services.AddScoped<IInfosMessage, InfosMessageService>();
             services.AddScoped<IRegleDEnvoi, RegleDEnvoiService>();
@@ -64,8 +62,10 @@ namespace GestionDeCampagneBack
             services.AddScoped<IContact, ContactService>();
             services.AddScoped<INiveauDeVisibilite, NiveauDeVisibiliteService>();
             services.AddScoped<ISuiviCampagne, SuiviCampagneService>();
-            services.AddScoped<IContactCanalEnvoi, ContactCanalEnvoiService>();
             services.AddScoped<IListeDeDiffusion, ListeDeDiffusionService>();
+            services.AddScoped<IContactCanal, ContactCanalService>();
+            services.AddScoped<ICampagne, CampagneService>();
+            services.AddScoped<IEntite, EntiteService>();
             services.AddScoped<IContactListeDiffusion, ContactListeDiffusionService>();
             services.AddDbContextPool<DbcontextGC>(options => options.UseSqlServer(
                     Configuration.GetConnectionString("CampagneConnection"))); 

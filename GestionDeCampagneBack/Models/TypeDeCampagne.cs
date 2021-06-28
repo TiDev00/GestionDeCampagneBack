@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GestionDeCampagneBack.Models
 {
-    [Index(nameof(Libelle), IsUnique = true)]
 
     public partial class TypeDeCampagne
     {
@@ -23,6 +22,8 @@ namespace GestionDeCampagneBack.Models
         ErrorMessage = "Le libellé doit comporter au minimum 2 caractères et au maximum 100 caractères")]
         [DataType(DataType.Text)]
         public string Libelle { get; set; }
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
 
         public virtual ICollection<Campagne> Campagnes { get; set; }
     }

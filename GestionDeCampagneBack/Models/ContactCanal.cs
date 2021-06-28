@@ -35,6 +35,8 @@ namespace GestionDeCampagneBack.Models
         public int IdCanalEnvoi { get; set; }
         [ForeignKey("IdCanalEnvoi")]
         public virtual CanalEnvoi IdCanalEnvoiNavigation { get; set; }
-    
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
+
     }
 }

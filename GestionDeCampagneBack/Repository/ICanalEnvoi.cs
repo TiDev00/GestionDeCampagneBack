@@ -7,11 +7,10 @@ namespace GestionDeCampagneBack.Repository
   public  interface ICanalEnvoi
     {
           bool SaveChanges();
-        List<CanalEnvoi> GetCanalEnvois();
+        List<CanalEnvoi> GetCanalEnvois(int id);
 
         CanalEnvoi GetCanalEnvoiById(int id);
 
-        CanalEnvoi GetCanalEnvoiByTitre(string titre);
         CanalEnvoi GetCanalEnvoiByCode(string code);
 
         void AddCanalEnvoi(CanalEnvoi CanalEnvoi);

@@ -7,12 +7,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GestionDeCampagneBack.Models
 {
-    [Index(nameof(Titre), IsUnique = true)]
     public partial class CanalEnvoi
     {
         public CanalEnvoi()
         {
-            Campagnes = new HashSet<Campagne>();
+            Modeles = new HashSet<Modele>();
             ContactCanals = new HashSet<ContactCanal>();
         }
 
@@ -36,8 +35,10 @@ namespace GestionDeCampagneBack.Models
 
  
         public bool Etat { get; set; }
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
 
-        public virtual ICollection<Campagne> Campagnes { get; set; }
+        public virtual ICollection<Modele> Modeles { get; set; }
         public virtual ICollection<ContactCanal> ContactCanals { get; set; }
     }
 }

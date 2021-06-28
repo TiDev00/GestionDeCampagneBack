@@ -29,7 +29,7 @@ namespace GestionDeCampagneBack.Service
                     var maxId = _dbcontextGC.Modeles.Max(p => p.Id);
 
                     Modele.Code = "MD0000" + (maxId+1).ToString();
-
+                    Modele.Statut = true;
                     _dbcontextGC.Modeles.Add(Modele);
                 }
                 else
@@ -37,7 +37,7 @@ namespace GestionDeCampagneBack.Service
                 
 
                     Modele.Code = "MD00001";
-
+                    Modele.Statut = true;
                     _dbcontextGC.Modeles.Add(Modele);
                 }
 
@@ -67,6 +67,9 @@ namespace GestionDeCampagneBack.Service
             mod.Code = Modele.Code;
             mod.Contenu = Modele.Contenu;
             mod.Description = Modele.Description;
+            mod.IdEntite = Modele.IdEntite;
+            mod.IdCanalEnvoi = Modele.IdCanalEnvoi;
+           
             return mod;
 
         }
@@ -85,17 +88,10 @@ namespace GestionDeCampagneBack.Service
             return Modele;
         }
 
-        public Modele GetModeleByLibelle(string libelle)
-        {
-            var Modele = _dbcontextGC.Modeles.FirstOrDefault(r => r.Libelle == libelle);
-            if (Modele != null)
-                return Modele;
-            else return null;
-        }
 
-        public List<Modele> GetModeles()
+        public List<Modele> GetModeles(int id)
         {
-            return _dbcontextGC.Modeles.ToList();
+            return _dbcontextGC.Modeles.Where(r=> r.IdEntite==id).ToList();
         }
 
         public bool SaveChanges()

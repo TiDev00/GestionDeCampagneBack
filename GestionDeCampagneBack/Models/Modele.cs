@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace GestionDeCampagneBack.Models
 {
-    [Index(nameof(Code), IsUnique = true)]
-    [Index(nameof(Libelle), IsUnique = true)]
     public partial class Modele
 
 
@@ -35,7 +34,15 @@ namespace GestionDeCampagneBack.Models
         [DataType(DataType.MultilineText)]
         public string Contenu { get; set; }
         public bool Statut { get; set; }
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
 
+        [Required(ErrorMessage = "Le canal d'envoi est obligatoire")]
+        public int IdCanalEnvoi { get; set; }
+
+
+        [ForeignKey("IdCanalEnvoi")]
+        public virtual CanalEnvoi IdCanalEnvoiNavigation { get; set; }
         public virtual ICollection<ModeleCampagne> ModeleCampagnes { get; set; }
     }
 }

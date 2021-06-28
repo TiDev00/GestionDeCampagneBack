@@ -41,6 +41,7 @@ namespace GestionDeCampagneBack.Service
         {
             var _typeDeCampagne = _dbcontextGC.TypeDeCampagnes.Find(id);
             _typeDeCampagne.Libelle = typeDeCampagne.Libelle;
+            _typeDeCampagne.IdEntite = typeDeCampagne.IdEntite;
             return _typeDeCampagne;
         }
 
@@ -50,17 +51,11 @@ namespace GestionDeCampagneBack.Service
             return _typeDeCampagne;
         }
         
-        public TypeDeCampagne GetTypeDeCampagneByLibelle(string libelle)
-        {
-            var _typeDeCampagne = _dbcontextGC.TypeDeCampagnes.FirstOrDefault(t => t.Libelle == libelle);
-            if (_typeDeCampagne != null)
-                return _typeDeCampagne;
-            else return null;
-        }
+      
 
-        public List<TypeDeCampagne> GetTypeDeCampagnes()
+        public List<TypeDeCampagne> GetTypeDeCampagnes(int id)
         {
-            return _dbcontextGC.TypeDeCampagnes.ToList();
+            return _dbcontextGC.TypeDeCampagnes.Where(r=> r.IdEntite ==id).ToList();
         }
 
         public bool SaveChanges()

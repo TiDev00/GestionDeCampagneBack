@@ -9,12 +9,14 @@ namespace GestionDeCampagneBack.Controllers
     public class InfosMessagesController : ControllerBase
     {
         private IInfosMessage _infosMessageData;
+        private ICampagne _icampagne;
 
-        public InfosMessagesController(IInfosMessage infosMessageData)
+        public InfosMessagesController(IInfosMessage infosMessageData, ICampagne iCampagne)
         {
             _infosMessageData = infosMessageData;
+            _icampagne = iCampagne;
         }
-       
+
         [HttpGet]
         public IActionResult GetAllInfosMessages()
         {
@@ -36,32 +38,38 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<InfosMessage> AddInfosMessage(InfosMessage infosMessage)
         {
-            var _infosMessage = _infosMessageData.GetInfosMessageById(infosMessage.Id);
-         
-            if (_infosMessage == null)
+            var camp = _icampagne.GetCampagneById(infosMessage.IdCampagne);
+            if (camp != null)
             {
+
                 _infosMessageData.AddInfosMessage(infosMessage);
                 _infosMessageData.SaveChanges();
 
                 return CreatedAtRoute(nameof(GetInfosMessageById), new { Id = infosMessage.Id }, infosMessage);
             }
-            else 
-            { 
-                return NotFound($"Un infosMessage avec le libelle : {infosMessage.Id} existe déjà");
+            else
+            {
+                return NotFound($"Une campagne avec l'id : {infosMessage.IdCampagne} n'existe pas");
             }
         }
 
         [HttpPut("put/{id}")]
-        public ActionResult<InfosMessage> PutInfosMessage(InfosMessage infMes,int id)
+        public ActionResult<InfosMessage> PutInfosMessage(InfosMessage infMes, int id)
         {
-            var infosMessage = _infosMessageData.GetInfosMessageById(id);
-            if (infosMessage != null)
+            var camp = _icampagne.GetCampagneById(infMes.IdCampagne);
+            if (camp != null)
             {
-                _infosMessageData.EditInfosMessage(infMes, id);
-                _infosMessageData.SaveChanges();
-                return CreatedAtRoute(nameof(GetInfosMessageById), new { Id = infosMessage.Id }, infosMessage);
+                var infosMessage = _infosMessageData.GetInfosMessageById(id);
+                if (infosMessage != null)
+                {
+                    _infosMessageData.EditInfosMessage(infMes, id);
+                    _infosMessageData.SaveChanges();
+                    return CreatedAtRoute(nameof(GetInfosMessageById), new { Id = infosMessage.Id }, infosMessage);
+                }
+                return NotFound($"Un infosMessage avec l'id : {id} n'existe pas");
             }
-            return NotFound($"Un infosMessage avec l'id : {id} n'existe pas");
+            else
+                return NotFound($"Une campagne avec l'id : {infMes.IdCampagne} n'existe pas");
         }
 
 

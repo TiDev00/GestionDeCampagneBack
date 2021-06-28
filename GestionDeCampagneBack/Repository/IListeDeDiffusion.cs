@@ -10,11 +10,10 @@ namespace GestionDeCampagneBack.Repository
     {
             
           bool SaveChanges();
-        List<ListeDeDiffusion> GetListeDiffusion();
+        List<ListeDeDiffusion> GetListeDiffusion(int id);
 
         ListeDeDiffusion GetListeDiffusionById(int id);
 
-        ListeDeDiffusion GetListeDiffusionByTitre(string titre);
         ListeDeDiffusion GetListeDiffusionByReference(string reference);
 
         void AddListeDiffusion(ListeDeDiffusion ListeDeDiffusion);

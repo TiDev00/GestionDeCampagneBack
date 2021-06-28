@@ -26,5 +26,7 @@ namespace GestionDeCampagneBack.Models
         public DateTimeOffset? FuseauHoraire { get; set; }
 
         public virtual ICollection<Campagne> Campagnes { get; set; }
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
     }
 }

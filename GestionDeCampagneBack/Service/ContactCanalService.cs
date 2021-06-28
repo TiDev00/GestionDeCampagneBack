@@ -23,7 +23,7 @@ namespace GestionDeCampagneBack.Service
                 throw new ArgumentNullException(nameof(ContactCanal));
 
             }
-
+            ContactCanal.Etat = true;
             _dbcontextGC.ContactCanals.Add(ContactCanal);
         }
 
@@ -42,8 +42,14 @@ namespace GestionDeCampagneBack.Service
         public ContactCanal EditContactCanal(ContactCanal ContactCanal, int id)
         {
             var contactCanal = _dbcontextGC.ContactCanals.Find(id);
-            ContactCanal.Etat = true;
-            return ContactCanal;
+            contactCanal.Etat = ContactCanal.Etat;
+            contactCanal.CanalDuContatct = ContactCanal.CanalDuContatct;
+            contactCanal.DateDesabonnement = ContactCanal.DateDesabonnement;
+            contactCanal.IdCanalEnvoi = ContactCanal.IdCanalEnvoi;
+            contactCanal.IdContact = ContactCanal.IdContact;
+            contactCanal.Raison = ContactCanal.Raison;
+            contactCanal.IdEntite = ContactCanal.IdEntite;
+            return contactCanal;
         }
 
         public ContactCanal GetContactCanalById(int id)
@@ -53,15 +59,15 @@ namespace GestionDeCampagneBack.Service
         }
 
 
-        public List<ContactCanal> GetContactCanals()
+        public List<ContactCanal> GetContactCanals(int id)
         {
-            return _dbcontextGC.ContactCanals.ToList();
+            return _dbcontextGC.ContactCanals.Where(r => r.IdEntite == id).ToList();
         }
         public bool SaveChanges()
         {
             return (_dbcontextGC.SaveChanges() >= 0);
         }
 
-    
+
     }
 }
