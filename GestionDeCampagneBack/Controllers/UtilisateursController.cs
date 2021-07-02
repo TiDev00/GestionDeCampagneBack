@@ -118,6 +118,7 @@ namespace GestionDeCampagneBack.Controllers
             var user = _utilisateurData.GetUtilisateurById(id);
             if (user != null)
             {
+
                 bool verified = BCrypt.Net.BCrypt.Verify(chm.Amp, user.Password);
                 if (verified==true)
                 {
