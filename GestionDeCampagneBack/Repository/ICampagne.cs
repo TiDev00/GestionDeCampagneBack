@@ -15,6 +15,8 @@ namespace GestionDeCampagneBack.Repository
 
         Campagne GetCampagneByCode(string code);
 
+        void SendMail(string email);
+
         void AddCampagne(Campagne Campagne);
 
         void DeleteCampagne(Campagne Campagne);

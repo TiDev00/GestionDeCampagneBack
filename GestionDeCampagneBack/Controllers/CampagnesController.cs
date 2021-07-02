@@ -41,7 +41,7 @@ namespace GestionDeCampagneBack.Controllers
         [HttpGet("all/{id}")]
         public IActionResult GetAllCampagne(int id)
         {
-
+         
             return Ok(_campagneData.GetCampagnes(id));
         }
 
@@ -94,6 +94,37 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Une Campagne avec le code : {code} n'existe pas");
         }
 
+        [HttpPost("sendEmail/{email}")]
+        public IActionResult SendEmail(string email)
+        {
+            // Send Campagne mail
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 25;
+            smtp.EnableSsl = true;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new NetworkCredential("tikokane11@gmail.com", "tikokane");
+
+            try
+            {
+                using (var message = new MailMessage("tikokane11@gmail.com", email))
+                {
+                    message.Subject = "Test";
+                    message.Body = "Nice Test";
+                    message.IsBodyHtml = true;
+                    smtp.Send(message);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                //to do: stockage dans une table pour un envoi antérieur
+            }
+
+            return Ok("Mail Send");
+        }
+
 
 
         [HttpPost("add")]
@@ -103,35 +134,17 @@ namespace GestionDeCampagneBack.Controllers
             if (entite != null)
             {
                 var Camp = _campagneData.GetCampagneByCode(Campagne.Code);
-                if (Camp != null)
+                if (Camp == null)
                 {
+
                     _campagneData.AddCampagne(Campagne);
                     _campagneData.SaveChanges();
-                    // Send Campagne mail
-                    SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.gmail.com";
-                    smtp.Port = 25;
-                    smtp.EnableSsl = true;
-                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = new NetworkCredential("tikokane11@gmail.com", "tikokane");
 
-                    try
-                    {
-                        using (var message = new MailMessage("tikokane11@gmail.com", "diallo.thiernoabdourahmane@atos.net"))
-                        {
-                            message.Subject = "Test";
-                            message.Body = "Nice Test";
-                            message.IsBodyHtml = true;
-                            smtp.Send(message);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-
-                        //to do: stockage dans une table pour un envoi antérieur
-                    }
-                    return CreatedAtRoute(nameof(GetCampagneById), new { Id = Camp.Id }, Camp);
+                    _campagneData.SendMail("diakhate.djibril@atos.net");
+                    _campagneData.SendMail("mohamed.diouf@atos.net");
+                    _campagneData.SendMail("tikokane11@gmail.com");
+                    _campagneData.SendMail("thierno-ibrahima.cisse@atos.net");
+                    return CreatedAtRoute(nameof(GetCampagneById), new { Id = Campagne.Id }, Campagne);
                 }
                 else
                 {

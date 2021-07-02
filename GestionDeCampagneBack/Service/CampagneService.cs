@@ -3,6 +3,8 @@ using GestionDeCampagneBack.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack.Service
@@ -105,6 +107,34 @@ namespace GestionDeCampagneBack.Service
         public bool SaveChanges()
         {
             return (_dbcontextGC.SaveChanges() >= 0);
+        }
+
+        public void SendMail(string email)
+        {
+            // Send Campagne mail
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 25;
+            smtp.EnableSsl = true;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new NetworkCredential("tikokane11@gmail.com", "tikokane");
+
+            try
+            {
+                using (var message = new MailMessage("tikokane11@gmail.com", email))
+                {
+                    message.Subject = "Test";
+                    message.Body = "Nice Test";
+                    message.IsBodyHtml = true;
+                    smtp.Send(message);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                //to do: stockage dans une table pour un envoi antérieur
+            }
         }
     }
 }
