@@ -86,9 +86,7 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<ListeDeDiffusion> AddListeDiffusion(ListeDeDiffusion ListeDiff)
         {
-            var niveauDevisibilite = _NiveauDeVisibiliteData.GetNiveauDeVisibiliteById(ListeDiff.IdNiveauVisibilite);
-            if (niveauDevisibilite != null)
-            {
+            
                 var entite = _entiteData.GetEntiteById(ListeDiff.IdEntite);
                 if (entite != null)
                 {
@@ -109,8 +107,7 @@ namespace GestionDeCampagneBack.Controllers
                 }
                 else
                     return NotFound($"Une entité avec l'id : {ListeDiff.IdEntite} n'existe pas");
-            }
-            else return NotFound($"Un niveau de visibilité avec l'id : {ListeDiff.IdNiveauVisibilite} n'existe pas");
+         
         }
 
         [HttpPut("put/{id}")]
@@ -175,13 +172,13 @@ namespace GestionDeCampagneBack.Controllers
 
 
         [HttpGet("donneescontact/{id}")]
-        public IQueryable<ContactListDeDiffusion> GetDonneesContactByListeDiffusion(int id)
+        public IQueryable<ContactListDeDiffusionRequet> GetDonneesContactByListeDiffusion(int id)
         {
             var query = (from x in _dbcontextGC.ContactListeDiffusions
                          join y in _dbcontextGC.Contacts on x.IdContact equals y.Id
                          join z in _dbcontextGC.ListeDeDiffusions on x.IdListeDiffusion equals z.Id
                          where z.Id == id
-                         select new ContactListDeDiffusion()
+                         select new ContactListDeDiffusionRequet()
                          {
                              Nom = y.Nom,
                              Prenom = y.Prenom,

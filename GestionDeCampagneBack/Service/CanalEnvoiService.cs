@@ -87,7 +87,7 @@ namespace GestionDeCampagneBack.Service
 
         public List<CanalEnvoi> GetCanalEnvois(int id)
         {
-            return _dbcontextGC.CanalEnvois.Where(r=> r.IdEntite == id).ToList();
+            return _dbcontextGC.CanalEnvois.ToList();
         }
 
         public bool SaveChanges()

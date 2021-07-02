@@ -165,13 +165,13 @@ namespace GestionDeCampagneBack.Controllers
         }
 
         [HttpGet("donneescontact/{id}")]
-        public IQueryable<ContactListDeDiffusion> GetDonneesContactByListeDiffusion(int id)
+        public IQueryable<ContactListDeDiffusionRequet> GetDonneesContactByListeDiffusion(int id)
         {
             var query = (from x in _dbcontextGC.ContactListeDiffusions
                          join y in _dbcontextGC.Contacts on x.IdContact equals y.Id
                          join z in _dbcontextGC.ListeDeDiffusions on x.IdListeDiffusion equals z.Id
                          where z.Id == id
-                         select new ContactListDeDiffusion()
+                         select new ContactListDeDiffusionRequet()
                          {
                              Nom = y.Nom,
                              Prenom = y.Prenom,

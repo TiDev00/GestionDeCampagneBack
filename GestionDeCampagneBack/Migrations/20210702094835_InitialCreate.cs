@@ -13,11 +13,10 @@ namespace GestionDeCampagneBack.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Titre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Titre = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Etat = table.Column<bool>(type: "bit", nullable: false),
-                    IdEntite = table.Column<int>(type: "int", nullable: false)
+                    Etat = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -181,7 +180,7 @@ namespace GestionDeCampagneBack.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Titre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Titre = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateDeDebut = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -229,10 +228,10 @@ namespace GestionDeCampagneBack.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nom = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Prenom = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Nom = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Prenom = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Matricule = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Adresse = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Adresse = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Etat = table.Column<bool>(type: "bit", nullable: false),
                     Statut = table.Column<bool>(type: "bit", nullable: false),
                     Pays = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -241,6 +240,7 @@ namespace GestionDeCampagneBack.Migrations
                     Situation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Profession = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false),
                     IdUser = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -270,6 +270,7 @@ namespace GestionDeCampagneBack.Migrations
                     MessageAchemines = table.Column<int>(type: "int", nullable: true),
                     MessageEnCours = table.Column<int>(type: "int", nullable: true),
                     MessageErreur = table.Column<int>(type: "int", nullable: true),
+                    IdEntite = table.Column<int>(type: "int", nullable: false),
                     IdCampagne = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -343,7 +344,8 @@ namespace GestionDeCampagneBack.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CanalDuContatct = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CanalDuContatct = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Lieuounumero = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Etat = table.Column<bool>(type: "bit", nullable: false),
                     DateDesabonnement = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Raison = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -456,7 +458,8 @@ namespace GestionDeCampagneBack.Migrations
                     IdCampagne = table.Column<int>(type: "int", nullable: false),
                     IdCampagneNavigationId = table.Column<int>(type: "int", nullable: true),
                     IdInfosMessage = table.Column<int>(type: "int", nullable: false),
-                    IdInfosMessageNavigationId = table.Column<int>(type: "int", nullable: true)
+                    IdInfosMessageNavigationId = table.Column<int>(type: "int", nullable: true),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -505,12 +508,6 @@ namespace GestionDeCampagneBack.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Campagnes_Code",
-                table: "Campagnes",
-                column: "Code",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Campagnes_IdNiveauVisibilite",
                 table: "Campagnes",
                 column: "IdNiveauVisibilite");
@@ -539,12 +536,6 @@ namespace GestionDeCampagneBack.Migrations
                 name: "IX_ContactCanals_IdContact",
                 table: "ContactCanals",
                 column: "IdContact");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ContactListeDiffusions_Code",
-                table: "ContactListeDiffusions",
-                column: "Code",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ContactListeDiffusions_IdContact",

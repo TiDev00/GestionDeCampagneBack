@@ -101,9 +101,9 @@ namespace GestionDeCampagneBack.Service
             else return null;
         }
 
-        public List<Contact> GetContacts(int idUser)
+        public List<Contact> GetContacts(int idEntite)
         {
-            return _dbcontextGC.Contacts.Where(r => r.Etat == true && r.IdUser == idUser).ToList();
+            return _dbcontextGC.Contacts.Where(r => r.Etat == true && r.IdEntite == idEntite).ToList();
         }
 
         public bool SaveChanges()

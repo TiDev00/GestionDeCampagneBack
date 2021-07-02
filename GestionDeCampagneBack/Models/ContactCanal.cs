@@ -15,10 +15,17 @@ namespace GestionDeCampagneBack.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Le canal est obligatoire")]
-        [StringLength(100, MinimumLength = 2,
-        ErrorMessage = "Le canal doit comporter au minimum 2 caractères et au maximum 100 caractères")]
+        [StringLength(200, MinimumLength = 2,
+        ErrorMessage = "Le canal doit comporter au minimum 2 caractères et au maximum 200 caractères")]
         [DataType(DataType.Text)]
         public string CanalDuContatct { get; set; }
+
+        [Required(ErrorMessage = "Le lien ou le numero est obligatoire")]
+        [StringLength(500, MinimumLength = 2,
+        ErrorMessage = "Le lien ou le numero doit comporter au minimum 2 caractères et au maximum 500 caractères")]
+        [DataType(DataType.Text)]
+        public string Lieuounumero { get; set; }
+
         public bool Etat { get; set; }
 
         [DataType(DataType.Date)]

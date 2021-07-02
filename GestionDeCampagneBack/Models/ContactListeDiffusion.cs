@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestionDeCampagneBack.Models
 {
-    [Index(nameof(Code), IsUnique = true)]
     public partial class ContactListeDiffusion
     {
       

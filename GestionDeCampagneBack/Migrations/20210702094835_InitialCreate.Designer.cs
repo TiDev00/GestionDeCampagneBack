@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionDeCampagneBack.Migrations
 {
     [DbContext(typeof(DbcontextGC))]
-    [Migration("20210628112622_InitialCreate")]
+    [Migration("20210702094835_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,13 +65,10 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.Property<string>("Titre")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
 
                     b.HasIndex("IdNiveauVisibilite");
 
@@ -95,20 +92,15 @@ namespace GestionDeCampagneBack.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
 
-                    b.Property<int>("IdEntite")
-                        .HasColumnType("int");
-
                     b.Property<string>("Titre")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.HasKey("Id");
 
@@ -123,14 +115,16 @@ namespace GestionDeCampagneBack.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Adresse")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DateDeNaissance")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
+
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
 
                     b.Property<int>("IdNiveauVisibilite")
                         .HasColumnType("int");
@@ -143,16 +137,16 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.Property<string>("Nom")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Pays")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Prenom")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Profession")
                         .HasColumnType("nvarchar(max)");
@@ -189,8 +183,8 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.Property<string>("CanalDuContatct")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("DateDesabonnement")
                         .HasColumnType("datetime2");
@@ -206,6 +200,11 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.Property<int>("IdEntite")
                         .HasColumnType("int");
+
+                    b.Property<string>("Lieuounumero")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Raison")
                         .HasColumnType("nvarchar(max)");
@@ -251,9 +250,6 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code")
-                        .IsUnique();
-
                     b.HasIndex("IdContact");
 
                     b.HasIndex("IdListeDiffusion");
@@ -291,6 +287,9 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("IdCampagne")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
                     b.Property<int?>("MessageAchemines")
                         .HasColumnType("int");
 
@@ -321,6 +320,9 @@ namespace GestionDeCampagneBack.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("IdCampagneNavigationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdEntite")
                         .HasColumnType("int");
 
                     b.Property<int>("IdInfosMessage")

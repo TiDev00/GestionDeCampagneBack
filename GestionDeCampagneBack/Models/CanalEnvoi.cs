@@ -19,14 +19,12 @@ namespace GestionDeCampagneBack.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Le titre est obligatoire")]
-        [StringLength(100, MinimumLength = 2,
-        ErrorMessage = "Le titre doit comporter au minimum 2 caractères et au maximum 100 caractères")]
+        [StringLength(500, MinimumLength = 2,
+        ErrorMessage = "Le titre doit comporter au minimum 2 caractères et au maximum 500 caractères")]
         [DataType(DataType.Text)]
         public string Titre { get; set; }
 
-        [Required(ErrorMessage = "La description est obligatoire")]
-        [StringLength(500, MinimumLength = 2,
-        ErrorMessage = "La description doit comporter au minimum 2 caractères et au maximum 500 caractères")]
+      
         [DataType(DataType.MultilineText)]
 
         public string Description { get; set; }
@@ -36,7 +34,6 @@ namespace GestionDeCampagneBack.Models
  
         public bool Etat { get; set; }
         [Required(ErrorMessage = "L'entité est obligatoire")]
-        public int IdEntite { get; set; }
 
         public virtual ICollection<Modele> Modeles { get; set; }
         public virtual ICollection<ContactCanal> ContactCanals { get; set; }

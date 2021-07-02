@@ -30,25 +30,31 @@ namespace GestionDeCampagneBack
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
             services.AddControllers();
-            services.AddAuthentication(opt =>
+            services.AddAuthentication(options =>
             {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(option =>
-            {
-                option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = "https://localhost:44332",
-                    ValidAudience = "https://localhost:44332",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superGCSecretKey@11"))
-                };
-            });
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
 
-            services.AddCors(option => option.AddPolicy("GestionCampagnePolicy", builder => {
+          // Adding Jwt Bearer  
+          .AddJwtBearer(options =>
+          {
+              options.SaveToken = true;
+              options.RequireHttpsMetadata = false;
+              options.TokenValidationParameters = new TokenValidationParameters()
+              {
+                  ValidateIssuer = true,
+                  ValidateAudience = true,
+                  ValidAudience = Configuration["JWT:ValidAudience"],
+                  ValidIssuer = Configuration["JWT:ValidIssuer"],
+                  IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+              };
+          });
+        
+
+
+        services.AddCors(option => option.AddPolicy("GestionCampagnePolicy", builder => {
                 builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 
             }));

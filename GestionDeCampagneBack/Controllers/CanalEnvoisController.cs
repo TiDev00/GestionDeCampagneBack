@@ -9,15 +9,13 @@ namespace GestionDeCampagneBack.Controllers
     public class CanalEnvoisController : ControllerBase
     {
         private ICanalEnvoi _canalEnvoiData;
-        private IEntite _entiteData;
 
         public CanalEnvoisController(ICanalEnvoi CanalEnvoiData, IEntite entite)
         {
             _canalEnvoiData = CanalEnvoiData;
-            _entiteData = entite;
         }
         // GET: api/<ValuesController>
-        [HttpGet("all/{id}")]
+        [HttpGet]
         public IActionResult GetAllCanalEnvois(int id)
         {
             return Ok(_canalEnvoiData.GetCanalEnvois(id));
@@ -77,32 +75,26 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<CanalEnvoi> AddCanalEnvoi(CanalEnvoi CanalEnvoi)
         {
-            var entite = _entiteData.GetEntiteById(CanalEnvoi.IdEntite);
-            if (entite != null)
-            {
+      
                 var Canal = _canalEnvoiData.GetCanalEnvoiByCode(CanalEnvoi.Code);
-                if (Canal != null)
+                if (Canal == null)
                 {
                     _canalEnvoiData.AddCanalEnvoi(CanalEnvoi);
                     _canalEnvoiData.SaveChanges();
-                    return CreatedAtRoute(nameof(GetCanalEnvoiById), new { Id = Canal.Id }, Canal);
+                    return CreatedAtRoute(nameof(GetCanalEnvoiById), new { Id = CanalEnvoi.Id }, CanalEnvoi);
                 }
                 else
                 {
-                    return NotFound($"Un CanalEnvoi avec le code : {CanalEnvoi.Code} n'existe pas");
+                    return NotFound($"Un CanalEnvoi avec le code : {CanalEnvoi.Code} existe déjà pas");
                 }
-            }
-            else
-                return NotFound($"Une entité avec l'id : {CanalEnvoi.IdEntite} n'existe pas");
+ 
 
         }
 
         [HttpPut("put/{id}")]
         public ActionResult<CanalEnvoi> PutCanalEnvoi(CanalEnvoi canal, int id)
         {
-            var entite = _entiteData.GetEntiteById(canal.IdEntite);
-            if (entite != null)
-            {
+      
                 var can = _canalEnvoiData.GetCanalEnvoiById(id);
                 if (can != null)
                 {
@@ -126,10 +118,7 @@ namespace GestionDeCampagneBack.Controllers
                         return NotFound($"Un Canal avec le code : {canal.Code} n'existe déjà");
                 }
                 return NotFound($"Un Canal avec l'id : {id} n'existe pas");
-            }
-            else
-                return NotFound($"Une Entité avec l'id : {canal.IdEntite} n'existe pas");
-
+        
         }
 
 

@@ -1,13 +1,29 @@
 ﻿using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Repository;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Net;
+using System.Net.Mail;
 
 namespace GestionDeCampagneBack.Controllers
+
 {
+   
     [Route("api/[controller]")]
     [ApiController]
     public class CampagnesController : ControllerBase
     {
+        public static string GmailUsername { get; set; }
+        public static string GmailPassword { get; set; }
+        public static string GmailHost { get; set; }
+        public static int GmailPort { get; set; }
+        public static bool GmailSSL { get; set; }
+
+        public string ToEmail { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
+        public bool IsHtml { get; set; }
+
         private ICanalEnvoi _canalEnvoiData;
         private IEntite _entiteData;
         private ICampagne _campagneData;
@@ -25,6 +41,7 @@ namespace GestionDeCampagneBack.Controllers
         [HttpGet("all/{id}")]
         public IActionResult GetAllCampagne(int id)
         {
+
             return Ok(_campagneData.GetCampagnes(id));
         }
 
@@ -90,6 +107,30 @@ namespace GestionDeCampagneBack.Controllers
                 {
                     _campagneData.AddCampagne(Campagne);
                     _campagneData.SaveChanges();
+                    // Send Campagne mail
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.Port = 25;
+                    smtp.EnableSsl = true;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new NetworkCredential("tikokane11@gmail.com", "tikokane");
+
+                    try
+                    {
+                        using (var message = new MailMessage("tikokane11@gmail.com", "diallo.thiernoabdourahmane@atos.net"))
+                        {
+                            message.Subject = "Test";
+                            message.Body = "Nice Test";
+                            message.IsBodyHtml = true;
+                            smtp.Send(message);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        //to do: stockage dans une table pour un envoi antérieur
+                    }
                     return CreatedAtRoute(nameof(GetCampagneById), new { Id = Camp.Id }, Camp);
                 }
                 else
