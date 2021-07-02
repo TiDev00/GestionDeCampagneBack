@@ -18,12 +18,14 @@ namespace GestionDeCampagneBack.Controllers
         private DbcontextGC _dbcontextGC;
         private IEntite _entiteData;
         private INiveauDeVisibilite _NiveauDeVisibiliteData;
-        public ListeDeDiffusionController(IListeDeDiffusion ListeDeDiffusionData, DbcontextGC dbcontextGC, IEntite entite, INiveauDeVisibilite niveauDeVisibilite)
+        private IContactListeDiffusion _ContactListeDiffusionData;
+        public ListeDeDiffusionController(IListeDeDiffusion ListeDeDiffusionData, IContactListeDiffusion contactListeDiffusion, DbcontextGC dbcontextGC, IEntite entite, INiveauDeVisibilite niveauDeVisibilite)
         {
             _listeListeData = ListeDeDiffusionData;
             _dbcontextGC = dbcontextGC;
             _entiteData = entite;
             _NiveauDeVisibiliteData = niveauDeVisibilite;
+            _ContactListeDiffusionData = contactListeDiffusion;
         }
         // GET: api/<ValuesController>
         [HttpGet("all/{id}")]
@@ -69,8 +71,35 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Une Liste de Diffusion avec la référence : {reference} n'existe pas");
         }
 
+        [HttpGet("changes/{id}")]
+        public IActionResult Changes(int id)
+        {
+            var ListeDiff = _listeListeData.GetListeDiffusionById(id);
+            if (ListeDiff != null)
+            {
+                if (ListeDiff.Statut == true)
+                {
+                    ListeDiff.Statut = false;
+                    _listeListeData.SaveChanges();
+                    return Ok(ListeDiff);
+                }
+                else
+                {
+                    ListeDiff.Statut = true;
+                    _listeListeData.SaveChanges();
+                    return Ok(ListeDiff);
+                }
 
 
+            }
+            return NotFound($"Une Liste de diffusion avec l'id : {id} n'existe pas");
+        }
+
+        [HttpGet("contactListeDiff")]
+        public IActionResult GetAllContactListeDiffusions(int id)
+        {
+            return Ok(_ContactListeDiffusionData.GetContactListeDiffusions(id));
+        }
         [HttpPost("add")]
         public ActionResult<ListeDeDiffusion> AddListeDiffusion(ListeDeDiffusion ListeDiff)
         {
@@ -91,7 +120,7 @@ namespace GestionDeCampagneBack.Controllers
                     }
                     else
                     {
-                        return NotFound($"Une Liste de Diffusion avec le référence : {ListeDiff.Reference} existe déjà");
+                        return NotFound($"Une Liste de Diffusion avec la référence : {ListeDiff.Reference} existe déjà");
 
                     }
                 }

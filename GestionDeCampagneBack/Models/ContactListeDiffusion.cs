@@ -40,6 +40,8 @@ namespace GestionDeCampagneBack.Models
         [Required(ErrorMessage = "L'entité est obligatoire")]
         public int IdEntite { get; set; }
 
+        [ForeignKey("IdEntite")]
+        public virtual ContactListeDiffusion IdEntiteNavigation { get; set; }
 
     }
 }

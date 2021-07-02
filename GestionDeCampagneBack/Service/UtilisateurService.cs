@@ -42,7 +42,6 @@ namespace GestionDeCampagneBack.Service
         {
             var user = _dbcontextGC.Utilisateurs.Find(id);
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(Utilisateur.Password);
-            user.Statut = Utilisateur.Statut;
             user.Password = passwordHash;
             user.ConfirmPassword = passwordHash;
             user.Etat = Utilisateur.Etat;

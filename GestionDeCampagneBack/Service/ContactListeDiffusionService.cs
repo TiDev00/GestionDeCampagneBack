@@ -33,7 +33,6 @@ namespace GestionDeCampagneBack.Service
                     ContactListeDiffusion.Etat = true;
 
                     _dbcontextGC.ContactListeDiffusions.Add(ContactListeDiffusion);
-                    SaveChanges();
                 }
                 else
                 {
@@ -59,13 +58,8 @@ namespace GestionDeCampagneBack.Service
         public ContactListeDiffusion EditContactListeDiffusion(ContactListeDiffusion ContactListeDiffusion, int id)
         {
             var contactListeDiffusion = _dbcontextGC.ContactListeDiffusions.Find(id);
-            contactListeDiffusion.Etat = ContactListeDiffusion.Etat;
-            contactListeDiffusion.Code = ContactListeDiffusion.Code;
-            contactListeDiffusion.DateDesa = ContactListeDiffusion.DateDesa;
-            contactListeDiffusion.IdContact = ContactListeDiffusion.IdContact;
-            contactListeDiffusion.IdListeDiffusion = ContactListeDiffusion.IdListeDiffusion;
-            contactListeDiffusion.Raison = ContactListeDiffusion.Raison;
-            return contactListeDiffusion;
+            ContactListeDiffusion.Etat = true;
+            return ContactListeDiffusion;
         }
 
         public ContactListeDiffusion GetContactListeDiffusionById(int id)
@@ -84,12 +78,11 @@ namespace GestionDeCampagneBack.Service
 
         public List<ContactListeDiffusion> GetContactListeDiffusions(int id)
         {
-            return _dbcontextGC.ContactListeDiffusions.Where(r => r.IdEntite == id).ToList();
+            return _dbcontextGC.ContactListeDiffusions.ToList();
         }
         public bool SaveChanges()
         {
             return (_dbcontextGC.SaveChanges() >= 0);
         }
-
     }
 }

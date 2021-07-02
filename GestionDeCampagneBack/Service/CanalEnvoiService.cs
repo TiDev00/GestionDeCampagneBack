@@ -60,12 +60,10 @@ namespace GestionDeCampagneBack.Service
         public CanalEnvoi EditCanalEnvoi(CanalEnvoi CanalEnvoi, int id)
         {
             var canal = _dbcontextGC.CanalEnvois.Find(id);
-            canal.Code = CanalEnvoi.Code;
             canal.Description = CanalEnvoi.Description;
             canal.Etat = CanalEnvoi.Etat;
             canal.Titre = CanalEnvoi.Titre;
             return canal;
-
         }
 
 

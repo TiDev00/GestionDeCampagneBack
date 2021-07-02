@@ -13,19 +13,19 @@ namespace GestionDeCampagneBack.Controllers
     [ApiController]
     public class ContactCanalEnvois : ControllerBase
     {
-        private IContactCanalEnvoi _contactCanalEnvoiData;
+        private IContactCanal _contactCanalEnvoiData;
         private IContact _contactData;
 
-        public ContactCanalEnvois(IContactCanalEnvoi ContactCanalEnvoiData, IContact ContactData)
+        public ContactCanalEnvois(IContactCanal ContactCanalEnvoiData, IContact ContactData)
         {
             _contactCanalEnvoiData = ContactCanalEnvoiData;
             _contactData = ContactData;
         }
 
-        [HttpGet ]
-        public IActionResult GetAllContactCanalEnvoi()
+        [HttpGet("all/{id}")]
+        public IActionResult GetAllContactCanalEnvoi(int id)
         {
-            return Ok(_contactCanalEnvoiData.GetContactCanalCanals());
+            return Ok(_contactCanalEnvoiData.GetContactCanals(id));
         }
 
         [HttpGet("{id}", Name = "GetContactCanalEnvoiById")]

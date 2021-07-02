@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -37,7 +38,8 @@ namespace GestionDeCampagneBack.Models
         public bool Etat { get; set; }
         [Required(ErrorMessage = "L'entité est obligatoire")]
         public int IdEntite { get; set; }
-
+        [ForeignKey("IdEntite")]
+        public virtual Entite IdEntiteNavigation { get; set; }
         public virtual ICollection<Modele> Modeles { get; set; }
         public virtual ICollection<ContactCanal> ContactCanals { get; set; }
     }

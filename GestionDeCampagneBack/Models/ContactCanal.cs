@@ -37,6 +37,6 @@ namespace GestionDeCampagneBack.Models
         public virtual CanalEnvoi IdCanalEnvoiNavigation { get; set; }
         [Required(ErrorMessage = "L'entité est obligatoire")]
         public int IdEntite { get; set; }
-
+   
     }
 }

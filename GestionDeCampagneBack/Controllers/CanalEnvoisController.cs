@@ -81,15 +81,15 @@ namespace GestionDeCampagneBack.Controllers
             if (entite != null)
             {
                 var Canal = _canalEnvoiData.GetCanalEnvoiByCode(CanalEnvoi.Code);
-                if (Canal != null)
+                if (Canal == null)
                 {
                     _canalEnvoiData.AddCanalEnvoi(CanalEnvoi);
                     _canalEnvoiData.SaveChanges();
-                    return CreatedAtRoute(nameof(GetCanalEnvoiById), new { Id = Canal.Id }, Canal);
+                    return CreatedAtRoute(nameof(GetCanalEnvoiById), new { Id = CanalEnvoi.Id }, CanalEnvoi);
                 }
                 else
                 {
-                    return NotFound($"Un CanalEnvoi avec le code : {CanalEnvoi.Code} n'existe pas");
+                    return NotFound($"Un CanalEnvoi avec le code : {CanalEnvoi.Code} existe déjà");
                 }
             }
             else

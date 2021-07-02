@@ -141,7 +141,11 @@ namespace GestionDeCampagneBack.Controllers
             }
             return NotFound($"Un utilisateur avec l'email : {id} n'existe pas");
         }
-
+        [HttpGet("roles")]
+        public IActionResult GetAllRoles()
+        {
+            return Ok(_roleData.GetRoles());
+        }
 
         [HttpPost("add")]
         public ActionResult<Utilisateur> AddUtilisateur(Utilisateur Utilisateur)

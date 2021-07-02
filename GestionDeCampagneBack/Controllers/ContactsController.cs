@@ -102,6 +102,29 @@ namespace GestionDeCampagneBack.Controllers
         }
 
 
+        [HttpGet("changes/{id}")]
+        public IActionResult ChangeStatutContact(int id)
+        {
+            var Contact = _ContactData.GetContactById(id);
+            if (Contact != null)
+            {
+                if (Contact.Statut == true)
+                {
+                    Contact.Statut = false;
+                    _ContactData.SaveChanges();
+                    return Ok(Contact);
+                }
+                else
+                {
+                    Contact.Statut = true;
+                    _ContactData.SaveChanges();
+                    return Ok(Contact);
+                }
+
+
+            }
+            return NotFound($"Un Contact avec l'id : {id} n'existe pas");
+        }
 
         [HttpPost("add")]
         public ActionResult<Contact> AddContact(Contact Contact)
@@ -123,7 +146,7 @@ namespace GestionDeCampagneBack.Controllers
 
                         return CreatedAtRoute(nameof(GetContactById), new { Id = Contact.Id }, Contact);
                     }
-                    else return NotFound($"Un Contact avec le matricule : {Contact.Matricule} n'existe pas");
+                    else return NotFound($"Un Contact avec le matricule : {Contact.Matricule} existe dejà");
                 }
                 else
                 {
@@ -168,7 +191,7 @@ namespace GestionDeCampagneBack.Controllers
                         }
                     }
                     else
-                        return NotFound($"Un contact avec l'id : {contact.IdUser} n'existe pas");
+                        return NotFound($"Un user avec l'id : {contact.IdUser} n'existe pas");
                 }
                 else
                     return NotFound($"Un contact avec l'id : {id} n'existe pas");

@@ -38,9 +38,13 @@ namespace GestionDeCampagneBack.Models
 
         [Required(ErrorMessage = "L'entité est obligatoire")]
         public int IdEntite { get; set; }
+        [ForeignKey("IdEntite")]
+        public virtual Entite IdEntiteNavigation { get; set; }
 
         [Required(ErrorMessage = "Le niveau de visibilité est obligatoire")]
         public int IdNiveauVisibilite { get; set; }
+        [ForeignKey("IdNiveauVisibilite")]
+        public virtual NiveauDeVisibilite IdNiveauVisibiliteNavigation { get; set; }
         public virtual ICollection<ContactListeDiffusion> ContactListeDiffusions { get; set; }
         public virtual ICollection<ListeDffCampagne> ListeDffCampagnes { get; set; }
     }
