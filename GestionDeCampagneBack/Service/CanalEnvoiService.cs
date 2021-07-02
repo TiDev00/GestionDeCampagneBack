@@ -19,7 +19,6 @@ namespace GestionDeCampagneBack.Service
             if (CanalEnvoi == null)
             {
                 throw new ArgumentNullException(nameof(CanalEnvoi));
-
             }
             else
             {
@@ -27,24 +26,17 @@ namespace GestionDeCampagneBack.Service
                 if (countval >= 1)
                 {
                     var maxId = _dbcontextGC.CanalEnvois.Max(p => p.Id);
-
                     CanalEnvoi.Code = "CE0000" + (maxId + 1).ToString();
                     CanalEnvoi.Etat = true;
-
                     _dbcontextGC.CanalEnvois.Add(CanalEnvoi);
                 }
                 else
                 {
-
-
                     CanalEnvoi.Code = "CE00001";
                     CanalEnvoi.Etat = true;
                     _dbcontextGC.CanalEnvois.Add(CanalEnvoi);
                 }
-
-
             }
-
         }
 
         public void DeleteCanalEnvoi(CanalEnvoi CanalEnvoi)

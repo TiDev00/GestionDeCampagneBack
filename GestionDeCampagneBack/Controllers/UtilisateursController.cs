@@ -209,8 +209,7 @@ namespace GestionDeCampagneBack.Controllers
                             return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = utilisateur.Id }, utilisateur);
                         }
 
-                        else
-
+                        else 
                             return NotFound($"Un utilisateur avec le login : {user.Login} existe déjà");
                     }
                     return NotFound($"Un Utilisateur avec l'id : {id} n'existe pas");
@@ -218,7 +217,8 @@ namespace GestionDeCampagneBack.Controllers
                 else
                     return NotFound($"Un role avec l'id : {user.IdRole} n'existe pas");
             }
-            else return NotFound($"Une entité avec l'id : {user.IdEntite} n'existe pas");
+            else 
+                return NotFound($"Une entité avec l'id : {user.IdEntite} n'existe pas");
         }
 
 
