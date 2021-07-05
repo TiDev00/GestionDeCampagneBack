@@ -1,9 +1,11 @@
 ﻿using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Repository;
 using Microsoft.AspNetCore.Mvc;
+using GestionDeCampagneBack.ModelsRequets;
 using System;
 using System.Net;
 using System.Net.Mail;
+using System.Linq;
 
 namespace GestionDeCampagneBack.Controllers
 
@@ -28,20 +30,24 @@ namespace GestionDeCampagneBack.Controllers
         private IEntite _entiteData;
         private ICampagne _campagneData;
         private INiveauDeVisibilite _niveauDeVisibiliteData;
+        private DbcontextGC _dbcontextGC;
+        private IModele _modelData;
 
-        public CampagnesController(ICanalEnvoi CanalEnvoiData, IEntite entite, ICampagne campagne, INiveauDeVisibilite niveauDeVisibilite)
+        public CampagnesController(IModele ModeleData, DbcontextGC dbcontextGC, ICanalEnvoi CanalEnvoiData, IEntite entite, ICampagne campagne, INiveauDeVisibilite niveauDeVisibilite)
         {
             _canalEnvoiData = CanalEnvoiData;
             _entiteData = entite;
             _campagneData = campagne;
             _niveauDeVisibiliteData = niveauDeVisibilite;
+            _dbcontextGC = dbcontextGC;
+            _modelData = ModeleData;
 
         }
 
         [HttpGet("all/{id}")]
         public IActionResult GetAllCampagne(int id)
         {
-         
+            
             return Ok(_campagneData.GetCampagnes(id));
         }
 
@@ -94,35 +100,30 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Une Campagne avec le code : {code} n'existe pas");
         }
 
-        [HttpPost("sendEmail/{email}")]
-        public IActionResult SendEmail(string email)
+        [HttpPost("sendEmail/{id}/{idModel}")]
+        public IActionResult SendEmail( int id,int idModel)
         {
-            // Send Campagne mail
-            SmtpClient smtp = new SmtpClient();
-            smtp.Host = "smtp.gmail.com";
-            smtp.Port = 25;
-            smtp.EnableSsl = true;
-            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new NetworkCredential("tikokane11@gmail.com", "tikokane");
+            var model = _modelData.GetModeleById(idModel);
 
-            try
+            Response r = new Response();
+            var query = (from x in _dbcontextGC.ContactCanals
+                         where x.IdEntite == id && x.CanalDuContatct == "Mail"
+                         select new LienounumeroRequet()
+                         {
+                             Lieuounumero = x.Lieuounumero
+                         }
+                        ).AsQueryable();
+
+            foreach(LienounumeroRequet l in query)
             {
-                using (var message = new MailMessage("tikokane11@gmail.com", email))
-                {
-                    message.Subject = "Test";
-                    message.Body = "Nice Test";
-                    message.IsBodyHtml = true;
-                    smtp.Send(message);
-                }
-            }
-            catch (Exception ex)
-            {
+                _campagneData.SendMail(l.Lieuounumero,model.Contenu);
 
-                //to do: stockage dans une table pour un envoi antérieur
             }
+            r.Status = "200";
+            r.Message = "Email Send avec Success";
+            return Ok(r);
 
-            return Ok("Mail Send");
+
         }
 
 
@@ -139,11 +140,6 @@ namespace GestionDeCampagneBack.Controllers
 
                     _campagneData.AddCampagne(Campagne);
                     _campagneData.SaveChanges();
-
-                    _campagneData.SendMail("diakhate.djibril@atos.net");
-                    _campagneData.SendMail("mohamed.diouf@atos.net");
-                    _campagneData.SendMail("tikokane11@gmail.com");
-                    _campagneData.SendMail("thierno-ibrahima.cisse@atos.net");
                     return CreatedAtRoute(nameof(GetCampagneById), new { Id = Campagne.Id }, Campagne);
                 }
                 else

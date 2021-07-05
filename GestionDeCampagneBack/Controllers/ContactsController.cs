@@ -44,7 +44,7 @@ namespace GestionDeCampagneBack.Controllers
             var query = (from x in _dbcontextGC.ContactCanals
                          join y in _dbcontextGC.Contacts on x.IdContact equals y.Id
                          join z in _dbcontextGC.CanalEnvois on x.IdCanalEnvoi equals z.Id
-                         where z.Id == id
+                         where y.Id == id
                          select new ContactCanalRequet()
                          {
                              NomComplet = y.Nom + " " + y.Prenom,

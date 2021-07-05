@@ -109,7 +109,7 @@ namespace GestionDeCampagneBack.Service
             return (_dbcontextGC.SaveChanges() >= 0);
         }
 
-        public void SendMail(string email)
+        public void SendMail(string email,string body)
         {
             // Send Campagne mail
             SmtpClient smtp = new SmtpClient();
@@ -125,7 +125,7 @@ namespace GestionDeCampagneBack.Service
                 using (var message = new MailMessage("tikokane11@gmail.com", email))
                 {
                     message.Subject = "Test";
-                    message.Body = "Nice Test";
+                    message.Body = body;
                     message.IsBodyHtml = true;
                     smtp.Send(message);
                 }
