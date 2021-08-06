@@ -10,6 +10,7 @@ namespace GestionDeCampagneBack.Repository
         List<Modele> GetModeles(int id);
 
         Modele GetModeleById(int id);
+        List<Modele> GetModeleByCanalEnvoi(int idEntite, int idCanal);
         Modele GetModeleByCode(string code);
 
         void AddModele(Modele Modele);

@@ -6,6 +6,9 @@ using System;
 using System.Net;
 using System.Net.Mail;
 using System.Linq;
+using DotnetOrangeSms;
+using System.Threading.Tasks;
+using DotnetOrangeSms.Extensions;
 
 namespace GestionDeCampagneBack.Controllers
 
@@ -43,13 +46,18 @@ namespace GestionDeCampagneBack.Controllers
             _modelData = ModeleData;
 
         }
+    
 
         [HttpGet("all/{id}")]
-        public IActionResult GetAllCampagne(int id)
+        public async Task<IActionResult> GetAllCampagneAsync(int id)
         {
-            
+          
+
             return Ok(_campagneData.GetCampagnes(id));
         }
+
+      
+
 
         [HttpGet("{id}", Name = "GetCampagneById")]
         public IActionResult GetCampagneById(int id)
@@ -101,7 +109,7 @@ namespace GestionDeCampagneBack.Controllers
         }
 
         [HttpPost("sendEmail/{id}/{idModel}")]
-        public IActionResult SendEmail( int id,int idModel)
+        public IActionResult SendEmailAsync( int id,int idModel)
         {
             var model = _modelData.GetModeleById(idModel);
 
@@ -125,10 +133,43 @@ namespace GestionDeCampagneBack.Controllers
 
 
         }
+        [HttpPost("SendSms/{id}/{idModel}")]
+        public async Task<IActionResult> SendSms(int id, int idModel)
+        {
+            var smsClient = await SmsClient.Authenticate();
+            var model = _modelData.GetModeleById(idModel);
+
+            Response r = new Response();
+            var query = (from x in _dbcontextGC.ContactCanals
+                         where x.IdEntite == id && x.CanalDuContatct == "Téléphone"
+                         select new LienounumeroRequet()
+                         {
+                             Lieuounumero = x.Lieuounumero
+                         }
+                        ).AsQueryable();
+
+            foreach (LienounumeroRequet l in query)
+            {
+                try
+                {
+                    await _campagneData.SendingSms(smsClient,l.Lieuounumero,model.Contenu);
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception:{ex.Message}");
+                }
+
+            }
+            r.Status = "200";
+            r.Message = "Mess Send avec Success";
+            return Ok(r);
+
+        }
+        
 
 
-
-        [HttpPost("add")]
+[HttpPost("add")]
         public ActionResult<Campagne> AddCanalEnvoi(Campagne Campagne)
         {
             var entite = _entiteData.GetEntiteById(Campagne.IdEntite);

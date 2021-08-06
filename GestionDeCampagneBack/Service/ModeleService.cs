@@ -74,6 +74,11 @@ namespace GestionDeCampagneBack.Service
 
         }
 
+        public List<Modele> GetModeleByCanalEnvoi(int idEntite, int idCanal)
+        {
+            return _dbcontextGC.Modeles.Where(r => r.IdEntite == idEntite && r.IdCanalEnvoi == idCanal).ToList();
+        }
+
         public Modele GetModeleByCode(string code)
         {
             var Modele = _dbcontextGC.Modeles.FirstOrDefault(r => r.Code == code);

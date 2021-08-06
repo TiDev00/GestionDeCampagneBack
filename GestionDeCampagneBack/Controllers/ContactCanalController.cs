@@ -1,4 +1,5 @@
 ﻿using GestionDeCampagneBack.Models;
+using GestionDeCampagneBack.ModelsRequets;
 using GestionDeCampagneBack.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +17,14 @@ namespace GestionDeCampagneBack.Controllers
         private IContactCanal _ContactCanalData;
         private IContact _ContactData;
         private ICanalEnvoi _CanalEnvoiData;
+        private DbcontextGC _dbcontextGC;
 
-        public ContactCanalsController(IContactCanal ContactCanalData, IContact ContactData, ICanalEnvoi CanalEnvoiData)
+        public ContactCanalsController(DbcontextGC dbcontextGC, IContactCanal ContactCanalData, IContact ContactData, ICanalEnvoi CanalEnvoiData)
         {
             _ContactCanalData = ContactCanalData;
             _ContactData = ContactData;
             _CanalEnvoiData = CanalEnvoiData;
+            _dbcontextGC = dbcontextGC;
         }
         // GET: api/<ValuesController>
         [HttpGet("all/{id}")]
@@ -111,6 +114,29 @@ namespace GestionDeCampagneBack.Controllers
             }
             return NotFound($"Un ContactCanal avec l'id : {id} n'existe pas");
             // return Ok(categorireadDto);
+        }
+
+
+        [HttpGet("canauxcontact/{id}")]
+        public IQueryable<CanauxContact> GetCanauxContact(int id)
+        {
+            var query = (from x in _dbcontextGC.ContactCanals
+                         join y in _dbcontextGC.Contacts on x.IdContact equals y.Id
+                         join z in _dbcontextGC.CanalEnvois on x.IdCanalEnvoi equals z.Id
+                         where y.Id == id
+                         select new CanauxContact()
+                         {
+                           Canal = x.CanalDuContatct,
+                           Lienounumero = x.Lieuounumero
+                         }
+                         ).AsQueryable();
+
+
+
+            return query;
+
+
+
         }
     }
 }

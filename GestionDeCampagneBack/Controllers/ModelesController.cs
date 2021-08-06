@@ -28,6 +28,13 @@ namespace GestionDeCampagneBack.Controllers
             return Ok(_modelData.GetModeles(id));
         }
 
+
+        [HttpGet("all/{id}/{idCanal}")]
+        public IActionResult GetAllModeles(int id, int idCanal)
+        {
+            return Ok(_modelData.GetModeleByCanalEnvoi(id,idCanal));
+        }
+
         [HttpGet("{id}", Name = "GetModeleById")]
         public IActionResult GetModeleById(int id)
         {

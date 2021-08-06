@@ -147,7 +147,7 @@ namespace GestionDeCampagneBack.Controllers
                     var verifiMatricule = _ContactData.GetContactByMatricul(Contact.Matricule);
 
 
-                    if (verifiMatricule == null)
+                    if (verifiMatricule != null)
                     {
                         _ContactData.AddContact(Contact);
 

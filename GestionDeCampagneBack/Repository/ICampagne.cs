@@ -1,4 +1,5 @@
-﻿using GestionDeCampagneBack.Models;
+﻿using DotnetOrangeSms;
+using GestionDeCampagneBack.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,6 @@ namespace GestionDeCampagneBack.Repository
         void DeleteCampagne(Campagne Campagne);
 
         Campagne EditCampagne(Campagne Campagne, int id);
+        Task SendingSms(SmsClient smsClient, string numero, string contenu);
     }
 }

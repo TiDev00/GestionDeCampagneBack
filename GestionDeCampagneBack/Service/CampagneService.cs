@@ -1,4 +1,6 @@
-﻿using GestionDeCampagneBack.Models;
+﻿using DotnetOrangeSms;
+using DotnetOrangeSms.Extensions;
+using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Repository;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,7 @@ namespace GestionDeCampagneBack.Service
         {
             _dbcontextGC = dbcontextGC;
         }
+
         public void AddCampagne(Campagne Campagne)
         {
             if (Campagne == null)
@@ -118,7 +121,7 @@ namespace GestionDeCampagneBack.Service
             smtp.EnableSsl = true;
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new NetworkCredential("tikokane11@gmail.com", "tikokane");
+            smtp.Credentials = new NetworkCredential("tikokane11@gmail.com", "Tikoneymar11");
 
             try
             {
@@ -136,5 +139,17 @@ namespace GestionDeCampagneBack.Service
                 //to do: stockage dans une table pour un envoi antérieur
             }
         }
+
+        //Sending SMS
+        public async Task SendingSms(SmsClient smsClient, string numero, string contenu)
+        {
+            var response = await smsClient.SendSms(contenu, "2210000", "221"+ numero, "Tikokane");
+            if (response.IsSuccess)
+                Console.WriteLine($"Sms sent: {response.Value}");
+            else
+                Console.WriteLine($"Sending sms failed:{response.Error}");
+        }
+
+
     }
 }
