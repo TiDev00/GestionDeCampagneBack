@@ -75,7 +75,7 @@ namespace GestionDeCampagneBack.Service
 
         public bool SaveChanges()
         {
-            return (_dbcontextGC.SaveChanges() >= 0);
+            return (_dbcontextGC.SaveChanges() >= 0);   
         }
     }
 }
