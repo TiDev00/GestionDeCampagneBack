@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace GestionDeCampagneBack.Models
 {
-    [Index(nameof(Reference), IsUnique = true)]
     [Index(nameof(Reference), IsUnique = true)]
     public partial class ListeDeDiffusion
     {
@@ -35,6 +35,12 @@ namespace GestionDeCampagneBack.Models
         public bool Etat { get; set; }
 
         public bool Statut { get; set; }
+
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
+
+        [Required(ErrorMessage = "Le niveau de visibilité est obligatoire")]
+        public int IdNiveauVisibilite { get; set; }
 
         public virtual ICollection<ContactListeDiffusion> ContactListeDiffusions { get; set; }
         public virtual ICollection<ListeDffCampagne> ListeDffCampagnes { get; set; }

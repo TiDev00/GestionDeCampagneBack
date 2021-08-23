@@ -1,4 +1,5 @@
 ﻿using GestionDeCampagneBack.Models;
+using GestionDeCampagneBack.ModelsRequets;
 using GestionDeCampagneBack.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,20 +18,68 @@ namespace GestionDeCampagneBack.Controllers
         private DbcontextGC _dbcontextGC;
 
         private IContact _ContactData;
-        private INiveauDeVisibilite _NiveauDeVisibiliteData;
 
-        public ContactsController(DbcontextGC dbcontextGC,IContact ContactData, INiveauDeVisibilite NiveauDeVisibiliteData)
+        private IUtilisateur _UtilisateurData;
+
+        private INiveauDeVisibilite _NiveauDeVisibilite;
+
+        public ContactsController(DbcontextGC dbcontextGC, IContact ContactData, IUtilisateur UtilisateurData, INiveauDeVisibilite NiveauDeVisibilite)
         {
             _ContactData = ContactData;
-            _NiveauDeVisibiliteData = NiveauDeVisibiliteData;
+            _UtilisateurData = UtilisateurData;
             _dbcontextGC = dbcontextGC;
+            _NiveauDeVisibilite = NiveauDeVisibilite;
+
         }
         // GET: api/<ValuesController>
-        [HttpGet]
-        public IActionResult GetAllContacts()
+        [HttpGet("all/{id}")]
+        public IActionResult GetAllContacts(int id)
         {
-            return Ok(_ContactData.GetContacts());
+            return Ok(_ContactData.GetContacts(id));
         }
+
+        [HttpGet("allwithcanal/{id}")]
+        public IQueryable<ContactCanalRequet> GetDonneesContactByListeDiffusion(int id)
+        {
+            var query = (from x in _dbcontextGC.ContactCanals
+                         join y in _dbcontextGC.Contacts on x.IdContact equals y.Id
+                         join z in _dbcontextGC.CanalEnvois on x.IdCanalEnvoi equals z.Id
+                         where y.Id == id
+                         select new ContactCanalRequet()
+                         {
+                             NomComplet = y.Nom + " " + y.Prenom,
+                             Facebook = x.IdCanalEnvoi,
+                             Mail = x.IdCanalEnvoi,
+                             Telephone = x.IdCanalEnvoi,
+                             Whatsapp = x.IdCanalEnvoi,
+                             Statut = y.Statut,
+                             NiveauDeVisibilite = y.IdNiveauVisibilite,
+                             idContact = y.Id,
+                             Sexe = y.Sexe
+                         }
+                         ).AsQueryable();
+
+
+
+            return query;
+
+
+
+        }
+
+        [HttpGet("matricule/{matricule}", Name = "GetContactByMatricule")]
+        public IActionResult GetContactMatricule(string matricule)
+        {
+            var mat = _ContactData.GetContactByMatricul(matricule);
+            if (mat != null)
+            {
+                return Ok(mat);
+
+            }
+            return NotFound($"Un Contact avec le matricule : {matricule} n'existe pas");
+        }
+
+
 
 
         [HttpGet("donneescontact/{id}")]
@@ -50,11 +99,11 @@ namespace GestionDeCampagneBack.Controllers
            }
        ).ToList().Where(c => c.contactId == id);
 
-            List <object> nnn = new List<object>();
+            List<object> nnn = new List<object>();
 
 
             //Dictionary <List<string> myDic = new Dictionary<List<string>();
-             //int i=0;
+            //int i=0;
             foreach (var detail in data)
             {
                 var contactObjet = new Dictionary<string, object>();
@@ -67,11 +116,11 @@ namespace GestionDeCampagneBack.Controllers
                 nnn.Add(contactObjet);
             }
 
-         
-           
+
+
             return Ok(nnn);
         }
-       
+
         [HttpGet("{id}", Name = "GetContactById")]
         public IActionResult GetContactById(int id)
         {
@@ -85,39 +134,105 @@ namespace GestionDeCampagneBack.Controllers
         }
 
 
-  
+
         [HttpPost("add")]
         public ActionResult<Contact> AddContact(Contact Contact)
         {
-           
-                _ContactData.AddContact(Contact);
-                
-                _ContactData.SaveChanges();
+            var niveauDevisibilite = _NiveauDeVisibilite.GetNiveauDeVisibiliteById(Contact.IdNiveauVisibilite);
+            if (niveauDevisibilite != null)
+            {
+                var user = _UtilisateurData.GetUtilisateurById(Contact.IdUser);
+                if (user != null)
+                {
+                    var verifiMatricule = _ContactData.GetContactByMatricul(Contact.Matricule);
 
-                return CreatedAtRoute(nameof(GetContactById), new { Id = Contact.Id }, Contact);
-            
-           
+
+                    if (verifiMatricule != null)
+                    {
+                        _ContactData.AddContact(Contact);
+
+                        _ContactData.SaveChanges();
+
+                        return CreatedAtRoute(nameof(GetContactById), new { Id = Contact.Id }, Contact);
+                    }
+                    else return NotFound($"Un Contact avec le matricule : {Contact.Matricule} existe déjà pas");
+                }
+                else
+                {
+                    return NotFound($"Un utilisateur avec l'id : {Contact.IdUser} n'existe pas");
+                }
+            }
+            else return NotFound($"Un niveau de visibilité avec l'id : {Contact.IdNiveauVisibilite} n'existe pas");
+
         }
 
 
         [HttpPut("put/{id}")]
         public ActionResult<Contact> PutContact(Contact contact, int id)
         {
+            var niveauDevisibilite = _NiveauDeVisibilite.GetNiveauDeVisibiliteById(contact.IdNiveauVisibilite);
+            if (niveauDevisibilite != null)
+            {
+                var con = _ContactData.GetContactById(id);
+                if (con != null)
+                {
+                    var user = _UtilisateurData.GetUtilisateurById(contact.IdUser);
+                    if (user != null)
+                    {
+                        var verifiMatricule = _ContactData.GetContactByMatricul(contact.Matricule);
+
+                        if (verifiMatricule == null)
+                        {
+                            _ContactData.EditContact(contact, id);
+                            _ContactData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetContactById), new { Id = con.Id }, con);
+                        }
+                        else if (verifiMatricule.Id == con.Id)
+                        {
+                            _ContactData.EditContact(contact, id);
+                            _ContactData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetContactById), new { Id = con.Id }, con);
+
+                        }
+                        else
+                        {
+                            return NotFound($"Un contact avec le matricule : {contact.Matricule} existe déjà");
+                        }
+                    }
+                    else
+                        return NotFound($"Un contact avec l'id : {contact.IdUser} n'existe pas");
+                }
+                else
+                    return NotFound($"Un contact avec l'id : {id} n'existe pas");
+            }
+            else return NotFound($"Un niveau de visibilité avec l'id : {contact.IdNiveauVisibilite} n'existe pas");
+
+
+        }
+
+        [HttpGet("changestatut/{id}")]
+        public IActionResult ChangeStatutUser(int id)
+        {
             var Contact = _ContactData.GetContactById(id);
             if (Contact != null)
             {
-                _ContactData.EditContact(contact, id);
-                _ContactData.SaveChanges();
-                return CreatedAtRoute(nameof(GetContactById), new { Id = Contact.Id }, Contact);
+                if (Contact.Statut == true)
+                {
+                    Contact.Statut = false;
+                    _ContactData.SaveChanges();
+                    return Ok(Contact);
+                }
+                else
+                {
+                    Contact.Statut = true;
+                    _ContactData.SaveChanges();
+                    return Ok(Contact);
+                }
+
+
             }
-            return NotFound($"Un Contact avec l'id : {id} n'existe pas");
-
-
-
-            // return Ok(categorireadDto);
+            return NotFound($"Un Utilisateur avec l'id : {id} n'existe pas");
         }
-
-
 
         [HttpDelete("delete/{id}")]
         public ActionResult<Contact> DeleteContact(int id)
@@ -133,6 +248,31 @@ namespace GestionDeCampagneBack.Controllers
             }
             return NotFound($"Un Contact avec l'id : {id} n'existe pas");
             // return Ok(categorireadDto);
+        }
+
+        [HttpGet("contactsByListeDiff/{id}/{idlist}")]
+        public IQueryable<ContactCanalRequet> GetByListeDiffusion(int id,int idlist)
+        {
+            var query = (from x in _dbcontextGC.ContactListeDiffusions
+                         join y in _dbcontextGC.Contacts on x.IdContact equals y.Id
+                         join z in _dbcontextGC.ListeDeDiffusions on x.IdListeDiffusion equals z.Id
+                         where x.IdEntite == id && z.Id==idlist
+                         select new ContactCanalRequet()
+                         {
+                             NomComplet = y.Nom + " " + y.Prenom,
+                             Statut = y.Statut,
+                             NiveauDeVisibilite = y.IdNiveauVisibilite,
+                             idContact = y.Id,
+                             Sexe = y.Sexe
+                         }
+                         ).AsQueryable();
+
+
+
+            return query;
+
+
+
         }
     }
 }

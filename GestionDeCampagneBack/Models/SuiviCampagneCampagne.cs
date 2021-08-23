@@ -20,5 +20,7 @@ namespace GestionDeCampagneBack.Models
 
       
         public virtual SuiviCampagne IdSuiviNavigation { get; set; }
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
     }
 }

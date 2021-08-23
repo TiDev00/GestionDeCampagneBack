@@ -17,5 +17,8 @@ namespace GestionDeCampagneBack.Models
         public int IdInfosMessage { get; set; }
 
         public virtual InfosMessage IdInfosMessageNavigation { get; set; }
+
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
     }
 }

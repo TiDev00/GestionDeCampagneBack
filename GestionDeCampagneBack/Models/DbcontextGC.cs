@@ -22,7 +22,7 @@ namespace GestionDeCampagneBack.Models
         }
         public virtual DbSet<Campagne> Campagnes { get; set; }
         public virtual DbSet<CanalEnvoi> CanalEnvois { get; set; }
-        public virtual DbSet<Categorie> Categories { get; set; }
+        public virtual DbSet<Entite> Entites { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<ContactCanal> ContactCanals { get; set; }
         public virtual DbSet<ContactListeDiffusion> ContactListeDiffusions { get; set; }

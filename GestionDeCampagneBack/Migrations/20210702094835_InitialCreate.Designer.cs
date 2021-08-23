@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionDeCampagneBack.Migrations
 {
     [DbContext(typeof(DbcontextGC))]
-    [Migration("20210531142810_InitialCreate")]
+    [Migration("20210702094835_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,10 +45,7 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
 
-                    b.Property<int>("IdCanalEnvoi")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCategorie")
+                    b.Property<int>("IdEntite")
                         .HasColumnType("int");
 
                     b.Property<int>("IdNiveauVisibilite")
@@ -68,17 +65,10 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.Property<string>("Titre")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.HasIndex("IdCanalEnvoi");
-
-                    b.HasIndex("IdCategorie");
 
                     b.HasIndex("IdNiveauVisibilite");
 
@@ -102,44 +92,19 @@ namespace GestionDeCampagneBack.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
 
                     b.Property<string>("Titre")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Titre")
-                        .IsUnique();
 
                     b.ToTable("CanalEnvois");
-                });
-
-            modelBuilder.Entity("GestionDeCampagneBack.Models.Categorie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Libelle")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Libelle")
-                        .IsUnique();
-
-                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.Contact", b =>
@@ -150,14 +115,16 @@ namespace GestionDeCampagneBack.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Adresse")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DateDeNaissance")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
+
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
 
                     b.Property<int>("IdNiveauVisibilite")
                         .HasColumnType("int");
@@ -170,16 +137,16 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.Property<string>("Nom")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Pays")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Prenom")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Profession")
                         .HasColumnType("nvarchar(max)");
@@ -216,8 +183,8 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.Property<string>("CanalDuContatct")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("DateDesabonnement")
                         .HasColumnType("datetime2");
@@ -230,6 +197,14 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.Property<int>("IdContact")
                         .HasColumnType("int");
+
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Lieuounumero")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Raison")
                         .HasColumnType("nvarchar(max)");
@@ -264,13 +239,10 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("IdContact")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdListeDiffusion")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdNiveauVisibilite")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdNiveauVisibiliteNavigationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Raison")
@@ -278,16 +250,31 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code")
-                        .IsUnique();
-
                     b.HasIndex("IdContact");
 
                     b.HasIndex("IdListeDiffusion");
 
-                    b.HasIndex("IdNiveauVisibiliteNavigationId");
-
                     b.ToTable("ContactListeDiffusions");
+                });
+
+            modelBuilder.Entity("GestionDeCampagneBack.Models.Entite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Activite")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Entites");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.InfosMessage", b =>
@@ -298,6 +285,9 @@ namespace GestionDeCampagneBack.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("IdCampagne")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdEntite")
                         .HasColumnType("int");
 
                     b.Property<int?>("MessageAchemines")
@@ -332,6 +322,9 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int?>("IdCampagneNavigationId")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdInfosMessage")
                         .HasColumnType("int");
 
@@ -356,6 +349,12 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
+
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdNiveauVisibilite")
+                        .HasColumnType("int");
 
                     b.Property<string>("Reference")
                         .IsRequired()
@@ -388,6 +387,9 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("IdCampagne")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdListe")
                         .HasColumnType("int");
 
@@ -408,13 +410,19 @@ namespace GestionDeCampagneBack.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Contenu")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdCanalEnvoi")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
 
                     b.Property<string>("Libelle")
                         .IsRequired()
@@ -426,12 +434,7 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
-
-                    b.HasIndex("Libelle")
-                        .IsUnique();
+                    b.HasIndex("IdCanalEnvoi");
 
                     b.ToTable("Modeles");
                 });
@@ -444,6 +447,9 @@ namespace GestionDeCampagneBack.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("IdCampagne")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdEntite")
                         .HasColumnType("int");
 
                     b.Property<int>("IdModele")
@@ -497,6 +503,9 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<DateTimeOffset?>("FuseauHoraire")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
                     b.Property<int?>("NombreTentative")
                         .HasColumnType("int");
 
@@ -544,6 +553,9 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int>("IdContact")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
                     b.Property<int?>("NombreDeTentative")
                         .HasColumnType("int");
 
@@ -570,6 +582,9 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<int?>("IdCampagneNavigationId")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdSuivi")
                         .HasColumnType("int");
 
@@ -592,15 +607,15 @@ namespace GestionDeCampagneBack.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
                     b.Property<string>("Libelle")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Libelle")
-                        .IsUnique();
 
                     b.ToTable("TypeDeCampagnes");
                 });
@@ -619,6 +634,9 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
+
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
 
                     b.Property<int>("IdRole")
                         .HasColumnType("int");
@@ -654,8 +672,7 @@ namespace GestionDeCampagneBack.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+                    b.HasIndex("IdEntite");
 
                     b.HasIndex("IdRole");
 
@@ -703,20 +720,8 @@ namespace GestionDeCampagneBack.Migrations
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.Campagne", b =>
                 {
-                    b.HasOne("GestionDeCampagneBack.Models.CanalEnvoi", "IdCanalEnvoiNavigation")
-                        .WithMany("Campagnes")
-                        .HasForeignKey("IdCanalEnvoi")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GestionDeCampagneBack.Models.Categorie", "IdCategorieNavigation")
-                        .WithMany("Campagnes")
-                        .HasForeignKey("IdCategorie")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GestionDeCampagneBack.Models.NiveauDeVisibilite", "IdNiveauVisibiliteNavigation")
-                        .WithMany()
+                        .WithMany("Campagnes")
                         .HasForeignKey("IdNiveauVisibilite")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -739,10 +744,6 @@ namespace GestionDeCampagneBack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IdCanalEnvoiNavigation");
-
-                    b.Navigation("IdCategorieNavigation");
-
                     b.Navigation("IdNiveauVisibiliteNavigation");
 
                     b.Navigation("IdRegleEnvoiNavigation");
@@ -755,7 +756,7 @@ namespace GestionDeCampagneBack.Migrations
             modelBuilder.Entity("GestionDeCampagneBack.Models.Contact", b =>
                 {
                     b.HasOne("GestionDeCampagneBack.Models.NiveauDeVisibilite", "IdNiveauVisibiliteNavigation")
-                        .WithMany()
+                        .WithMany("Contacts")
                         .HasForeignKey("IdNiveauVisibilite")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -804,15 +805,9 @@ namespace GestionDeCampagneBack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestionDeCampagneBack.Models.NiveauDeVisibilite", "IdNiveauVisibiliteNavigation")
-                        .WithMany()
-                        .HasForeignKey("IdNiveauVisibiliteNavigationId");
-
                     b.Navigation("IdContactNavigation");
 
                     b.Navigation("IdIdListeDiffusionNavigation");
-
-                    b.Navigation("IdNiveauVisibiliteNavigation");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.InfosMessage", b =>
@@ -858,6 +853,17 @@ namespace GestionDeCampagneBack.Migrations
                     b.Navigation("IdCampagneNavigation");
 
                     b.Navigation("IdListeNavigation");
+                });
+
+            modelBuilder.Entity("GestionDeCampagneBack.Models.Modele", b =>
+                {
+                    b.HasOne("GestionDeCampagneBack.Models.CanalEnvoi", "IdCanalEnvoiNavigation")
+                        .WithMany("Modeles")
+                        .HasForeignKey("IdCanalEnvoi")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdCanalEnvoiNavigation");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.ModeleCampagne", b =>
@@ -907,11 +913,19 @@ namespace GestionDeCampagneBack.Migrations
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.Utilisateur", b =>
                 {
+                    b.HasOne("GestionDeCampagneBack.Models.Entite", "IdEntiteNavigation")
+                        .WithMany("Utilisateurs")
+                        .HasForeignKey("IdEntite")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GestionDeCampagneBack.Models.Role", "IdRoleNavigation")
                         .WithMany("Utilisateurs")
                         .HasForeignKey("IdRole")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("IdEntiteNavigation");
 
                     b.Navigation("IdRoleNavigation");
                 });
@@ -940,14 +954,9 @@ namespace GestionDeCampagneBack.Migrations
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.CanalEnvoi", b =>
                 {
-                    b.Navigation("Campagnes");
-
                     b.Navigation("ContactCanals");
-                });
 
-            modelBuilder.Entity("GestionDeCampagneBack.Models.Categorie", b =>
-                {
-                    b.Navigation("Campagnes");
+                    b.Navigation("Modeles");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.Contact", b =>
@@ -959,6 +968,11 @@ namespace GestionDeCampagneBack.Migrations
                     b.Navigation("SuiviCampagnes");
 
                     b.Navigation("Variables");
+                });
+
+            modelBuilder.Entity("GestionDeCampagneBack.Models.Entite", b =>
+                {
+                    b.Navigation("Utilisateurs");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.InfosMessage", b =>
@@ -976,6 +990,13 @@ namespace GestionDeCampagneBack.Migrations
             modelBuilder.Entity("GestionDeCampagneBack.Models.Modele", b =>
                 {
                     b.Navigation("ModeleCampagnes");
+                });
+
+            modelBuilder.Entity("GestionDeCampagneBack.Models.NiveauDeVisibilite", b =>
+                {
+                    b.Navigation("Campagnes");
+
+                    b.Navigation("Contacts");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.RegleDEnvoi", b =>

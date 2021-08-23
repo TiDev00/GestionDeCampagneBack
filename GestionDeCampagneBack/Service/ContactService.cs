@@ -32,7 +32,7 @@ namespace GestionDeCampagneBack.Service
                 {
                     var maxId = _dbcontextGC.Contacts.Max(p => p.Id);
 
-                    Contact.Matricule = "CT0000" + (maxId + 1).ToString();
+                    Contact.Matricule = "MCT0000" + (maxId + 1).ToString();
                     Contact.Etat = true;
                     Contact.Statut = true;
 
@@ -42,7 +42,7 @@ namespace GestionDeCampagneBack.Service
                 {
 
 
-                    Contact.Matricule = "CT00001";
+                    Contact.Matricule = "MCT00001";
                     Contact.Etat = true;
                     Contact.Statut = true;
                     _dbcontextGC.Contacts.Add(Contact);
@@ -69,6 +69,19 @@ namespace GestionDeCampagneBack.Service
         {
             var contact = _dbcontextGC.Contacts.Find(id);
             contact.Matricule = Contact.Matricule;
+            contact.Prenom = Contact.Prenom;
+            contact.Nom = Contact.Nom;
+            contact.Pays = Contact.Pays;
+            contact.Sexe = Contact.Sexe;
+            contact.Profession = Contact.Profession;
+            contact.Situation = Contact.Situation;
+            contact.DateDeNaissance = Contact.DateDeNaissance;
+            contact.Adresse = Contact.Adresse;
+            contact.Etat = Contact.Etat;
+            contact.Statut = Contact.Statut;
+            contact.IdNiveauVisibilite = Contact.IdNiveauVisibilite;
+            contact.IdUser = Contact.IdUser;
+   
             return Contact;
 
         }
@@ -88,9 +101,9 @@ namespace GestionDeCampagneBack.Service
             else return null;
         }
 
-        public List<Contact> GetContacts()
+        public List<Contact> GetContacts(int idEntite)
         {
-            return _dbcontextGC.Contacts.ToList();
+            return _dbcontextGC.Contacts.Where(r => r.Etat == true && r.IdEntite == idEntite).ToList();
         }
 
         public bool SaveChanges()

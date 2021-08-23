@@ -7,11 +7,10 @@ namespace GestionDeCampagneBack.Repository
     public interface IModele
     {
         bool SaveChanges();
-        List<Modele> GetModeles();
+        List<Modele> GetModeles(int id);
 
         Modele GetModeleById(int id);
-
-        Modele GetModeleByLibelle(string libelle);
+        List<Modele> GetModeleByCanalEnvoi(int idEntite, int idCanal);
         Modele GetModeleByCode(string code);
 
         void AddModele(Modele Modele);

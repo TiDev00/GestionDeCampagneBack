@@ -9,7 +9,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GestionDeCampagneBack.Models
 {
     [Index(nameof(Login), IsUnique = true)]
-    [Index(nameof(Email), IsUnique = true)]
     public partial class Utilisateur
     {
         public Utilisateur()
@@ -69,6 +68,12 @@ namespace GestionDeCampagneBack.Models
 
         [ForeignKey("IdRole")]
         public virtual Role IdRoleNavigation { get; set; }
+
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
+
+        [ForeignKey("IdEntite")]
+        public virtual Entite IdEntiteNavigation { get; set; }
 
         [Required(ErrorMessage = "Le numéro de téléphone est obligatoire")]
         [StringLength(100, MinimumLength = 7,

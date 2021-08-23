@@ -1,15 +1,11 @@
 ﻿using GestionDeCampagneBack.Models;
 using GestionDeCampagneBack.Repository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace GestionDeCampagneBack.Controllers
 {
-    // [Authorize]
+  //  [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class NiveauDeVisibilitesController : ControllerBase

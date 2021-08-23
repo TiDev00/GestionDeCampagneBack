@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace GestionDeCampagneBack.Repository
 {
-   public interface IContactCanalEnvoi
+    public interface IContactCanal
     {
         bool SaveChanges();
-        List<ContactCanal> GetContactCanalCanals();
+        List<ContactCanal> GetContactCanals(int id);
 
-        ContactCanal GetContactCanalById(int Id);
+        ContactCanal GetContactCanalById(int id);
 
         void AddContactCanal(ContactCanal ContactCanal);
 
         void DeleteContactCanal(ContactCanal ContactCanal);
 
-        ContactCanal EditContactCanal(ContactCanal ContactCanal, int Id);
+        ContactCanal EditContactCanal(ContactCanal ContactCanal, int id);
     }
 }

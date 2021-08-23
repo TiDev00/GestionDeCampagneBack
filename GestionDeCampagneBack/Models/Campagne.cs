@@ -8,7 +8,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestionDeCampagneBack.Models
 {
-    [Index(nameof(Code), IsUnique = true)]
     public partial class Campagne
     {
 
@@ -25,8 +24,8 @@ namespace GestionDeCampagneBack.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Le titre est obligatoire")]
-        [StringLength(100, MinimumLength = 2,
-        ErrorMessage = "Le titre doit comporter au minimum 2 caractères et au maximum 100 caractères")]
+        [StringLength(200, MinimumLength = 2,
+        ErrorMessage = "Le titre doit comporter au minimum 2 caractères et au maximum 200 caractères")]
         [DataType(DataType.Text)]
         public string Titre { get; set; }
 
@@ -66,20 +65,8 @@ namespace GestionDeCampagneBack.Models
         [Required(ErrorMessage = "Le type de campagne est obligatoire")]
         public int IdTypeCampagne { get; set; }
 
-        [Required(ErrorMessage = "La catégorie est obligatoire")]
-        public int IdCategorie { get; set; }
-
-        [Required(ErrorMessage = "Le canal d'envoi est obligatoire")]
-        public int IdCanalEnvoi { get; set; }
-
-
-        [ForeignKey("IdCanalEnvoi")]
-        public virtual CanalEnvoi IdCanalEnvoiNavigation { get; set; }
-
-        [ForeignKey("IdCategorie")]
-        public virtual Categorie IdCategorieNavigation { get; set; }
-
-       
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
 
         [ForeignKey("IdNiveauVisibilite")]
         public virtual NiveauDeVisibilite IdNiveauVisibiliteNavigation { get; set; }

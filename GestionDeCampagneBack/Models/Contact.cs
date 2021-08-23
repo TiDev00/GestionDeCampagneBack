@@ -23,20 +23,19 @@ namespace GestionDeCampagneBack.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Le nom est obligatoire")]
-        [StringLength(100, MinimumLength = 2,
+        [StringLength(200, MinimumLength = 2,
         ErrorMessage = "Le nom doit comporter au minimum 2 caractères et au maximum 100 caractères")]
         [DataType(DataType.Text)]
         public string Nom { get; set; }
 
         [Required(ErrorMessage = "Le prenom est obligatoire")]
-        [StringLength(100, MinimumLength = 2,
+        [StringLength(200, MinimumLength = 2,
         ErrorMessage = "Le prenom doit comporter au minimum 2 caractères et au maximum 100 caractères")]
         [DataType(DataType.Text)]
         public string Prenom { get; set; }
 
         public string Matricule { get; set; }
 
-        [StringLength(20, MinimumLength = 0)]
         public string Adresse { get; set; }
 
         public bool Etat { get; set; }
@@ -56,10 +55,11 @@ namespace GestionDeCampagneBack.Models
 
         [Required(ErrorMessage = "Le niveau de visibilité est obligatoire")]
         public int IdNiveauVisibilite { get; set; }
-
         [ForeignKey("IdNiveauVisibilite")]
         public virtual NiveauDeVisibilite IdNiveauVisibiliteNavigation { get; set; }
 
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
         public int IdUser { get; set; }
         [ForeignKey("IdUser")]
         public virtual Utilisateur IdUserNavigation { get; set; }

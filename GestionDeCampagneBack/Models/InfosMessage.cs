@@ -25,9 +25,12 @@ namespace GestionDeCampagneBack.Models
         public int? MessageEnCours { get; set; }
         public int? MessageErreur { get; set; }
 
+        [Required(ErrorMessage = "L'entité est obligatoire")]
+        public int IdEntite { get; set; }
         public int IdCampagne { get; set; }
 
         [ForeignKey("IdCampagne")]
+
         public virtual Campagne Campagnes { get; set; }
 
         public virtual ICollection<InfosMessageCampagne> InfosMessageCampagnes { get; set; }

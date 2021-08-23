@@ -9,7 +9,7 @@ namespace GestionDeCampagneBack.Repository
     public interface IContact
     {
         bool SaveChanges();
-        List<Contact> GetContacts();
+        List<Contact> GetContacts(int id);
 
         Contact GetContactById(int Id);
 

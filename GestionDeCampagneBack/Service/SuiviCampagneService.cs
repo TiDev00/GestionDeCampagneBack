@@ -42,7 +42,14 @@ namespace GestionDeCampagneBack.Service
         public SuiviCampagne EditSuiviCampagne(SuiviCampagne SuiviCampagne, int id)
         {
             var suiviCampagne = _dbcontextGC.SuiviCampagnes.Find(id);
-            SuiviCampagne.Id = SuiviCampagne.Id;
+            suiviCampagne.Id = SuiviCampagne.Id;
+            suiviCampagne.IdContact = SuiviCampagne.IdContact;
+            suiviCampagne.IdEntite = SuiviCampagne.IdEntite;
+            suiviCampagne.NombreDeTentative = SuiviCampagne.NombreDeTentative;
+            suiviCampagne.Statut = SuiviCampagne.Statut;
+            suiviCampagne.Contenu = SuiviCampagne.Contenu;
+            suiviCampagne.DateEnvoi = SuiviCampagne.DateEnvoi;
+
             return SuiviCampagne;
         }
 

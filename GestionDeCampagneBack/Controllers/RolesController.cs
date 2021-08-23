@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GestionDeCampagneBack.Controllers
 {
-  
+
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
@@ -17,7 +17,7 @@ namespace GestionDeCampagneBack.Controllers
             _roleData = roleData;
         }
         // GET: api/<ValuesController>
-       // [Authorize]
+        // [Authorize]
         [HttpGet]
         public IActionResult GetAllRoles()
         {

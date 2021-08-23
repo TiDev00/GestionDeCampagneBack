@@ -42,6 +42,11 @@ namespace GestionDeCampagneBack.Service
         {
             var variable = _dbcontextGC.Variables.Find(id);
             variable.NomAffichage = Variable.NomAffichage;
+            variable.IdContact = Variable.IdContact;
+            variable.NomTechnique = Variable.NomTechnique;
+            variable.TailleMax = Variable.TailleMax;
+            variable.Type = Variable.Type;
+            variable.Valeur = Variable.Valeur;
             return variable;
         }
 
@@ -62,9 +67,6 @@ namespace GestionDeCampagneBack.Service
             return (_dbcontextGC.SaveChanges() >= 0);
         }
 
-        Variable IVariable.GetVariableById(int id)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

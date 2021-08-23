@@ -14,16 +14,25 @@ namespace GestionDeCampagneBack.Controllers
     public class ModelesController : ControllerBase
     {
         private IModele _modelData;
+        private ICanalEnvoi _canalEnvoi;
 
-        public ModelesController(IModele ModeleData)
+        public ModelesController(IModele ModeleData, ICanalEnvoi CanalEnvoiData)
         {
             _modelData = ModeleData;
+            _canalEnvoi = CanalEnvoiData;
         }
         // GET: api/<ValuesController>
-        [HttpGet]
-        public IActionResult GetAllModeles()
+        [HttpGet("all/{id}")]
+        public IActionResult GetAllModeles(int id)
         {
-            return Ok(_modelData.GetModeles());
+            return Ok(_modelData.GetModeles(id));
+        }
+
+
+        [HttpGet("all/{id}/{idCanal}")]
+        public IActionResult GetAllModeles(int id, int idCanal)
+        {
+            return Ok(_modelData.GetModeleByCanalEnvoi(id,idCanal));
         }
 
         [HttpGet("{id}", Name = "GetModeleById")]
@@ -38,17 +47,6 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Un Modele avec l'id : {id} n'existe pas");
         }
 
-        [HttpGet("libelle/{libelle}", Name = "GetModeleByLille")]
-        public IActionResult GetByLibelle(string libelle)
-        {
-            var Modele = _modelData.GetModeleByLibelle(libelle);
-            if (Modele != null)
-            {
-                return Ok(Modele);
-
-            }
-            return NotFound($"Un Modele avec le libelle : {libelle} n'existe pas");
-        }
 
         [HttpGet("code/{code}", Name = "GetModeleByCode")]
         public IActionResult GetModeleByCode(string code)
@@ -67,53 +65,62 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<Modele> AddModele(Modele Modele)
         {
-            var verifiLibelle = _modelData.GetModeleByLibelle(Modele.Libelle);
-
-            if (verifiLibelle == null)
+            var canal = _canalEnvoi.GetCanalEnvoiById(Modele.IdCanalEnvoi);
+            if (canal != null)
             {
+                var verifiCode = _modelData.GetModeleByCode(Modele.Code);
 
-                _modelData.AddModele(Modele);
-                _modelData.SaveChanges();
+                if (verifiCode == null)
+                {
 
-                return CreatedAtRoute(nameof(GetModeleById), new { Id = Modele.Id }, Modele);
+                    _modelData.AddModele(Modele);
+                    _modelData.SaveChanges();
+
+                    return CreatedAtRoute(nameof(GetModeleById), new { Id = Modele.Id }, Modele);
+                }
+                else
+                {
+                    return NotFound($"Un Modele avec le code : {Modele.Code} existe déjà");
+
+                }
             }
-            else
-            {
-                return NotFound($"Un Modele avec le libelle : {Modele.Libelle} existe déjà");
-
-            }
+            else return NotFound($"Un Modele avec l'id du canal : {Modele.IdCanalEnvoi} existe déjà");
         }
 
         [HttpPut("put/{id}")]
         public ActionResult<Modele> PutModele(Modele mod, int id)
         {
-            var Modele = _modelData.GetModeleById(id);
-            if (Modele != null)
+            var canal = _canalEnvoi.GetCanalEnvoiById(mod.IdCanalEnvoi);
+            if (canal != null)
             {
-                var verifiLibelle = _modelData.GetModeleByLibelle(mod.Libelle);
-                if (verifiLibelle == null)
+                var Modele = _modelData.GetModeleById(id);
+                if (Modele != null)
                 {
-                    _modelData.EditModele(mod, id);
-                    _modelData.SaveChanges();
-                    return CreatedAtRoute(nameof(GetModeleById), new { Id = Modele.Id }, Modele);
-                }
-                else
-                if (verifiLibelle.Id == Modele.Id)
-                {
-                    _modelData.EditModele(mod, id);
-                    _modelData.SaveChanges();
-                    return CreatedAtRoute(nameof(GetModeleById), new { Id = Modele.Id }, Modele);
-                }
-                else
-                {
-                    return NotFound($"Un Modele avec le libelle : {mod.Libelle} existe déjà");
+                    var verificode = _modelData.GetModeleByCode(mod.Code);
+                    if (verificode == null)
+                    {
+                        _modelData.EditModele(mod, id);
+                        _modelData.SaveChanges();
+                        return CreatedAtRoute(nameof(GetModeleById), new { Id = Modele.Id }, Modele);
+                    }
+                    else
+                    if (verificode.Id == Modele.Id)
+                    {
+                        _modelData.EditModele(mod, id);
+                        _modelData.SaveChanges();
+                        return CreatedAtRoute(nameof(GetModeleById), new { Id = Modele.Id }, Modele);
+                    }
+                    else
+                    {
+                        return NotFound($"Un Modele avec le Code : {mod.Code} existe déjà");
+
+                    }
 
                 }
+                return NotFound($"Un Modele avec l'id : {id} n'existe pas");
 
             }
-            return NotFound($"Un Modele avec l'id : {id} n'existe pas");
-
-
+            else return NotFound($"Un Modele avec l'id du canal : {mod.IdCanalEnvoi} n'existe pas");
 
             // return Ok(categorireadDto);
         }

@@ -14,7 +14,7 @@ namespace GestionDeCampagneBack.Service
         {
             _dbcontextGC = dbcontextGC;
         }
-     public void AddCanalEnvoi(CanalEnvoi CanalEnvoi)
+        public void AddCanalEnvoi(CanalEnvoi CanalEnvoi)
         {
             if (CanalEnvoi == null)
             {
@@ -24,27 +24,27 @@ namespace GestionDeCampagneBack.Service
             else
             {
                 var countval = _dbcontextGC.CanalEnvois.Count();
-                if (countval>=1)
+                if (countval >= 1)
                 {
                     var maxId = _dbcontextGC.CanalEnvois.Max(p => p.Id);
 
-                    CanalEnvoi.Code = "CE0000" + (maxId+1).ToString();
+                    CanalEnvoi.Code = "CE0000" + (maxId + 1).ToString();
                     CanalEnvoi.Etat = true;
 
                     _dbcontextGC.CanalEnvois.Add(CanalEnvoi);
                 }
                 else
                 {
-                
+
 
                     CanalEnvoi.Code = "CE00001";
                     CanalEnvoi.Etat = true;
                     _dbcontextGC.CanalEnvois.Add(CanalEnvoi);
                 }
 
-             
+
             }
-          
+
         }
 
         public void DeleteCanalEnvoi(CanalEnvoi CanalEnvoi)
@@ -59,11 +59,16 @@ namespace GestionDeCampagneBack.Service
 
         public CanalEnvoi EditCanalEnvoi(CanalEnvoi CanalEnvoi, int id)
         {
-            var canalEnvoi = _dbcontextGC.CanalEnvois.Find(id);
-          
-            return canalEnvoi;
+            var canal = _dbcontextGC.CanalEnvois.Find(id);
+            canal.Code = CanalEnvoi.Code;
+            canal.Description = CanalEnvoi.Description;
+            canal.Etat = CanalEnvoi.Etat;
+            canal.Titre = CanalEnvoi.Titre;
+            return canal;
 
         }
+
+
 
         public CanalEnvoi GetCanalEnvoiByCode(string code)
         {
@@ -79,15 +84,8 @@ namespace GestionDeCampagneBack.Service
             return canalEnvoi;
         }
 
-        public CanalEnvoi GetCanalEnvoiByTitre(string titre)
-        {
-            var canalenvoi = _dbcontextGC.CanalEnvois.FirstOrDefault(r => r.Titre == titre);
-            if (canalenvoi != null)
-                return canalenvoi;
-            else return null;
-        }
 
-        public List<CanalEnvoi> GetCanalEnvois()
+        public List<CanalEnvoi> GetCanalEnvois(int id)
         {
             return _dbcontextGC.CanalEnvois.ToList();
         }

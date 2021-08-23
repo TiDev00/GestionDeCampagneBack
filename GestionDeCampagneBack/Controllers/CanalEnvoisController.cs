@@ -10,15 +10,15 @@ namespace GestionDeCampagneBack.Controllers
     {
         private ICanalEnvoi _canalEnvoiData;
 
-        public CanalEnvoisController(ICanalEnvoi CanalEnvoiData)
+        public CanalEnvoisController(ICanalEnvoi CanalEnvoiData, IEntite entite)
         {
             _canalEnvoiData = CanalEnvoiData;
         }
         // GET: api/<ValuesController>
         [HttpGet]
-        public IActionResult GetAllCanalEnvois()
+        public IActionResult GetAllCanalEnvois(int id)
         {
-            return Ok(_canalEnvoiData.GetCanalEnvois());
+            return Ok(_canalEnvoiData.GetCanalEnvois(id));
         }
 
         [HttpGet("{id}", Name = "GetCanalEnvoiById")]
@@ -57,17 +57,6 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Un CanalEnvoi avec l'id : {id} n'existe pas");
         }
 
-        [HttpGet("titre/{titre}", Name = "GetCanalEnvoiByTitre")]
-        public IActionResult GetCanalEnvoiByLibelle(string titre)
-        {
-            var CanalEnvoi = _canalEnvoiData.GetCanalEnvoiByTitre(titre);
-            if (CanalEnvoi != null)
-            {
-                return Ok(CanalEnvoi);
-
-            }
-            return NotFound($"Un CanalEnvoi avec le titre : {titre} n'existe pas");
-        }
 
         [HttpGet("code/{code}", Name = "GetCanalEnvoiByCode")]
         public IActionResult GetCanalEnvoiByCode(string code)
@@ -78,7 +67,7 @@ namespace GestionDeCampagneBack.Controllers
                 return Ok(CanalEnvoi);
 
             }
-            return NotFound($"Un CanalEnvoi avec le titre : {code} n'existe pas");
+            return NotFound($"Un CanalEnvoi avec le code : {code} n'existe pas");
         }
 
 
@@ -86,56 +75,51 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<CanalEnvoi> AddCanalEnvoi(CanalEnvoi CanalEnvoi)
         {
-            var verifiTitre = _canalEnvoiData.GetCanalEnvoiByTitre(CanalEnvoi.Titre);
+      
+                var Canal = _canalEnvoiData.GetCanalEnvoiByCode(CanalEnvoi.Code);
+                if (Canal == null)
+                {
+                    _canalEnvoiData.AddCanalEnvoi(CanalEnvoi);
+                    _canalEnvoiData.SaveChanges();
+                    return CreatedAtRoute(nameof(GetCanalEnvoiById), new { Id = CanalEnvoi.Id }, CanalEnvoi);
+                }
+                else
+                {
+                    return NotFound($"Un CanalEnvoi avec le code : {CanalEnvoi.Code} existe déjà pas");
+                }
+ 
 
-            if (verifiTitre == null)
-            {
-                _canalEnvoiData.AddCanalEnvoi(CanalEnvoi);
-                _canalEnvoiData.SaveChanges();
-
-                return CreatedAtRoute(nameof(GetCanalEnvoiById), new { Id = CanalEnvoi.Id }, CanalEnvoi);
-            }
-            else
-            {
-                return NotFound($"Un CanalEnvoi avec le libelle : {CanalEnvoi.Titre} existe déjà");
-
-            }
         }
 
         [HttpPut("put/{id}")]
-        public ActionResult<CanalEnvoi> PutCanalEnvoi(CanalEnvoi rol, int id)
+        public ActionResult<CanalEnvoi> PutCanalEnvoi(CanalEnvoi canal, int id)
         {
-            var CanalEnvoi = _canalEnvoiData.GetCanalEnvoiById(id);
-            if (CanalEnvoi != null)
-            {
-                var verifiTitre = _canalEnvoiData.GetCanalEnvoiByTitre(rol.Titre);
-                if (verifiTitre == null)
+      
+                var can = _canalEnvoiData.GetCanalEnvoiById(id);
+                if (can != null)
                 {
-                    _canalEnvoiData.EditCanalEnvoi(rol, id);
-                    _canalEnvoiData.SaveChanges();
-                    return CreatedAtRoute(nameof(GetCanalEnvoiById), new { Id = CanalEnvoi.Id }, CanalEnvoi);
+
+                    var verifiCode = _canalEnvoiData.GetCanalEnvoiByCode(canal.Code);
+
+                    if (verifiCode == null)
+                    {
+                        _canalEnvoiData.EditCanalEnvoi(canal, id);
+                        _canalEnvoiData.SaveChanges();
+                        return CreatedAtRoute(nameof(GetCanalEnvoiById), new { Id = can.Id }, can);
+                    }
+                    else if (verifiCode.Id == can.Id)
+                    {
+                        _canalEnvoiData.EditCanalEnvoi(canal, id);
+                        _canalEnvoiData.SaveChanges();
+                        return CreatedAtRoute(nameof(GetCanalEnvoiById), new { Id = can.Id }, can);
+
+                    }
+                    else
+                        return NotFound($"Un Canal avec le code : {canal.Code} n'existe déjà");
                 }
-                else
-                if (verifiTitre.Id == CanalEnvoi.Id)
-                {
-                    _canalEnvoiData.EditCanalEnvoi(rol, id);
-                    _canalEnvoiData.SaveChanges();
-                    return CreatedAtRoute(nameof(GetCanalEnvoiById), new { Id = CanalEnvoi.Id }, CanalEnvoi);
-                }
-                else
-                {
-                    return NotFound($"Un CanalEnvoi avec le titre : {rol.Titre} existe déjà");
-
-                }
-
-            }
-            return NotFound($"Un CanalEnvoi avec l'id : {id} n'existe pas");
-
-
-
-            // return Ok(categorireadDto);
+                return NotFound($"Un Canal avec l'id : {id} n'existe pas");
+        
         }
-
 
 
         [HttpDelete("delete/{id}")]

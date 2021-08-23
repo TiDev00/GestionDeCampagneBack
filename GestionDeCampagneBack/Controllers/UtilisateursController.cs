@@ -17,18 +17,21 @@ namespace GestionDeCampagneBack.Controllers
     {
         private IUtilisateur _utilisateurData;
         private IRole _roleData;
+        private IEntite _entiteData;
 
-        public UtilisateursController(IUtilisateur UtilisateurData, IRole roleData)
+
+        public UtilisateursController(IUtilisateur UtilisateurData, IRole roleData, IEntite entite)
         {
+            _entiteData = entite;
             _utilisateurData = UtilisateurData;
             _roleData = roleData;
         }
         // GET: api/<ValuesController>
-        [HttpGet]
-       // [Authorize]
-        public IActionResult GetAllUtilisateurs()
+        [HttpGet("all/{id}")]
+        // [Authorize]
+        public IActionResult GetAllUtilisateurs(int id)
         {
-            return Ok(_utilisateurData.GetUtilisateurs());
+            return Ok(_utilisateurData.GetUtilisateurs(id));
         }
 
         [HttpGet("{id}", Name = "GetUtilisateurById")]
@@ -54,14 +57,14 @@ namespace GestionDeCampagneBack.Controllers
                     Utilisateur.Statut = false;
                     _utilisateurData.SaveChanges();
                     return Ok(Utilisateur);
-                } 
+                }
                 else
                 {
                     Utilisateur.Statut = true;
                     _utilisateurData.SaveChanges();
                     return Ok(Utilisateur);
                 }
-               
+
 
             }
             return NotFound($"Un Utilisateur avec l'id : {id} n'existe pas");
@@ -84,8 +87,8 @@ namespace GestionDeCampagneBack.Controllers
         {
             //string passwordHash = BCrypt.Net.BCrypt.HashPassword(aut.Password);
             var user = _utilisateurData.GetUtilisateurByLogin(aut.Login);
-            if (user == null || user.Etat==false)
-                
+            if (user == null || user.Etat == false)
+
                 return BadRequest(new { message = "Login ou mot de passe invalide" });
             else
             {
@@ -119,7 +122,7 @@ namespace GestionDeCampagneBack.Controllers
             if (user != null)
             {
                 bool verified = BCrypt.Net.BCrypt.Verify(chm.Amp, user.Password);
-                if (verified==true)
+                if (verified == true)
                 {
                     string passwordHash = BCrypt.Net.BCrypt.HashPassword(chm.Nmp);
                     user.Password = passwordHash;
@@ -139,38 +142,26 @@ namespace GestionDeCampagneBack.Controllers
             return NotFound($"Un utilisateur avec l'email : {id} n'existe pas");
         }
 
-        [HttpGet("email/{email}", Name = "GetUtilisateurByEmail")]
-        public IActionResult GetUtilisateurByEmail(string email)
-        {
-            var user = _utilisateurData.GetUtilisateurByEmail(email);
-            if (user != null)
-            {
-                return Ok(user);
-
-            }
-            return NotFound($"Un utilisateur avec l'email : {email} n'existe pas");
-        }
 
         [HttpPost("add")]
         public ActionResult<Utilisateur> AddUtilisateur(Utilisateur Utilisateur)
         {
 
-            var role = _roleData.GetRoleById(Utilisateur.IdRole);
-            if (role != null)
+            var entite = _entiteData.GetEntiteById(Utilisateur.IdEntite);
+            if (entite != null)
             {
-                var verifiLogin = _utilisateurData.GetUtilisateurByLogin(Utilisateur.Login);
-                var verifiEmail = _utilisateurData.GetUtilisateurByEmail(Utilisateur.Email);
-
-                if (verifiLogin == null)
+                var role = _roleData.GetRoleById(Utilisateur.IdRole);
+                if (role != null)
                 {
-                    if (verifiEmail == null)
+                    var verifiLogin = _utilisateurData.GetUtilisateurByLogin(Utilisateur.Login);
+
+                    if (verifiLogin == null)
                     {
+
                         string passwordHash = BCrypt.Net.BCrypt.HashPassword("passer");
 
                         Utilisateur.Password = passwordHash;
                         Utilisateur.ConfirmPassword = passwordHash;
-                        Utilisateur.Etat = true;
-                        Utilisateur.Statut = true;
                         Utilisateur.Ischange = false;
                         _utilisateurData.AddUtilisateur(Utilisateur);
                         _utilisateurData.SaveChanges();
@@ -178,66 +169,56 @@ namespace GestionDeCampagneBack.Controllers
                         _roleData.SaveChanges();
                         return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = Utilisateur.Id }, Utilisateur);
                     }
-                    else return NotFound($"Un Utilisateur avec l'email : {Utilisateur.Email} existe déjà");
+                    else
+                    {
+                        return NotFound($"Un Utilisateur avec le login : {Utilisateur.Login} existe déjà");
+
+                    }
 
                 }
                 else
-                {
-                    return NotFound($"Un Utilisateur avec le login : {Utilisateur.Login} existe déjà");
-
-                }
-
+                    return NotFound($"Un role avec l'id : {Utilisateur.IdRole} n'existe pas");
             }
-            else
-                return NotFound($"Un role avec l'id : {Utilisateur.IdRole} n'existe pas");
-
-
-            // return Ok(categorireadDto);
+            else return NotFound($"Une entité avec l'id : {Utilisateur.IdEntite} n'existe pas");
         }
 
         [HttpPut("put/{id}")]
         public ActionResult<Utilisateur> PutUtilisateur(Utilisateur user, int id)
         {
-            var role = _roleData.GetRoleById(user.IdRole);
-            if (role != null)
+            var entite = _entiteData.GetEntiteById(user.IdEntite);
+            if (entite != null)
             {
-                var utilisateur = _utilisateurData.GetUtilisateurById(id);
-                if (utilisateur != null)
+                var role = _roleData.GetRoleById(user.IdRole);
+                if (role != null)
                 {
-                    var verifiEmail = _utilisateurData.GetUtilisateurByEmail(user.Email);
-                    var verifiLogin = _utilisateurData.GetUtilisateurByLogin(user.Login);
-
-                    if (verifiLogin == null && verifiEmail == null)
+                    var utilisateur = _utilisateurData.GetUtilisateurById(id);
+                    if (utilisateur != null)
                     {
-                        _utilisateurData.EditUtilisateur(user, id);
-                        _utilisateurData.SaveChanges();
-                        return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = utilisateur.Id }, utilisateur);
+                        var verifiLogin = _utilisateurData.GetUtilisateurByLogin(user.Login);
+
+                        if (verifiLogin == null)
+                        {
+                            _utilisateurData.EditUtilisateur(user, id);
+                            _utilisateurData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = utilisateur.Id }, utilisateur);
+                        }
+                        else if (verifiLogin.Id == utilisateur.Id)
+                        {
+                            _utilisateurData.EditUtilisateur(user, id);
+                            _utilisateurData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = utilisateur.Id }, utilisateur);
+                        }
+
+                        else
+
+                            return NotFound($"Un utilisateur avec le login : {user.Login} existe déjà");
                     }
-                    else if (verifiEmail.Id == utilisateur.Id && verifiLogin.Id == utilisateur.Id)
-                    {
-                        _utilisateurData.EditUtilisateur(user, id);
-                        _utilisateurData.SaveChanges();
-                        return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = utilisateur.Id }, utilisateur);
-                    }
-                    else if (verifiEmail.Id != utilisateur.Id && verifiLogin.Id == utilisateur.Id)
-
-                    {
-                        return NotFound($"Un utilisateur avec l'email : {user.Email} existe déjà");
-                    }
-                    else
-
-                        return NotFound($"Un utilisateur avec le login : {user.Login} existe déjà");
-
-
-
+                    return NotFound($"Un Utilisateur avec l'id : {id} n'existe pas");
                 }
-                return NotFound($"Un Utilisateur avec l'id : {id} n'existe pas");
+                else
+                    return NotFound($"Un role avec l'id : {user.IdRole} n'existe pas");
             }
-            else
-                return NotFound($"Un role avec l'id : {user.IdRole} n'existe pas");
-
-
-            // return Ok(categorireadDto);
+            else return NotFound($"Une entité avec l'id : {user.IdEntite} n'existe pas");
         }
 
 
