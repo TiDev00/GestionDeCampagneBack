@@ -65,6 +65,9 @@ namespace GestionDeCampagneBack.Models
         [Required(ErrorMessage = "Le type de campagne est obligatoire")]
         public int IdTypeCampagne { get; set; }
 
+        [Required(ErrorMessage = "La categorie est obligatoire")]
+        public int IdCategorie { get; set; }
+
         [Required(ErrorMessage = "L'entité est obligatoire")]
         public int IdEntite { get; set; }
 
@@ -76,6 +79,9 @@ namespace GestionDeCampagneBack.Models
 
         [ForeignKey("IdTypeCampagne")]
         public virtual TypeDeCampagne IdTypeCampagneNavigation { get; set; }
+
+        [ForeignKey("IdCategorie")]
+        public virtual Categorie IdCategorieNavigation { get; set; }
 
         [ForeignKey("IdUtilisateur")]
         public virtual Utilisateur IdUtilisateurNavigation { get; set; }

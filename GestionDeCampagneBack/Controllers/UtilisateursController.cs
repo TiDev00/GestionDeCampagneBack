@@ -18,11 +18,13 @@ namespace GestionDeCampagneBack.Controllers
         private IUtilisateur _utilisateurData;
         private IRole _roleData;
         private IEntite _entiteData;
+        private ICampagne _campagneData;
 
 
-        public UtilisateursController(IUtilisateur UtilisateurData, IRole roleData, IEntite entite)
+        public UtilisateursController(IUtilisateur UtilisateurData, ICampagne campagneData, IRole roleData, IEntite entite)
         {
             _entiteData = entite;
+            _campagneData = campagneData;
             _utilisateurData = UtilisateurData;
             _roleData = roleData;
         }
@@ -146,7 +148,7 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<Utilisateur> AddUtilisateur(Utilisateur Utilisateur)
         {
-
+            Random rnd = new Random();
             var entite = _entiteData.GetEntiteById(Utilisateur.IdEntite);
             if (entite != null)
             {
@@ -157,8 +159,8 @@ namespace GestionDeCampagneBack.Controllers
 
                     if (verifiLogin == null)
                     {
-
-                        string passwordHash = BCrypt.Net.BCrypt.HashPassword("passer");
+                        int card = rnd.Next(10000, 99999);
+                        string passwordHash = BCrypt.Net.BCrypt.HashPassword(card.ToString());
 
                         Utilisateur.Password = passwordHash;
                         Utilisateur.ConfirmPassword = passwordHash;
@@ -167,6 +169,7 @@ namespace GestionDeCampagneBack.Controllers
                         _utilisateurData.SaveChanges();
                         role.Utilisateurs.Add(Utilisateur);
                         _roleData.SaveChanges();
+                        _campagneData.SendMail(Utilisateur.Email, "Votre code de vérification est le suivant : "+ card +" "+ "\r\n" + "Votre compte n’est pas accessible sans ce code de vérification, même si vous n’avez pas soumis cette requête.");
                         return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = Utilisateur.Id }, Utilisateur);
                     }
                     else

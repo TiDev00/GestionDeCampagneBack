@@ -24,6 +24,20 @@ namespace GestionDeCampagneBack.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Libelle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IdEntite = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Entites",
                 columns: table => new
                 {
@@ -191,11 +205,18 @@ namespace GestionDeCampagneBack.Migrations
                     IdRegleEnvoi = table.Column<int>(type: "int", nullable: false),
                     IdNiveauVisibilite = table.Column<int>(type: "int", nullable: false),
                     IdTypeCampagne = table.Column<int>(type: "int", nullable: false),
+                    IdCategorie = table.Column<int>(type: "int", nullable: false),
                     IdEntite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Campagnes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Campagnes_Categories_IdCategorie",
+                        column: x => x.IdCategorie,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Campagnes_NiveauDeVisibilites_IdNiveauVisibilite",
                         column: x => x.IdNiveauVisibilite,
@@ -508,6 +529,11 @@ namespace GestionDeCampagneBack.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Campagnes_IdCategorie",
+                table: "Campagnes",
+                column: "IdCategorie");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Campagnes_IdNiveauVisibilite",
                 table: "Campagnes",
                 column: "IdNiveauVisibilite");
@@ -702,6 +728,9 @@ namespace GestionDeCampagneBack.Migrations
 
             migrationBuilder.DropTable(
                 name: "Contacts");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "RegleDEnvois");

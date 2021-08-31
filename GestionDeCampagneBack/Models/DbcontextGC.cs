@@ -42,6 +42,8 @@ namespace GestionDeCampagneBack.Models
         public virtual DbSet<Utilisateur> Utilisateurs { get; set; }
         public virtual DbSet<Variable> Variables { get; set; }
 
+        public virtual DbSet<Categorie> Categories { get; set; }
+
 
     }
     

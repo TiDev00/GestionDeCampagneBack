@@ -48,8 +48,6 @@ namespace GestionDeCampagneBack.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-
-       
         [DataType(DataType.Password)]
         [Compare("Password")]
         [NotMapped]

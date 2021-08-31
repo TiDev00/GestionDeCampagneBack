@@ -43,6 +43,9 @@ namespace GestionDeCampagneBack.Migrations
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
 
+                    b.Property<int>("IdCategorie")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdEntite")
                         .HasColumnType("int");
 
@@ -67,6 +70,8 @@ namespace GestionDeCampagneBack.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdCategorie");
 
                     b.HasIndex("IdNiveauVisibilite");
 
@@ -103,6 +108,26 @@ namespace GestionDeCampagneBack.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CanalEnvois");
+                });
+
+            modelBuilder.Entity("GestionDeCampagneBack.Models.Categorie", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdEntite")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.Contact", b =>
@@ -718,6 +743,12 @@ namespace GestionDeCampagneBack.Migrations
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.Campagne", b =>
                 {
+                    b.HasOne("GestionDeCampagneBack.Models.Categorie", "IdCategorieNavigation")
+                        .WithMany("Campagnes")
+                        .HasForeignKey("IdCategorie")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GestionDeCampagneBack.Models.NiveauDeVisibilite", "IdNiveauVisibiliteNavigation")
                         .WithMany("Campagnes")
                         .HasForeignKey("IdNiveauVisibilite")
@@ -741,6 +772,8 @@ namespace GestionDeCampagneBack.Migrations
                         .HasForeignKey("IdUtilisateur")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("IdCategorieNavigation");
 
                     b.Navigation("IdNiveauVisibiliteNavigation");
 
@@ -955,6 +988,11 @@ namespace GestionDeCampagneBack.Migrations
                     b.Navigation("ContactCanals");
 
                     b.Navigation("Modeles");
+                });
+
+            modelBuilder.Entity("GestionDeCampagneBack.Models.Categorie", b =>
+                {
+                    b.Navigation("Campagnes");
                 });
 
             modelBuilder.Entity("GestionDeCampagneBack.Models.Contact", b =>
