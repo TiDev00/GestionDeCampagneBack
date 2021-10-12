@@ -20,6 +20,7 @@ namespace GestionDeCampagneBack.Service
 
         public void AddContact(Contact Contact)
         {
+            Random rnd = new Random();
             if (Contact == null)
             {
                 throw new ArgumentNullException(nameof(Contact));
@@ -30,9 +31,11 @@ namespace GestionDeCampagneBack.Service
                 var countval = _dbcontextGC.Contacts.Count();
                 if (countval >= 1)
                 {
-                    var maxId = _dbcontextGC.Contacts.Max(p => p.Id);
 
-                    Contact.Matricule = "MCT0000" + (maxId + 1).ToString();
+                    var maxId = _dbcontextGC.Contacts.Max(p => p.Id);
+                    int card = rnd.Next(10000, 99999);
+
+                    Contact.Matricule = "MCT0000"+ card + (maxId + 1).ToString();
                     Contact.Etat = true;
                     Contact.Statut = true;
 

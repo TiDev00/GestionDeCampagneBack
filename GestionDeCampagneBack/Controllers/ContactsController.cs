@@ -144,18 +144,16 @@ namespace GestionDeCampagneBack.Controllers
                 var user = _UtilisateurData.GetUtilisateurById(Contact.IdUser);
                 if (user != null)
                 {
-                    var verifiMatricule = _ContactData.GetContactByMatricul(Contact.Matricule);
+                    
 
 
-                    if (verifiMatricule == null)
-                    {
+                  
                         _ContactData.AddContact(Contact);
     
                         _ContactData.SaveChanges();
 
                         return CreatedAtRoute(nameof(GetContactById), new { Id = Contact.Id }, Contact);
-                    }
-                    else return NotFound($"Un Contact avec le matricule : {Contact.Matricule} existe déjà pas");
+                   
                 }
                 else
                 {
