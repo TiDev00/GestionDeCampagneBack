@@ -44,8 +44,8 @@ namespace GestionDeCampagneBack.Service
                 else
                 {
 
-
-                    Contact.Matricule = "MCT00001";
+                    int card = rnd.Next(10000, 99999);
+                    Contact.Matricule = "MCT0000"+card+"1";
                     Contact.Etat = true;
                     Contact.Statut = true;
                     _dbcontextGC.Contacts.Add(Contact);

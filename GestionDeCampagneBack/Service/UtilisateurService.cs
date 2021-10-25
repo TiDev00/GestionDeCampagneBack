@@ -46,7 +46,6 @@ namespace GestionDeCampagneBack.Service
             user.Password = passwordHash;
             user.ConfirmPassword = passwordHash;
             user.Etat = Utilisateur.Etat;
-            user.Statut = Utilisateur.Statut;
             user.Nom = Utilisateur.Nom;
             user.Prenom = Utilisateur.Prenom;
             user.IdRole = Utilisateur.IdRole;
@@ -54,6 +53,19 @@ namespace GestionDeCampagneBack.Service
             user.Email = Utilisateur.Email;
             user.Telephone = Utilisateur.Telephone;
             user.IdEntite = Utilisateur.IdEntite;
+            return user;
+        }
+
+
+        public Utilisateur ChangeDonnees(Utilisateur ch, int id)
+        {
+            var user = _dbcontextGC.Utilisateurs.Find(id);
+            user.Nom = ch.Nom;
+            user.Prenom = ch.Prenom;
+            user.IdRole = ch.IdRole;
+            user.Login = ch.Login;
+            user.Email = ch.Email;
+            user.Telephone = ch.Telephone;
             return user;
         }
 

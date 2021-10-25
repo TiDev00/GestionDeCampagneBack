@@ -18,5 +18,8 @@ namespace GestionDeCampagneBack.Repository
         void DeleteUtilisateur(Utilisateur Utilisateur);
 
         Utilisateur EditUtilisateur(Utilisateur Utilisateur, int id);
+
+        Utilisateur ChangeDonnees(Utilisateur Utilisateur, int id);
+        
     }
 }

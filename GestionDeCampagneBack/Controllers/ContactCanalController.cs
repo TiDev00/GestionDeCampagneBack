@@ -18,13 +18,17 @@ namespace GestionDeCampagneBack.Controllers
         private IContact _ContactData;
         private ICanalEnvoi _CanalEnvoiData;
         private DbcontextGC _dbcontextGC;
+        private INiveauDeVisibilite _NiveauDeVisibilite;
+        private IUtilisateur _UtilisateurData;
 
-        public ContactCanalsController(DbcontextGC dbcontextGC, IContactCanal ContactCanalData, IContact ContactData, ICanalEnvoi CanalEnvoiData)
+        public ContactCanalsController(DbcontextGC dbcontextGC, IUtilisateur UtilisateurData, IContactCanal ContactCanalData, INiveauDeVisibilite NiveauDeVisibilite, IContact ContactData, ICanalEnvoi CanalEnvoiData)
         {
             _ContactCanalData = ContactCanalData;
             _ContactData = ContactData;
+            _UtilisateurData = UtilisateurData;
             _CanalEnvoiData = CanalEnvoiData;
             _dbcontextGC = dbcontextGC;
+            _NiveauDeVisibilite = NiveauDeVisibilite;
         }
         // GET: api/<ValuesController>
         [HttpGet("all/{id}")]
@@ -64,6 +68,53 @@ namespace GestionDeCampagneBack.Controllers
             }
             else
                 return NotFound($"Un canal envoi avec l'id : {ContactCanal.IdCanalEnvoi} n'existe pas");
+
+        }
+
+        [HttpPost("addContactCanal")]
+        public ActionResult<ContactCanal> AddContactCanalBis(ContactCanal ContactCanal)
+        {
+            /*  */
+            Contact Contact = new Contact();
+            var niveauDevisibilite = _NiveauDeVisibilite.GetNiveauDeVisibiliteById(Contact.IdNiveauVisibilite);
+            if (niveauDevisibilite != null)
+            {
+                var user = _UtilisateurData.GetUtilisateurById(Contact.IdUser);
+                if (user != null)
+                {
+
+
+
+
+                    _ContactData.AddContact(Contact);
+
+                    _ContactData.SaveChanges();
+
+                    var canalenvoi = _CanalEnvoiData.GetCanalEnvoiById(ContactCanal.IdCanalEnvoi);
+                    if (canalenvoi != null)
+                    {
+                        var cont = _ContactData.GetContactById(ContactCanal.IdContact);
+                        if (cont != null)
+                        {
+                            ContactCanal.Id = Contact.Id;
+                            _ContactCanalData.AddContactCanal(ContactCanal);
+                            _ContactCanalData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetContactCanalById), new { Id = ContactCanal.Id }, ContactCanal);
+                        }
+                        else
+                            return NotFound($"Un contact avec l'id : {ContactCanal.IdContact} n'existe pas");
+                    }
+                    else
+                        return NotFound($"Un canal envoi avec l'id : {ContactCanal.IdCanalEnvoi} n'existe pas");
+
+
+                }
+                else
+                {
+                    return NotFound($"Un utilisateur avec l'id : {Contact.IdUser} n'existe pas");
+                }
+            }
+            else return NotFound($"Un niveau de visibilité avec l'id : {Contact.IdNiveauVisibilite} n'existe pas");
 
         }
 

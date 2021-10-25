@@ -86,13 +86,15 @@ namespace GestionDeCampagneBack.Controllers
         [HttpPost("add")]
         public ActionResult<ListeDeDiffusion> AddListeDiffusion(ListeDeDiffusion ListeDiff)
         {
-            
+            var vis = _NiveauDeVisibiliteData.GetNiveauDeVisibiliteById(ListeDiff.IdNiveauVisibilite);
+            if (vis != null)
+            {
                 var entite = _entiteData.GetEntiteById(ListeDiff.IdEntite);
                 if (entite != null)
                 {
-                    var verify = _listeListeData.GetListeDiffusionByReference(ListeDiff.Reference);
+                    var verifyRef = _listeListeData.GetListeDiffusionByReference(ListeDiff.Reference);
 
-                    if (verify == null)
+                    if (verifyRef == null)
                     {
                         _listeListeData.AddListeDiffusion(ListeDiff);
                         _listeListeData.SaveChanges();
@@ -107,10 +109,14 @@ namespace GestionDeCampagneBack.Controllers
                 }
                 else
                     return NotFound($"Une entité avec l'id : {ListeDiff.IdEntite} n'existe pas");
+            }
+            else
+            {
+                return NotFound($"Un niveau de visibilité l'id : {ListeDiff.IdNiveauVisibilite} n'existe pas");
+            }
          
         }
-
-        [HttpPut("put/{id}")]
+       [HttpPut("put/{id}")]
         public ActionResult<ListeDeDiffusion> PutListeDeDiffusion(ListeDeDiffusion rol, int id)
         {
             var niveauDevisibilite = _NiveauDeVisibiliteData.GetNiveauDeVisibiliteById(rol.IdNiveauVisibilite);
@@ -153,6 +159,49 @@ namespace GestionDeCampagneBack.Controllers
             // return Ok(categorireadDto);
         }
 
+
+        [HttpPut("changeesdonnees/{id}")]
+        public ActionResult<ListeDeDiffusion> ChangeDonnees(ListeDeDiffusion rol, int id)
+        {
+            var niveauDevisibilite = _NiveauDeVisibiliteData.GetNiveauDeVisibiliteById(rol.IdNiveauVisibilite);
+            if (niveauDevisibilite != null)
+            {
+                var entite = _entiteData.GetEntiteById(rol.IdEntite);
+                if (entite != null)
+                {
+                    var ListeDiffusion = _listeListeData.GetListeDiffusionById(id);
+                    if (ListeDiffusion != null)
+                    {
+                        var verifiRef = _listeListeData.GetListeDiffusionByReference(rol.Reference);
+                        if (verifiRef == null)
+                        {
+                            _listeListeData.ChangeDonnees(rol, id);
+                            _listeListeData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetListeDiffusionById), new { Id = ListeDiffusion.Id }, ListeDiffusion);
+                        }
+                        else
+                        if (verifiRef.Id == ListeDiffusion.Id)
+                        {
+                            _listeListeData.ChangeDonnees(rol, id);
+                            _listeListeData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetListeDiffusionById), new { Id = ListeDiffusion.Id }, ListeDiffusion);
+                        }
+                        else
+                        {
+                            return NotFound($"Une Liste de diffusion avec la référence : {rol.Reference} existe déjà");
+
+                        }
+
+                    }
+                    return NotFound($"Une Liste de diffusion avec l'id : {id} n'existe pas");
+
+                }
+                else
+                    return NotFound($"Une entité avec l'id : {rol.IdEntite} n'existe pas");
+            }
+            return NotFound($"Un niveau de visibilité avec l'id : {rol.IdNiveauVisibilite} n'existe pas");
+            // return Ok(categorireadDto);
+        }
 
         [HttpDelete("delete/{id}")]
         public ActionResult<ListeDeDiffusion> DeleteListeDiffusion(int id)

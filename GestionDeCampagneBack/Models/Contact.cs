@@ -44,6 +44,9 @@ namespace GestionDeCampagneBack.Models
         public bool Statut { get; set; }
         public string Pays { get; set; }
 
+        [NotMapped]
+        public string NomComplet => Prenom + " " + Nom;
+
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? DateDeNaissance { get; set; }

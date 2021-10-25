@@ -21,5 +21,7 @@ namespace GestionDeCampagneBack.Repository
         void DeleteListeDiffusion(ListeDeDiffusion ListeDeDiffusion);
 
         ListeDeDiffusion EditListeDiffusion(ListeDeDiffusion ListeDeDiffusion, int id);
+
+        ListeDeDiffusion ChangeDonnees(ListeDeDiffusion ListeDeDiffusion, int id);
     }
 }

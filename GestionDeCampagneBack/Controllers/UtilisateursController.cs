@@ -225,6 +225,45 @@ namespace GestionDeCampagneBack.Controllers
         }
 
 
+        [HttpPut("changedonnees/{id}")]
+        public ActionResult<Utilisateur> ChangeeDonnees(Utilisateur user, int id)
+        {
+            var entite = _entiteData.GetEntiteById(user.IdEntite);
+            if (entite != null)
+            {
+                var role = _roleData.GetRoleById(user.IdRole);
+                if (role != null)
+                {
+                    var utilisateur = _utilisateurData.GetUtilisateurById(id);
+                    if (utilisateur != null)
+                    {
+                        var verifiLogin = _utilisateurData.GetUtilisateurByLogin(user.Login);
+
+                        if (verifiLogin == null)
+                        {
+                            _utilisateurData.ChangeDonnees(user, id);
+                            _utilisateurData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = utilisateur.Id }, utilisateur);
+                        }
+                        else if (verifiLogin.Id == utilisateur.Id)
+                        {
+                            _utilisateurData.ChangeDonnees(user, id);
+                            _utilisateurData.SaveChanges();
+                            return CreatedAtRoute(nameof(GetUtilisateurById), new { Id = utilisateur.Id }, utilisateur);
+                        }
+
+                        else
+
+                            return NotFound($"Un utilisateur avec le login : {user.Login} existe déjà");
+                    }
+                    return NotFound($"Un Utilisateur avec l'id : {id} n'existe pas");
+                }
+                else
+                    return NotFound($"Un role avec l'id : {user.IdRole} n'existe pas");
+            }
+            else return NotFound($"Une entité avec l'id : {user.IdEntite} n'existe pas");
+        }
+
 
         [HttpDelete("delete/{id}")]
         public ActionResult<Utilisateur> DeleteUtilisateur(int id)

@@ -17,6 +17,7 @@ namespace GestionDeCampagneBack.Service
         }
         public void AddListeDiffusion(ListeDeDiffusion ListeDeDiffusion)
         {
+            Random rnd = new Random();
             if (ListeDeDiffusion == null)
             {
                 throw new ArgumentNullException(nameof(ListeDeDiffusion));
@@ -28,8 +29,9 @@ namespace GestionDeCampagneBack.Service
                 if (countval >= 1)
                 {
                     var maxId = _dbcontextGC.ListeDeDiffusions.Max(p => p.Id);
+                    int card = rnd.Next(10000, 99999);
 
-                    ListeDeDiffusion.Reference = "RE0000" + (maxId + 1).ToString();
+                    ListeDeDiffusion.Reference = "RE0000" + card + (maxId + 1).ToString();
                     ListeDeDiffusion.Etat = true;
                     ListeDeDiffusion.Statut = true;
 
@@ -67,6 +69,20 @@ namespace GestionDeCampagneBack.Service
 
         }
 
+
+        public ListeDeDiffusion ChangeDonnees(ListeDeDiffusion ListeDeDiffusion, int id)
+        {
+            var listeDiffusion = _dbcontextGC.ListeDeDiffusions.Find(id);
+            listeDiffusion.Titre = ListeDeDiffusion.Titre;
+            listeDiffusion.IdEntite = ListeDeDiffusion.IdEntite;
+            listeDiffusion.IdNiveauVisibilite = ListeDeDiffusion.IdNiveauVisibilite;
+            return listeDiffusion;
+
+        }
+
+
+
+        
         public List<ListeDeDiffusion> GetListeDiffusion(int id)
         {
             return _dbcontextGC.ListeDeDiffusions.Where(r => r.Etat == true && r.IdEntite == id).ToList();
